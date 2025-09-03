@@ -23,7 +23,7 @@ import { ValidationPasswordComponent } from './pages/validation-password/validat
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ValidationPasswordComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

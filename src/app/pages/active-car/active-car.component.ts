@@ -5,6 +5,7 @@ import { BtnWhiteComponent } from '../../componets/btn-white/btn-white.component
 
 @Component({
   selector: 'app-active-car',
+  standalone: true,
   imports: [HeaderComponent, BtnPurpleComponent, BtnWhiteComponent],
   templateUrl: './active-car.component.html',
   styleUrl: './active-car.component.scss'
