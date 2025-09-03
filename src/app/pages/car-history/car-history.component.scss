@@ -16,33 +16,21 @@
     }
   }
 
-  .search-section {
-    position: relative;
-    width: 250px;
-    margin-left: auto;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
-    
-
-    img {
-        position: absolute;
-        left: 10px; 
-        top: 50%;
-        transform: translateY(-50%);
-        width: 18px; 
-        height: 18px;
-        pointer-events: none;
-    }
-
-    input {
-        width: 100%;
-        padding: 8px 12px;
-        padding-left: 40px; 
-        border: 1px solid $primary;
-        border-radius: 3px;
-        font-size: 14px;
-    }
+  select{
+    display: flex;
+    font-size: 1rem;
+    color: $primary;
+    border: 1.5px solid $primary;
+    border-radius: 2px;
+    padding: 0.3rem;
   }
 
+  .filter{
+    display: flex;
+    flex-direction: row;
+    padding: 2rem;
+    align-self: flex-end;
+  }
 
   .vehicle-card {
     width: 100%;
@@ -52,7 +40,6 @@
     border-radius: 2px;
     padding: 1rem 1.5rem;
     margin-bottom: 1rem;
-    margin-top: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -84,4 +71,45 @@
       }
     }
 
-  }}
+    .actions {
+      display: flex;
+      gap: 0.7em;
+
+      .vizualize{
+        padding-top: 1rem;
+      }
+
+      .Download{
+            border: none;
+        }
+      button {
+        background: none;
+        border-right: 2px solid $primary;
+        border-left: none;
+        border-top: none;
+        border-bottom: none;
+        cursor: pointer;
+        font-size: 1.1rem;
+        color: $primary; 
+
+         padding-right: 13px;
+
+        &:hover {
+          color: #3a1b55;
+        }
+
+    
+      }
+    }
+  }
+
+  .new-vehicle {
+      display: flex;
+      flex-direction: row;
+  }
+
+  img{
+    width: 35px;
+    height: 35px;
+  }
+}

@@ -1,0 +1,115 @@
+@import "../../../assets/color-variables.scss";
+
+.main-section {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  .title h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .search-section {
+    position: relative;
+    width: 250px;
+    margin: 0 0 2rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
+
+    img {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px 12px;
+      padding-left: 40px;
+      border: 1px solid $primary;
+      border-radius: 3px;
+      font-size: 14px;
+    }
+  }
+
+  .vehicle-card {
+    width: 100%;
+    max-width: 700px;
+    background: #fff;
+    border: 1.5px solid $primary;
+    border-radius: 2px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    .vehicle-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+
+      > div {
+        flex: 1 1 200px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      p {
+        margin: 0.3rem 0;
+        font-size: 0.95rem;
+
+        strong {
+          color: #222;
+        }
+      }
+
+      .status {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-left: 3px;
+
+        &.active {
+          background: #28a745;
+        }
+        &.inactive {
+          background: #dc3545;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .search-section {
+    width: 90%;
+  }
+
+  .vehicle-card {
+    padding: 1rem;
+    
+    .vehicle-info {
+      flex-direction: column;
+      gap: 1rem;
+
+      > div {
+        width: 100%;
+      }
+    }
+  }
+
+  .title h2 {
+    font-size: 1.5rem;
+  }
+}
