@@ -332,7 +332,7 @@ public class PessoaService {
     }
 
     public Pessoa findByEmail(String email) {
-        return repository.findByEmail(email).orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+        return repository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Credenciais inválidas ou usuário inativo"));
     }
 
     public Pessoa updateOwn(String email, PessoaUpdateRequest request) {

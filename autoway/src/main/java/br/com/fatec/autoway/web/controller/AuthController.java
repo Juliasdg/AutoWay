@@ -157,18 +157,44 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
+
+        // valida campos obrigatórios
+        if (request == null || request.email() == null || request.email().isBlank()
+                || request.senha() == null || request.senha().isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(
+                            400,
+                            "Email e senha são obrigatórios",
+                            LocalDateTime.now().toString()
+                    ));
+        }
+
         try {
             Pessoa user = pessoaService.findByEmail(request.email());
+
+            // valida usuário e status
             if (user == null || !user.status()) {
-                return ResponseEntity.status(401).build();
+                return ResponseEntity.status(401)
+                        .body(new ErrorResponse(
+                                401,
+                                "Credenciais inválidas ou usuário inativo",
+                                LocalDateTime.now().toString()
+                        ));
             }
 
+            // valida senha
             boolean ok = pessoaService.checkPassword(request.senha(), user.senhaHash());
             if (!ok) {
-                return ResponseEntity.status(401).build();
+                return ResponseEntity.status(401)
+                        .body(new ErrorResponse(
+                                401,
+                                "Credenciais inválidas ou usuário inativo",
+                                LocalDateTime.now().toString()
+                        ));
             }
 
+            // gera token
             String token = jwtUtil.generateToken(user.email(), user.tipoUsuario().name());
 
             Cookie cookie = new Cookie("token", token);
@@ -181,8 +207,22 @@ public class AuthController {
             return ResponseEntity.ok(
                     new AuthResponse(token, user.id().toString(), user.tipoUsuario())
             );
+
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(
+                            400,
+                            e.getMessage(),
+                            LocalDateTime.now().toString()
+                    ));
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            e.printStackTrace(); // log detalhado no servidor
+            return ResponseEntity.status(500)
+                    .body(new ErrorResponse(
+                            500,
+                            "Erro interno do servidor",
+                            LocalDateTime.now().toString()
+                    ));
         }
     }
 
@@ -190,9 +230,9 @@ public class AuthController {
     public ResponseEntity<?> logout(HttpServletResponse response) {
         Cookie cookie = new Cookie("token", null);
         cookie.setHttpOnly(true);
-        cookie.setSecure(false); // true em produção com HTTPS
+        cookie.setSecure(false);
         cookie.setPath("/");
-        cookie.setMaxAge(0); // expira imediatamente
+        cookie.setMaxAge(0);
         response.addCookie(cookie);
 
         return ResponseEntity.ok("Logout realizado com sucesso");
