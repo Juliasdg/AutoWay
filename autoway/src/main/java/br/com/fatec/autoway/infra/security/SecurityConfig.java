@@ -37,9 +37,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authz -> authz
                         // Endpoints públicos
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/pessoas/confirm").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/passagens/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/pessoas/confirm").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/passagens/**").permitAll()
 
                         // libera o Swagger
                         .requestMatchers(
@@ -51,8 +51,8 @@ public class SecurityConfig {
                         // libera também se você tiver actuator/health
                         .requestMatchers("/actuator/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/passagens/all").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/passagens/me").hasRole("CLIENTE")
+                        .requestMatchers(HttpMethod.GET, "/api/passagens/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/passagens/me").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.POST, "/api/veiculos").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/veiculos/me").hasAnyRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/veiculos").hasAnyRole("ADMIN")
@@ -61,15 +61,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/veiculos/*/inativar").hasAnyRole("CLIENTE","ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/veiculos/*/reativar").hasAnyRole("CLIENTE","ADMIN")
 
-                        .requestMatchers(HttpMethod.PUT, "/pessoas/me/password").hasAnyRole("ADMIN", "CLIENTE")
-                        .requestMatchers(HttpMethod.GET, "/pessoas").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/pessoas/me").hasAnyRole("ADMIN","CLIENTE")
-                        .requestMatchers(HttpMethod.GET, "/pessoas/{id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/pessoas").hasRole("ADMIN") // Criar novo usuário
-                        .requestMatchers(HttpMethod.PUT, "/pessoas/me").hasAnyRole("ADMIN","CLIENTE")
-                        .requestMatchers(HttpMethod.PUT, "/pessoas/{id}").hasAnyRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/pessoas/{id}/inactivate").hasAnyRole("ADMIN", "CLIENTE") // Inativar
-                        .requestMatchers(HttpMethod.PATCH, "/pessoas/{id}/reactivate").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/pessoas/me/password").hasAnyRole("ADMIN", "CLIENTE")
+                        .requestMatchers(HttpMethod.GET, "/api/pessoas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/pessoas/me").hasAnyRole("ADMIN","CLIENTE")
+                        .requestMatchers(HttpMethod.GET, "/api/pessoas/{id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/pessoas").hasRole("ADMIN") // Criar novo usuário
+                        .requestMatchers(HttpMethod.PUT, "/api/pessoas/me").hasAnyRole("ADMIN","CLIENTE")
+                        .requestMatchers(HttpMethod.PUT, "/api/pessoas/{id}").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/pessoas/{id}/inactivate").hasAnyRole("ADMIN", "CLIENTE") // Inativar
+                        .requestMatchers(HttpMethod.PATCH, "/api/pessoas/{id}/reactivate").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
