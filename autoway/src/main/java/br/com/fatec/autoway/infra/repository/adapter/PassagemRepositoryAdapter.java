@@ -6,6 +6,7 @@ import br.com.fatec.autoway.infra.orm.PassagemOrm;
 import br.com.fatec.autoway.infra.repository.PassagemRepository;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,5 +53,37 @@ public class PassagemRepositoryAdapter implements PassagemRepositoryPort {
                 orm.getHora(),
                 orm.getValor()
         )).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Passagem> findByPessoa(String pessoaId) {
+        return jpa.findByIdPessoa(pessoaId)
+                .stream()
+                .map(orm -> new Passagem(
+                        orm.getId(),
+                        orm.getIdVeiculo(),
+                        orm.getIdPessoa(),
+                        orm.getLocal(),
+                        orm.getData(),
+                        orm.getHora(),
+                        orm.getValor()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Passagem> findByPessoaAndPeriodo(String pessoaId, LocalDate dataInicio, LocalDate dataFim) {
+        return jpa.findByIdPessoaAndDataBetween(pessoaId, dataInicio, dataFim)
+                .stream()
+                .map(orm -> new Passagem(
+                        orm.getId(),
+                        orm.getIdVeiculo(),
+                        orm.getIdPessoa(),
+                        orm.getLocal(),
+                        orm.getData(),
+                        orm.getHora(),
+                        orm.getValor()
+                ))
+                .collect(Collectors.toList());
     }
 }

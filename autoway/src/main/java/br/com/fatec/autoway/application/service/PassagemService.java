@@ -1,12 +1,16 @@
 package br.com.fatec.autoway.application.service;
 
 import br.com.fatec.autoway.domain.model.Passagem;
+import br.com.fatec.autoway.domain.model.Pessoa;
 import br.com.fatec.autoway.domain.port.persistence.PassagemRepositoryPort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PassagemService {
@@ -58,5 +62,46 @@ public class PassagemService {
 
     public List<Passagem> listAll() {
         return repository.findAll();
+    }
+
+    public List<Passagem> listByCurrentPessoa(String idPessoa) {
+        var mesAtual = java.time.YearMonth.now();
+        var inicio = mesAtual.atDay(1);
+        var fim = mesAtual.atEndOfMonth();
+        return repository.findByPessoa(idPessoa);
+    }
+
+    public Map<String, Object> listByCurrentPessoaWithPeriod(String idPessoa, LocalDate dataInicio, LocalDate dataFim) {
+        LocalDate hoje = LocalDate.now();
+
+        if (dataInicio.isAfter(hoje) || dataFim.isAfter(hoje)) {
+            throw new IllegalArgumentException("Não é permitido filtrar datas futuras");
+        }
+        if (dataInicio.isAfter(dataFim)) {
+            throw new IllegalArgumentException("Data início não pode ser maior que data fim");
+        }
+
+        List<Passagem> passagens = repository.findByPessoaAndPeriodo(idPessoa, dataInicio, dataFim);
+
+        boolean mesFechado = false;
+        YearMonth periodoInicio = YearMonth.from(dataInicio);
+        YearMonth periodoFim = YearMonth.from(dataFim);
+
+        if (periodoInicio.equals(periodoFim) &&
+                dataInicio.getDayOfMonth() == 1 &&
+                dataFim.getDayOfMonth() == periodoFim.lengthOfMonth()) {
+            mesFechado = true;
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("mesFechado", mesFechado);
+        response.put("passagens", passagens);
+
+        return response;
+    }
+
+    public String findPessoaIdByEmail(String email) {
+        Pessoa p = pessoaService.findByEmail(email);
+        return p.id();
     }
 }

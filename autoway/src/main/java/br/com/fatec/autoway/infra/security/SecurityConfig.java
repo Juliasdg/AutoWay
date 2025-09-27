@@ -41,7 +41,18 @@ public class SecurityConfig {
                         .requestMatchers("/pessoas/confirm").permitAll()
                         .requestMatchers(HttpMethod.POST, "/passagens/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/passagens/**").hasRole("ADMIN")
+                        // libera o Swagger
+                        .requestMatchers(
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+
+                        // libera também se você tiver actuator/health
+                        .requestMatchers("/actuator/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/passagens/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/passagens/me").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.POST, "/api/veiculos").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/veiculos/me").hasAnyRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/veiculos").hasAnyRole("ADMIN")

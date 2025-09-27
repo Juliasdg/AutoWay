@@ -6,12 +6,15 @@ import br.com.fatec.autoway.infra.security.JwtUtil;
 import br.com.fatec.autoway.web.dto.request.VeiculoRequest;
 import br.com.fatec.autoway.web.dto.request.VeiculoAdminUpdateRequest;
 import br.com.fatec.autoway.web.dto.response.VeiculoResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@ApiResponse
 @RestController
 @RequestMapping("/api/veiculos")
 public class VeiculoController {

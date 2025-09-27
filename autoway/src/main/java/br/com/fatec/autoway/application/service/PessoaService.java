@@ -11,6 +11,7 @@ import br.com.fatec.autoway.infra.repository.PasswordResetTokenRepository;
 import br.com.fatec.autoway.web.dto.request.PessoaRequest;
 import br.com.fatec.autoway.web.dto.request.PessoaUpdateRequest;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -398,5 +399,11 @@ public class PessoaService {
 
     public boolean checkPassword(String raw, String hashed) {
         return passwordEncoder.matches(raw, hashed);
+    }
+
+    public String getCurrentPessoaId() {
+        // Pega o usuário logado pelo Spring Security
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName(); // supondo que o username seja o ID da pessoa
     }
 }

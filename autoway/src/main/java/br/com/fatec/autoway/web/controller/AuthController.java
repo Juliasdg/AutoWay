@@ -7,14 +7,16 @@ import br.com.fatec.autoway.web.dto.request.*;
 import br.com.fatec.autoway.web.dto.response.AuthResponse;
 import br.com.fatec.autoway.web.dto.response.ErrorResponse;
 import br.com.fatec.autoway.web.dto.response.PessoaResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
+@ApiResponse
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final PessoaService pessoaService;

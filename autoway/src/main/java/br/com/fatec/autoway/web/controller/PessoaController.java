@@ -8,6 +8,8 @@ import br.com.fatec.autoway.web.dto.request.PessoaRequest;
 import br.com.fatec.autoway.web.dto.request.PessoaUpdateRequest;
 import br.com.fatec.autoway.web.dto.response.ErrorResponse;
 import br.com.fatec.autoway.web.dto.response.PessoaResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@ApiResponse
 @RestController
-@RequestMapping("/pessoas")
+@RequestMapping("/api/pessoas")
 public class PessoaController {
 
     private final PessoaService service;
