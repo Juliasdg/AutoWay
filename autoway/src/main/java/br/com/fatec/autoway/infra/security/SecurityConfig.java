@@ -44,6 +44,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         // Endpoints públicos
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("api/auth/logout").hasAnyRole("CLIENTE", "ADMIN")
                         .requestMatchers("/api/pessoas/confirm").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/passagens/**").permitAll()
 

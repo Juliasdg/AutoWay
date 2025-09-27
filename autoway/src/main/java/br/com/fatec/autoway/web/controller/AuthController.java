@@ -186,4 +186,15 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("token", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // true em produção com HTTPS
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // expira imediatamente
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logout realizado com sucesso");
+    }
 }
