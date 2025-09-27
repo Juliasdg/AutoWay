@@ -179,7 +179,7 @@ public class AuthController {
             response.addCookie(cookie);
 
             return ResponseEntity.ok(
-                    new AuthResponse(token, user.id().toString())
+                    new AuthResponse(token, user.id().toString(), user.tipoUsuario())
             );
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
