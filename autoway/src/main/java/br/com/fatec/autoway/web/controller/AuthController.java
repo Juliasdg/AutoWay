@@ -8,6 +8,8 @@ import br.com.fatec.autoway.web.dto.response.AuthResponse;
 import br.com.fatec.autoway.web.dto.response.ErrorResponse;
 import br.com.fatec.autoway.web.dto.response.PessoaResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -155,7 +157,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request, HttpServletResponse response) {
         try {
             Pessoa user = pessoaService.findByEmail(request.email());
             if (user == null || !user.status()) {
@@ -168,8 +170,16 @@ public class AuthController {
             }
 
             String token = jwtUtil.generateToken(user.email(), user.tipoUsuario().name());
+
+            Cookie cookie = new Cookie("token", token);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false);
+            cookie.setPath("/");
+            cookie.setMaxAge(24 * 60 * 60);
+            response.addCookie(cookie);
+
             return ResponseEntity.ok(
-                    new AuthResponse(token, user.id().toString(), user.tipoUsuario())
+                    new AuthResponse(token, user.id().toString())
             );
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
