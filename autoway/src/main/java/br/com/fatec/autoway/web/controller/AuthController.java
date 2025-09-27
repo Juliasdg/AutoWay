@@ -169,7 +169,7 @@ public class AuthController {
 
             String token = jwtUtil.generateToken(user.email(), user.tipoUsuario().name());
             return ResponseEntity.ok(
-                    new AuthResponse(token, "Bearer", user.id().toString())
+                    new AuthResponse(token, user.id().toString())
             );
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
