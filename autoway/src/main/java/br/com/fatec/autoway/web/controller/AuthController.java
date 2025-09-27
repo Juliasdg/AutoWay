@@ -175,4 +175,5 @@ public class AuthController {
             return ResponseEntity.status(500).build();
         }
     }
+
 }

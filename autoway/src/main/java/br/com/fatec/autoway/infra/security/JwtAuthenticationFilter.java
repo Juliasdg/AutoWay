@@ -1,5 +1,6 @@
 package br.com.fatec.autoway.infra.security;
 
+import jakarta.servlet.http.Cookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,9 +26,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
+        String token = null;
+
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if(token != null){
             if (!jwtUtil.validateJwtToken(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
@@ -37,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String email = jwtUtil.getEmailFromJwtToken(token);
             String role = jwtUtil.getRoleFromJwtToken(token).toUpperCase(); // admin -> ADMIN
 
-            // adiciona prefixo ROLE_
+            // adiciona prefixo ROLE
             var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
             // cria Authentication
@@ -47,6 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // popula o SecurityContext
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
+
         filterChain.doFilter(request, response);
     }
 
