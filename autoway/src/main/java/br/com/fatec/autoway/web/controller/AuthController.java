@@ -37,8 +37,6 @@ public class AuthController {
         this.blacklistService = blacklistService;
     }
 
-    // DTOs internos para requests JSON
-
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         try {
@@ -86,7 +84,6 @@ public class AuthController {
             @RequestParam String email,
             @RequestBody ChangePasswordRequest request) {
         try {
-            // valida se nova senha e confirmação são iguais
             if (!request.newPassword().equals(request.confirmPassword())) {
                 return ResponseEntity.badRequest()
                         .body(new ErrorResponse(400, "Nova senha e confirmação não coincidem", LocalDateTime.now().toString()));
@@ -104,8 +101,6 @@ public class AuthController {
         }
     }
 
-
-    // Mantém os endpoints de registro e login como estavam
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @Valid @RequestBody PessoaRequest request,
@@ -207,7 +202,7 @@ public class AuthController {
                             LocalDateTime.now().toString()
                     ));
         } catch (Exception e) {
-            e.printStackTrace(); // log detalhado no servidor
+            e.printStackTrace();
             return ResponseEntity.status(500)
                     .body(new ErrorResponse(
                             500,

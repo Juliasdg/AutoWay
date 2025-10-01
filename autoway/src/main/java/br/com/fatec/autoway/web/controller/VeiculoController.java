@@ -28,7 +28,6 @@ public class VeiculoController {
         this.jwtUtil = jwtUtil;
     }
 
-    // Criar veículo (cliente)
     @PostMapping
     public ResponseEntity<VeiculoResponse> criarVeiculo(
             @RequestBody VeiculoRequest body,
@@ -42,7 +41,6 @@ public class VeiculoController {
         return ResponseEntity.status(201).body(toResponse(v));
     }
 
-    // Listar veículos do cliente logado
     @GetMapping("/me")
     public ResponseEntity<List<VeiculoResponse>> listarMeusVeiculos(
             @RequestHeader("Authorization") String authHeader) {
@@ -57,7 +55,6 @@ public class VeiculoController {
         return ResponseEntity.ok(veiculos);
     }
 
-    // Listar todos os veículos (admin)
     @GetMapping
     public ResponseEntity<List<VeiculoResponse>> listarTodos() {
         List<VeiculoResponse> veiculos = service.listAll()
@@ -65,7 +62,6 @@ public class VeiculoController {
         return ResponseEntity.ok(veiculos);
     }
 
-    // Ativar veículo com RFID (admin)
     @PutMapping("/{idVeiculo}/ativar")
     public ResponseEntity<VeiculoResponse> ativar(
             @PathVariable String idVeiculo,
@@ -75,7 +71,6 @@ public class VeiculoController {
         return ResponseEntity.ok(toResponse(v));
     }
 
-    // Inativar veículo (cliente ou admin)
     @PutMapping("/{idVeiculo}/inativar")
     public ResponseEntity<Void> inativar(
             @PathVariable String idVeiculo,
@@ -91,7 +86,6 @@ public class VeiculoController {
         return ResponseEntity.noContent().build();
     }
 
-    // Reativar veículo (cliente ou admin)
     @PutMapping("/{idVeiculo}/reativar")
     public ResponseEntity<Void> reativar(
             @PathVariable String idVeiculo,
@@ -107,7 +101,6 @@ public class VeiculoController {
         return ResponseEntity.noContent().build();
     }
 
-    // Buscar veículo por ID (admin)
     @GetMapping("/{idVeiculo}")
     public ResponseEntity<VeiculoResponse> buscarPorId(@PathVariable String idVeiculo) {
         Veiculo v = service.findById(idVeiculo)
@@ -133,9 +126,6 @@ public class VeiculoController {
         return ResponseEntity.ok(response);
     }
 
-
-
-    // Conversor para Response DTO
     private VeiculoResponse toResponse(Veiculo v) {
         return new VeiculoResponse(
                 v.getIdVeiculo(),

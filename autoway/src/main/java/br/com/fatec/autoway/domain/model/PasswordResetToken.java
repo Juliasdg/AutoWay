@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 public class PasswordResetToken {
-    private String token;       // UUID ou código
-    private String userId;      // ID do usuário
+    private String token;
+    private String userId;
     private LocalDateTime expiresAt;
     private boolean used;
 

@@ -60,4 +60,11 @@ public class PassagemController {
 
         return service.listByCurrentPessoaWithPeriod(idPessoa, inicio, fim);
     }
+
+    @GetMapping("/count")
+    public Map<String, Long> countAllPassagens() {
+        long count = service.listAll().size();
+        return Map.of("quantidade", count);
+    }
+
 }

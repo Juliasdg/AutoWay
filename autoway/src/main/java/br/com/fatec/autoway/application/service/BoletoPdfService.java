@@ -23,7 +23,6 @@ public class BoletoPdfService {
 
     private static final Color LOGO_COLOR = new Color(78, 9, 103); // Roxo #4E0967
     private static final Color SECTION_BG = new Color(245, 245, 245); // Cinza claro para sombra
-    private static final Color LINE_COLOR = LOGO_COLOR;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public byte[] gerarPdfBoleto(Boleto boleto) {
@@ -32,9 +31,6 @@ public class BoletoPdfService {
             PdfWriter writer = PdfWriter.getInstance(document, baos);
             document.open();
 
-            // =======================
-            // Logo dentro de retângulo roxo arredondado
-            // =======================
             PdfPTable logoTable = new PdfPTable(1);
             logoTable.setWidthPercentage(100);
             logoTable.setSpacingAfter(15);
@@ -58,18 +54,12 @@ public class BoletoPdfService {
             logoTable.addCell(logoCell);
             document.add(logoTable);
 
-            // =======================
-            // Título centralizado
-            // =======================
             Font tituloFont = new Font(Font.HELVETICA, 22, Font.BOLD, LOGO_COLOR);
             Paragraph titulo = new Paragraph("Boleto AutoWay", tituloFont);
             titulo.setAlignment(Element.ALIGN_CENTER);
             titulo.setSpacingAfter(20);
             document.add(titulo);
 
-            // =======================
-            // Informações do Boleto com borda arredondada e sombra
-            // =======================
             PdfPTable infoTable = new PdfPTable(2);
             infoTable.setWidthPercentage(100);
             infoTable.setWidths(new int[]{3, 7});
@@ -96,9 +86,6 @@ public class BoletoPdfService {
 
             document.add(infoTable);
 
-            // =======================
-            // Tabela de Passagens com borda arredondada e linha roxa
-            // =======================
             PdfPTable tabela = new PdfPTable(2);
             tabela.setWidthPercentage(100);
             tabela.setWidths(new int[]{3, 2});
@@ -133,9 +120,6 @@ public class BoletoPdfService {
 
             document.add(tabela);
 
-            // =======================
-            // Instruções de pagamento
-            // =======================
             Paragraph instrucoesTitle = new Paragraph("Instruções de Pagamento", subTitulo);
             instrucoesTitle.setSpacingAfter(5);
             document.add(instrucoesTitle);
@@ -149,9 +133,6 @@ public class BoletoPdfService {
             instrucoes.setSpacingAfter(25);
             document.add(instrucoes);
 
-            // =======================
-            // Código de Barras maior, centralizado e espaçado
-            // =======================
             String codigoBarras = gerarCodigoBarrasDeterministico(boleto);
             Barcode128 barcode128 = new Barcode128();
             barcode128.setCode(codigoBarras);
@@ -189,10 +170,8 @@ public class BoletoPdfService {
     }
 
     private String gerarCodigoBarrasDeterministico(Boleto boleto) {
-        // Combina campos únicos do boleto em uma string
         String chave = boleto.dataInicio().toString() + boleto.dataFim().toString()
                 + boleto.valorTotal() + boleto.dataEmissao().toString();
-        // Converte para hash ou número fixo
         return Integer.toHexString(chave.hashCode()).toUpperCase();
     }
 

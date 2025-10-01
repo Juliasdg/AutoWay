@@ -1,9 +1,9 @@
 package br.com.fatec.autoway.infra.repository.adapter;
 
 import br.com.fatec.autoway.domain.model.Boleto;
-import br.com.fatec.autoway.domain.port.persistence.BoletoRepositoryPort;
+import br.com.fatec.autoway.domain.port.BoletoRepositoryPort;
 import br.com.fatec.autoway.infra.orm.BoletoOrm;
-import br.com.fatec.autoway.infra.repository.BoletoRepository;
+import br.com.fatec.autoway.infra.repository.jpa.BoletoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;

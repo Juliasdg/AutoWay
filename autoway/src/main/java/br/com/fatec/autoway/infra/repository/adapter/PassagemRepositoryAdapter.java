@@ -1,9 +1,9 @@
 package br.com.fatec.autoway.infra.repository.adapter;
 
 import br.com.fatec.autoway.domain.model.Passagem;
-import br.com.fatec.autoway.domain.port.persistence.PassagemRepositoryPort;
+import br.com.fatec.autoway.domain.port.PassagemRepositoryPort;
 import br.com.fatec.autoway.infra.orm.PassagemOrm;
-import br.com.fatec.autoway.infra.repository.PassagemRepository;
+import br.com.fatec.autoway.infra.repository.jpa.PassagemRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

@@ -1,9 +1,9 @@
 package br.com.fatec.autoway.infra.repository.adapter;
 
 import br.com.fatec.autoway.domain.model.Pessoa;
-import br.com.fatec.autoway.domain.port.persistence.PessoaRepositoryPort;
+import br.com.fatec.autoway.domain.port.PessoaRepositoryPort;
 import br.com.fatec.autoway.infra.orm.PessoaOrm;
-import br.com.fatec.autoway.infra.repository.PessoaRepository;
+import br.com.fatec.autoway.infra.repository.jpa.PessoaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

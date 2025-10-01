@@ -57,7 +57,7 @@ public class BoletoOrm {
         entity.setValorTotal(boleto.valorTotal());
         entity.setDataInicio(boleto.dataInicio());
         entity.setDataFim(boleto.dataFim());
-        entity.setPassagens(objectMapper.writeValueAsString(boleto.passagens())); // converte lista
+        entity.setPassagens(objectMapper.writeValueAsString(boleto.passagens()));
         entity.setStatusPagamento(boleto.statusPagamento());
         entity.setDataEmissao(boleto.dataEmissao());
         entity.setDataVencimento(boleto.dataVencimento());

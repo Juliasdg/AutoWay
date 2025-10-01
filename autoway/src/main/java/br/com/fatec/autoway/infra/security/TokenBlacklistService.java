@@ -15,7 +15,6 @@ public class TokenBlacklistService {
     }
 
     public void blacklistToken(String token, long expirationMs) {
-        // Salva o token no Redis com TTL (expiração automática)
         redisTemplate.opsForValue().set(token, "blacklisted", expirationMs, TimeUnit.MILLISECONDS);
     }
 

@@ -28,7 +28,7 @@ public class JwtUtil {
     public String generateToken(String subject, String role) {
         return Jwts.builder()
                 .setSubject(subject)
-                .claim("role", role) // role pode ser "ADMIN" ou "CLIENTE"
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -62,11 +62,9 @@ public class JwtUtil {
         return claims.get("role", String.class);
     }
 
-    // NOVO: retorna lista de roles
     public List<String> getRolesFromJwtToken(String token) {
         String roleStr = getRoleFromJwtToken(token);
         if (roleStr == null || roleStr.isEmpty()) return List.of();
-        // se você futuramente quiser suportar múltiplas roles separadas por vírgula:
         return Arrays.asList(roleStr.split(","));
     }
 

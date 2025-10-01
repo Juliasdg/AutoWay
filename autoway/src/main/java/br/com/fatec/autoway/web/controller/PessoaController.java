@@ -64,14 +64,13 @@ public class PessoaController {
         return ResponseEntity.ok(list);
     }
 
-    // Cliente atualiza só os próprios dados
     @PutMapping("/me")
     public ResponseEntity<PessoaResponse> updateMe(
             @RequestBody PessoaUpdateRequest request,
             @RequestHeader("Authorization") String authHeader
     ) {
-        String token = authHeader.substring(7); // remove "Bearer "
-        String email = jwtUtil.getEmailFromJwtToken(token); // pega o email logado
+        String token = authHeader.substring(7);
+        String email = jwtUtil.getEmailFromJwtToken(token);
 
         Pessoa updated = service.updateOwn(email, request);
         return ResponseEntity.ok(toResponse(updated));
@@ -84,8 +83,8 @@ public class PessoaController {
     ) {
         String timestamp = java.time.LocalDateTime.now().toString();
         try {
-            String token = authHeader.substring(7); // remove "Bearer "
-            String email = jwtUtil.getEmailFromJwtToken(token); // pega o email logado
+            String token = authHeader.substring(7);
+            String email = jwtUtil.getEmailFromJwtToken(token);
 
             if (!request.newPassword().equals(request.confirmPassword())) {
                 return ResponseEntity.badRequest()
@@ -105,8 +104,6 @@ public class PessoaController {
         }
     }
 
-
-    // Admin atualiza qualquer pessoa
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<PessoaResponse> updatePessoa(
@@ -114,7 +111,7 @@ public class PessoaController {
             @RequestBody PessoaUpdateRequest request
     ) {
         Pessoa updated = service.updateAsAdmin(id, request);
-        return ResponseEntity.ok(toResponse(updated)); // <-- idem
+        return ResponseEntity.ok(toResponse(updated));
     }
 
     @PatchMapping("/{id}/inactivate")
@@ -129,16 +126,14 @@ public class PessoaController {
         return ResponseEntity.noContent().build();
     }
 
-    // Endpoint para o cliente acessar seus próprios dados
     @GetMapping("/me")
     public ResponseEntity<PessoaResponse> getMyData(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.substring(7); // remove "Bearer "
+        String token = authHeader.substring(7);
         String email = jwtUtil.getEmailFromJwtToken(token);
         Pessoa p = service.findByEmail(email);
         return ResponseEntity.ok(toResponse(p));
     }
 
-    // Endpoint para admins acessarem dados de qualquer usuário
     @GetMapping("/{id}")
     public ResponseEntity<PessoaResponse> getById(@PathVariable String id,
                                                   @RequestHeader("Authorization") String authHeader) {
@@ -149,12 +144,11 @@ public class PessoaController {
             Pessoa p = service.findById(id);
             String email = jwtUtil.getEmailFromJwtToken(token);
             if (!p.email().equals(email)) {
-                return ResponseEntity.status(403).build(); // Forbidden
+                return ResponseEntity.status(403).build();
             }
             return ResponseEntity.ok(toResponse(p));
         }
 
-        // ADMIN pode acessar qualquer ID
         Pessoa p = service.findById(id);
         return ResponseEntity.ok(toResponse(p));
     }
@@ -175,9 +169,6 @@ public class PessoaController {
         Map<String, Long> response = Map.of("quantidade", count);
         return ResponseEntity.ok(response);
     }
-
-
-
 
     private PessoaResponse toResponse(Pessoa p) {
         return new PessoaResponse(p.id(), p.nome(), p.email(), p.tipoUsuario().name(),

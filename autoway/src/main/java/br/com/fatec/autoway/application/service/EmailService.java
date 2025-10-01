@@ -15,9 +15,7 @@ import java.util.List;
 @Service
 public class EmailService {
     private final JavaMailSender mailSender;
-    private final BoletoPdfService boletoPdfService; // serviço que gera PDF do boleto
-
-
+    private final BoletoPdfService boletoPdfService;
 
     public EmailService(JavaMailSender mailSender, BoletoPdfService boletoPdfService) {
         this.mailSender = mailSender;
@@ -123,8 +121,7 @@ public class EmailService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(bodyHtmlOrText, true); // html
-            // se quiser incluir a logo inline:
+            helper.setText(bodyHtmlOrText, true);
             ClassPathResource logo = new ClassPathResource("static/logo.png");
             if (logo.exists()) {
                 helper.addInline("logo", logo);
@@ -154,7 +151,6 @@ public class EmailService {
 
             helper.setText(content, true);
 
-            // opcional: adicionar logo inline
             ClassPathResource logo = new ClassPathResource("static/logo.png");
             if (logo.exists()) {
                 helper.addInline("logo", logo);
@@ -183,7 +179,6 @@ public class EmailService {
         helper.setText("Olá! Segue em anexo o seu boleto referente ao período " +
                 boleto.dataInicio() + " até " + boleto.dataFim());
 
-        // Gera PDF do boleto
         byte[] pdfBytes = boletoPdfService.gerarPdfBoleto(boleto);
         helper.addAttachment("boleto.pdf", new ByteArrayResource(pdfBytes));
 

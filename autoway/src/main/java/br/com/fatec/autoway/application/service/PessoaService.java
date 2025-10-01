@@ -5,16 +5,14 @@ import br.com.fatec.autoway.domain.model.ConfirmationToken;
 import br.com.fatec.autoway.domain.model.PasswordResetToken;
 import br.com.fatec.autoway.domain.model.Pessoa;
 import br.com.fatec.autoway.domain.model.TipoUsuario;
-import br.com.fatec.autoway.domain.port.persistence.PessoaRepositoryPort;
-import br.com.fatec.autoway.infra.repository.ConfirmationTokenRepository;
-import br.com.fatec.autoway.infra.repository.PasswordResetTokenRepository;
+import br.com.fatec.autoway.domain.port.PessoaRepositoryPort;
+import br.com.fatec.autoway.infra.repository.jpa.ConfirmationTokenRepository;
+import br.com.fatec.autoway.infra.repository.jpa.PasswordResetTokenRepository;
 import br.com.fatec.autoway.web.dto.request.PessoaRequest;
 import br.com.fatec.autoway.web.dto.request.PessoaUpdateRequest;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.time.LocalDate;
@@ -51,7 +49,7 @@ public class PessoaService {
             return ip.getHostAddress();
         } catch (UnknownHostException e) {
             e.printStackTrace();
-            return "localhost"; // fallback
+            return "localhost";
         }
     }
 
@@ -60,13 +58,12 @@ public class PessoaService {
         var user = repository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        String token = String.format("%06d", new Random().nextInt(999999)); // 6 dígitos
+        String token = String.format("%06d", new Random().nextInt(999999));
         PasswordResetToken resetToken = new PasswordResetToken(token, user.id(),
                 LocalDateTime.now().plusMinutes(15), false);
 
         resetTokenRepository.save(resetToken);
 
-        // chama o novo método específico
         emailService.sendPasswordResetEmail(user.email(), user.nome(), token);
     }
 
@@ -74,22 +71,18 @@ public class PessoaService {
         Pessoa user = repository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
 
-        // 1️⃣ Valida a senha atual
         if (!checkPassword(currentPassword, user.senhaHash())) {
             throw new IllegalArgumentException("Senha atual incorreta");
         }
 
-        // 2️⃣ Verifica se a nova senha é igual à atual
         if (checkPassword(newPassword, user.senhaHash())) {
             throw new IllegalArgumentException("Nova senha não pode ser igual à senha atual");
         }
 
-        // 3️⃣ Valida a nova senha quanto aos critérios (tamanho, caracteres, etc.)
         if (!isValidPassword(newPassword)) {
             throw new IllegalArgumentException("Nova senha inválida. Deve ter mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais.");
         }
 
-        // Atualiza a senha
         Pessoa updated = new Pessoa(
                 user.id(),
                 user.nome(),
@@ -123,10 +116,8 @@ public class PessoaService {
 
             return true;
         } catch (IllegalArgumentException ex) {
-            // repassa a mensagem para o handler
             throw ex;
         } catch (Exception ex) {
-            // log detalhado para depuração
             ex.printStackTrace();
             throw new IllegalArgumentException("Erro ao verificar o código de reset");
         }
@@ -197,7 +188,7 @@ public class PessoaService {
                 request.email(),
                 hashed,
                 tipo,
-                false, // usuário começa inativo até confirmar email
+                false,
                 request.telefone(),
                 request.cpf(),
                 request.cep(),
@@ -209,8 +200,6 @@ public class PessoaService {
 
         repository.save(p);
 
-
-        // criar token de confirmação
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken = new ConfirmationToken(
                 token,
@@ -220,7 +209,6 @@ public class PessoaService {
         );
         tokenRepository.save(confirmationToken);
 
-        // enviar email
         String ip = getLocalIp();
         String link = "http://" + ip + ":9000/api/pessoas/confirm?token=" + token;
         emailService.sendHtmlConfirmationEmail(p.email(), p.nome(), link);
@@ -275,7 +263,6 @@ public class PessoaService {
                 "</body>" +
                 "</html>";
 
-        // Usa apenas o ID do token para ativar o usuário
         repository.updateStatus(t.getUserId(), true);
 
         t.setConfirmed(true);
@@ -305,22 +292,18 @@ public class PessoaService {
     }
 
     public void validatePessoaRequest(PessoaRequest req) {
-        // Validação de email
         if (!isValidEmail(req.email())) {
             throw new IllegalArgumentException("Email inválido");
         }
 
-        // Verifica duplicidade de email
         if (repository.findByEmail(req.email()).isPresent()) {
             throw new IllegalArgumentException("Email já registrado");
         }
 
-        // Validação de CPF (se fornecido)
         if (req.cpf() != null) {
             if (!isValidCPF(req.cpf())) {
                 throw new IllegalArgumentException("CPF inválido");
             }
-            // Verifica duplicidade de CPF
             boolean cpfExists = repository.findAll().stream()
                     .anyMatch(p -> req.cpf().equals(p.cpf()));
             if (cpfExists) {
@@ -328,14 +311,12 @@ public class PessoaService {
             }
         }
 
-        // Validação de senha
         if (!isValidPassword(req.senha())) {
             throw new IllegalArgumentException(
                     "Senha inválida. Deve ter mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais."
             );
         }
 
-        // Validação de idade
         if (req.dataNascimento() != null) {
             LocalDate dataNascimento = DateUtils.parseDate(req.dataNascimento());
             DateUtils.validateAdult(dataNascimento);
@@ -352,10 +333,9 @@ public class PessoaService {
         return email != null && Pattern.compile("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$").matcher(email).matches();
     }
 
-
     public List<Pessoa> findAllAtivos() {
         return repository.findAll().stream()
-                .filter(Pessoa::status) // considera apenas ativos
+                .filter(Pessoa::status)
                 .toList();
     }
 
@@ -363,7 +343,6 @@ public class PessoaService {
         if (cpf == null) return false;
         cpf = cpf.replaceAll("[^\\d]", "");
         if (cpf.length() != 11) return false;
-        // Check para todos os dígitos iguais
         if (cpf.matches("(\\d)\\1{10}")) return false;
 
         try {
@@ -459,11 +438,10 @@ public class PessoaService {
 
     public List<Pessoa> search(String nome) {
         return repository.findAll().stream()
-                .filter(Pessoa::status) // opcional: apenas ativos
+                .filter(Pessoa::status)
                 .filter(p -> nome == null || p.nome().toLowerCase().contains(nome.toLowerCase()))
                 .toList();
     }
-
 
     public boolean checkPassword(String raw, String hashed) {
         return passwordEncoder.matches(raw, hashed);

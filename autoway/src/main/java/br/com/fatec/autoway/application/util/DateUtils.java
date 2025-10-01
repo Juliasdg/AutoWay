@@ -6,11 +6,10 @@ import java.time.format.DateTimeParseException;
 
 public class DateUtils {
 
-    // Aceita vários formatos comuns
     private static final DateTimeFormatter[] FORMATTERS = new DateTimeFormatter[]{
-            DateTimeFormatter.ISO_LOCAL_DATE,       // 2025-09-21
-            DateTimeFormatter.ofPattern("dd/MM/yyyy"), // 21/09/2025
-            DateTimeFormatter.ofPattern("dd-MM-yyyy")  // 21-09-2025
+            DateTimeFormatter.ISO_LOCAL_DATE,
+            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("dd-MM-yyyy")
     };
 
     public static LocalDate parseDate(String input) {

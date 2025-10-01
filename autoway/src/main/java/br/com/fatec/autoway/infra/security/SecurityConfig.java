@@ -33,7 +33,6 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(jwtUtil, blacklistService);
     }
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http
@@ -43,26 +42,25 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(authz -> authz
-                        // Endpoints públicos
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("api/auth/logout").hasAnyRole("CLIENTE", "ADMIN")
                         .requestMatchers("/api/pessoas/confirm").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/passagens/**").permitAll()
 
-                        // libera o Swagger
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        // libera também se você tiver actuator/health
                         .requestMatchers("/actuator/**").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/boletos/gerar/*").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/boletos/*").hasAnyRole("CLIENTE", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/boletos").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/boletos/count").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/passagens/count").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/boletos/trigger/*").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/api/passagens/all").hasRole("ADMIN")
@@ -99,15 +97,12 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Use "" se não precisar enviar credenciais; caso contrário, coloque a URL do Angular
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS","PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true); // permite cookies ou Authorization header
-
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // aplica CORS a todas as rotas
-
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 }

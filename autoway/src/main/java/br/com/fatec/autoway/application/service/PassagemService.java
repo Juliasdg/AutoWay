@@ -4,7 +4,7 @@ import br.com.fatec.autoway.domain.model.Passagem;
 import br.com.fatec.autoway.domain.model.Pessoa;
 import br.com.fatec.autoway.domain.model.TipoUsuario;
 import br.com.fatec.autoway.domain.model.Veiculo;
-import br.com.fatec.autoway.domain.port.persistence.PassagemRepositoryPort;
+import br.com.fatec.autoway.domain.port.PassagemRepositoryPort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,14 +39,12 @@ public class PassagemService {
             veiculo = veiculoService.findByRfid(rfid);
         } catch (RuntimeException ex) {
 
-            // Em PassagemService
             List<String> adminEmails = pessoaService.findAllAtivos().stream()
                     .filter(p -> p.tipoUsuario() == TipoUsuario.admin)
                     .map(Pessoa::email)
                     .toList();
 
 
-            // Veículo não registrado ou RFID inválido
             emailService.sendGenericEmailToAdmins(
                     adminEmails,
                     "Falha ao registrar passagem",
@@ -58,18 +56,14 @@ public class PassagemService {
         Pessoa pessoa = pessoaService.findById(veiculo.getIdPessoa());
 
         if (!veiculo.isAtivo()) {
-            // Em PassagemService
             List<String> adminEmails = pessoaService.findAllAtivos().stream()
                     .filter(p -> p.tipoUsuario() == TipoUsuario.admin)
                     .map(Pessoa::email)
                     .toList();
 
-
-            // dentro do método createByRfid
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             String dataFormatada = data.format(formatter);
 
-            // Notifica tanto admin quanto o dono do veículo
             emailService.sendGenericEmailToAdmins(
                     adminEmails,
                     "Veículo desativado detectado",
@@ -85,7 +79,7 @@ public class PassagemService {
             throw new IllegalArgumentException("Veículo desativado");
         }
 
-        var local = "No cu do Jeferson"; // seu local temporário
+        var local = "Pedágio Modelo 1A";
         var valorPassagem = 24.50;
 
         Passagem passagem = new Passagem(

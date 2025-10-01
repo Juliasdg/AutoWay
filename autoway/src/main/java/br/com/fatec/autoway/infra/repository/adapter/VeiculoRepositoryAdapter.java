@@ -1,11 +1,11 @@
 package br.com.fatec.autoway.infra.repository.adapter;
 
 import br.com.fatec.autoway.domain.model.Veiculo;
-import br.com.fatec.autoway.domain.port.persistence.VeiculoRepositoryPort;
+import br.com.fatec.autoway.domain.port.VeiculoRepositoryPort;
 import br.com.fatec.autoway.infra.orm.VeiculoOrm;
-import br.com.fatec.autoway.domain.port.persistence.PessoaRepositoryPort;
+import br.com.fatec.autoway.domain.port.PessoaRepositoryPort;
 import br.com.fatec.autoway.domain.model.Pessoa;
-import br.com.fatec.autoway.infra.repository.VeiculoRepository;
+import br.com.fatec.autoway.infra.repository.jpa.VeiculoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,7 +37,6 @@ public class VeiculoRepositoryAdapter implements VeiculoRepositoryPort {
 
     private VeiculoOrm toOrm(Veiculo v) {
         VeiculoOrm orm = new VeiculoOrm();
-        // se o domain não tiver id, gera um UUID string
         if (v.getIdVeiculo() == null) {
             orm.setIdVeiculo(UUID.randomUUID().toString());
             v.setIdVeiculo(orm.getIdVeiculo());

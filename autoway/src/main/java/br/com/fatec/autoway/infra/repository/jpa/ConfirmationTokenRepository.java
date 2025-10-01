@@ -1,4 +1,4 @@
-package br.com.fatec.autoway.infra.repository;
+package br.com.fatec.autoway.infra.repository.jpa;
 
 import br.com.fatec.autoway.domain.model.ConfirmationToken;
 import org.springframework.stereotype.Repository;

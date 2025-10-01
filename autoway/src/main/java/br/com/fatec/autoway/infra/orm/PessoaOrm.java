@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Getter @Setter
 public class PessoaOrm {
 
-    // getters e setters
     @Id
     @Column(name = "id_pessoa", length = 36)
     private String id;

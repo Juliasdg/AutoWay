@@ -35,7 +35,6 @@ public class PassagemOrm {
     @Column(name = "valor", nullable = false)
     private Double valor;
 
-    // Getters, setters e construtores
     public PassagemOrm() {}
 
     public PassagemOrm(Integer id, String idVeiculo, String idPessoa, String local, LocalDate data, LocalTime hora, Double valor) {
@@ -47,6 +46,4 @@ public class PassagemOrm {
         this.hora = hora;
         this.valor = valor;
     }
-
-    // getters e setters...
 }

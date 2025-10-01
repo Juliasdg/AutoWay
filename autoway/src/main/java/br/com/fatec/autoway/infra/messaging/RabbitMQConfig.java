@@ -32,7 +32,6 @@ public class RabbitMQConfig {
                 .with(ROUTING_KEY);
     }
 
-    // Adicione este bean
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         return new Jackson2JsonMessageConverter();

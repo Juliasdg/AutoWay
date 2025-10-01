@@ -2,7 +2,7 @@ package br.com.fatec.autoway.application.service;
 
 import br.com.fatec.autoway.domain.model.Veiculo;
 import br.com.fatec.autoway.domain.model.Pessoa;
-import br.com.fatec.autoway.domain.port.persistence.VeiculoRepositoryPort;
+import br.com.fatec.autoway.domain.port.VeiculoRepositoryPort;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -41,9 +41,9 @@ public class VeiculoService {
         Veiculo v = new Veiculo(UUID.randomUUID().toString(), idPessoa, placa, null, false);
         repository.save(v);
 
-        Pessoa pessoa = pessoaService.findById(idPessoa); // pega o objeto completo
+        Pessoa pessoa = pessoaService.findById(idPessoa);
         String clienteEmail = pessoa.email();
-        String clienteNome = pessoa.nome(); // supondo que você tenha esse método
+        String clienteNome = pessoa.nome();
 
         emailService.sendGenericEmail(clienteEmail,
                 "Veículo aguardando validação",

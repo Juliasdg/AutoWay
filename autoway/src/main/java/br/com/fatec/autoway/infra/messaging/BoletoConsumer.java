@@ -2,7 +2,7 @@ package br.com.fatec.autoway.infra.messaging;
 
 import br.com.fatec.autoway.domain.model.Boleto;
 import br.com.fatec.autoway.infra.orm.BoletoOrm;
-import br.com.fatec.autoway.infra.repository.BoletoRepository;
+import br.com.fatec.autoway.infra.repository.jpa.BoletoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
