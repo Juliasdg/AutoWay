@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @ApiResponse
@@ -113,6 +114,26 @@ public class VeiculoController {
                 .orElseThrow(() -> new IllegalArgumentException("Veículo não encontrado"));
         return ResponseEntity.ok(toResponse(v));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<VeiculoResponse>> search(
+            @RequestParam(required = false) String placa,
+            @RequestParam(required = false) String rfid
+    ) {
+        List<VeiculoResponse> result = service.search(placa, rfid).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/ativos/count")
+    public ResponseEntity<Map<String, Long>> countVeiculosAtivos() {
+        long count = service.findAllAtivos().size();
+        Map<String, Long> response = Map.of("quantidade", count);
+        return ResponseEntity.ok(response);
+    }
+
+
 
     // Conversor para Response DTO
     private VeiculoResponse toResponse(Veiculo v) {

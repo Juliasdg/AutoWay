@@ -72,6 +72,14 @@ public class VeiculoService {
         return v;
     }
 
+    public List<Veiculo> search(String placa, String rfid) {
+        return repository.findAll().stream()
+                .filter(v -> placa == null || v.getPlaca().toLowerCase().contains(placa.toLowerCase()))
+                .filter(v -> rfid == null || (v.getIdRfid() != null && v.getIdRfid().equalsIgnoreCase(rfid)))
+                .toList();
+    }
+
+
     public List<Veiculo> listByClient(String idPessoa) {
         return repository.findByPessoa(idPessoa);
     }
@@ -115,6 +123,13 @@ public class VeiculoService {
         return repository.findByRfid(rfid)
                 .orElseThrow(() -> new RuntimeException("Veículo não encontrado para RFID: " + rfid));
     }
+
+    public List<Veiculo> findAllAtivos() {
+        return repository.findAll().stream()
+                .filter(Veiculo::isAtivo)
+                .toList();
+    }
+
 
     @Async
     void notifyAdminsNewVehicle(Veiculo v, String clienteNome) {

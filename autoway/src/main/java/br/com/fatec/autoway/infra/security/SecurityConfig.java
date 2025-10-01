@@ -70,6 +70,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/veiculos").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/veiculos/me").hasAnyRole("CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/veiculos").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/veiculos/search/*").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/pessoas/ativos/count").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/veiculos/ativos/count").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/veiculos/*").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/veiculos/*/ativar").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/veiculos/*/inativar").hasAnyRole("CLIENTE","ADMIN")
@@ -77,6 +80,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.PUT, "/api/pessoas/me/password").hasAnyRole("ADMIN", "CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/pessoas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/pessoas/search/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/pessoas/me").hasAnyRole("ADMIN","CLIENTE")
                         .requestMatchers(HttpMethod.GET, "/api/pessoas/{id}").hasAnyRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/pessoas").hasRole("ADMIN") // Criar novo usuário

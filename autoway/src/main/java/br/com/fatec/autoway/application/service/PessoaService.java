@@ -457,13 +457,15 @@ public class PessoaService {
         repository.updateStatus(id, true);
     }
 
-    public boolean checkPassword(String raw, String hashed) {
-        return passwordEncoder.matches(raw, hashed);
+    public List<Pessoa> search(String nome) {
+        return repository.findAll().stream()
+                .filter(Pessoa::status) // opcional: apenas ativos
+                .filter(p -> nome == null || p.nome().toLowerCase().contains(nome.toLowerCase()))
+                .toList();
     }
 
-    public String getCurrentPessoaId() {
-        // Pega o usuário logado pelo Spring Security
-        var auth = SecurityContextHolder.getContext().getAuthentication();
-        return auth.getName(); // supondo que o username seja o ID da pessoa
+
+    public boolean checkPassword(String raw, String hashed) {
+        return passwordEncoder.matches(raw, hashed);
     }
 }

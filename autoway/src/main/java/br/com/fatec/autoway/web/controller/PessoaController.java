@@ -15,6 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -157,6 +158,26 @@ public class PessoaController {
         Pessoa p = service.findById(id);
         return ResponseEntity.ok(toResponse(p));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PessoaResponse>> search(
+            @RequestParam(required = false) String nome
+    ) {
+        List<PessoaResponse> result = service.search(nome).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/ativos/count")
+    public ResponseEntity<Map<String, Long>> countAtivos() {
+        long count = service.findAllAtivos().size();
+        Map<String, Long> response = Map.of("quantidade", count);
+        return ResponseEntity.ok(response);
+    }
+
+
+
 
     private PessoaResponse toResponse(Pessoa p) {
         return new PessoaResponse(p.id(), p.nome(), p.email(), p.tipoUsuario().name(),
