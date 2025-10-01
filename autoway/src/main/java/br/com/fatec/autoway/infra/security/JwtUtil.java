@@ -69,4 +69,14 @@ public class JwtUtil {
         // se você futuramente quiser suportar múltiplas roles separadas por vírgula:
         return Arrays.asList(roleStr.split(","));
     }
+
+    public Date getExpirationFromJwtToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.getExpiration();
+    }
+
 }

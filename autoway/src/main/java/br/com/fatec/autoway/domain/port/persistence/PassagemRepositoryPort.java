@@ -14,4 +14,6 @@ public interface PassagemRepositoryPort {
     List<Passagem> findByPessoaAndPeriodo(String pessoaId, LocalDate inicio, LocalDate fim);
 
     List<Passagem> findByPessoa(String pessoaId);
+
+
 }

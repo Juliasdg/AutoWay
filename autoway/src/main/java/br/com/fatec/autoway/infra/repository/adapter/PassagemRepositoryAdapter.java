@@ -86,4 +86,6 @@ public class PassagemRepositoryAdapter implements PassagemRepositoryPort {
                 ))
                 .collect(Collectors.toList());
     }
+
+
 }

@@ -3,13 +3,16 @@ package br.com.fatec.autoway.web.controller;
 import br.com.fatec.autoway.application.service.PessoaService;
 import br.com.fatec.autoway.domain.model.Pessoa;
 import br.com.fatec.autoway.infra.security.JwtUtil;
+import br.com.fatec.autoway.infra.security.TokenBlacklistService;
 import br.com.fatec.autoway.web.dto.request.*;
 import br.com.fatec.autoway.web.dto.response.AuthResponse;
 import br.com.fatec.autoway.web.dto.response.ErrorResponse;
 import br.com.fatec.autoway.web.dto.response.PessoaResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +26,15 @@ public class AuthController {
 
     private final PessoaService pessoaService;
     private final JwtUtil jwtUtil;
+    private final TokenBlacklistService blacklistService;
 
     @Value("${app.admin.secret}")
     private String adminSecret;
 
-    public AuthController(PessoaService pessoaService, JwtUtil jwtUtil) {
+    public AuthController(PessoaService pessoaService, JwtUtil jwtUtil, TokenBlacklistService blacklistService) {
         this.pessoaService = pessoaService;
         this.jwtUtil = jwtUtil;
+        this.blacklistService = blacklistService;
     }
 
     // DTOs internos para requests JSON
@@ -103,7 +108,7 @@ public class AuthController {
     // Mantém os endpoints de registro e login como estavam
     @PostMapping("/register")
     public ResponseEntity<?> register(
-            @RequestBody PessoaRequest request,
+            @Valid @RequestBody PessoaRequest request,
             @RequestParam(defaultValue = "cliente") String role,
             @RequestParam(required = false) String adminKey) {
 
@@ -159,21 +164,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
 
-        // valida campos obrigatórios
-        if (request == null || request.email() == null || request.email().isBlank()
-                || request.senha() == null || request.senha().isBlank()) {
-            return ResponseEntity.badRequest()
-                    .body(new ErrorResponse(
-                            400,
-                            "Email e senha são obrigatórios",
-                            LocalDateTime.now().toString()
-                    ));
-        }
-
         try {
             Pessoa user = pessoaService.findByEmail(request.email());
 
-            // valida usuário e status
             if (user == null || !user.status()) {
                 return ResponseEntity.status(401)
                         .body(new ErrorResponse(
@@ -183,18 +176,16 @@ public class AuthController {
                         ));
             }
 
-            // valida senha
             boolean ok = pessoaService.checkPassword(request.senha(), user.senhaHash());
             if (!ok) {
-                return ResponseEntity.status(401)
+                return ResponseEntity.status(400)
                         .body(new ErrorResponse(
-                                401,
+                                400,
                                 "Credenciais inválidas ou usuário inativo",
                                 LocalDateTime.now().toString()
                         ));
             }
 
-            // gera token
             String token = jwtUtil.generateToken(user.email(), user.tipoUsuario().name());
 
             Cookie cookie = new Cookie("token", token);
@@ -227,7 +218,21 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        String token = null;
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+
+        if (token != null) {
+            long expiration = jwtUtil.getExpirationFromJwtToken(token).getTime() - System.currentTimeMillis();
+            blacklistService.blacklistToken(token, expiration);
+        }
+
         Cookie cookie = new Cookie("token", null);
         cookie.setHttpOnly(true);
         cookie.setSecure(false);
@@ -237,4 +242,5 @@ public class AuthController {
 
         return ResponseEntity.ok("Logout realizado com sucesso");
     }
+
 }

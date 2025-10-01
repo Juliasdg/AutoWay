@@ -1,5 +1,7 @@
 package br.com.fatec.autoway.application.service;
 
+import br.com.fatec.autoway.domain.model.Boleto;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -8,12 +10,18 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+import java.util.List;
+
 @Service
 public class EmailService {
     private final JavaMailSender mailSender;
+    private final BoletoPdfService boletoPdfService; // serviço que gera PDF do boleto
 
-    public EmailService(JavaMailSender mailSender) {
+
+
+    public EmailService(JavaMailSender mailSender, BoletoPdfService boletoPdfService) {
         this.mailSender = mailSender;
+        this.boletoPdfService = boletoPdfService;
     }
 
     @Async
@@ -56,7 +64,7 @@ public class EmailService {
 
             helper.setText(content, true);
 
-            ClassPathResource logo = new ClassPathResource("logo.png");
+            ClassPathResource logo = new ClassPathResource("static/logo.png");
             helper.addInline("logo", logo);
 
             mailSender.send(message);
@@ -98,7 +106,7 @@ public class EmailService {
 
             helper.setText(content, true);
 
-            ClassPathResource logo = new ClassPathResource("logo.png");
+            ClassPathResource logo = new ClassPathResource("static/logo.png");
             helper.addInline("logo", logo);
 
             mailSender.send(message);
@@ -117,7 +125,7 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(bodyHtmlOrText, true); // html
             // se quiser incluir a logo inline:
-            ClassPathResource logo = new ClassPathResource("logo.png");
+            ClassPathResource logo = new ClassPathResource("static/logo.png");
             if (logo.exists()) {
                 helper.addInline("logo", logo);
             }
@@ -147,7 +155,7 @@ public class EmailService {
             helper.setText(content, true);
 
             // opcional: adicionar logo inline
-            ClassPathResource logo = new ClassPathResource("logo.png");
+            ClassPathResource logo = new ClassPathResource("static/logo.png");
             if (logo.exists()) {
                 helper.addInline("logo", logo);
             }
@@ -159,5 +167,27 @@ public class EmailService {
         }
     }
 
+    @Async
+    public void sendGenericEmailToAdmins(List<String> emails, String subject, String bodyHtmlOrText) {
+        for (String adminEmail : emails) {
+            sendGenericEmail(adminEmail, subject, bodyHtmlOrText);
+        }
+    }
+
+    public void enviarBoletoPorEmail(Boleto boleto, String emailDestinatario) throws MessagingException {
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(emailDestinatario);
+        helper.setSubject("AutoWay - Seu Boleto");
+        helper.setText("Olá! Segue em anexo o seu boleto referente ao período " +
+                boleto.dataInicio() + " até " + boleto.dataFim());
+
+        // Gera PDF do boleto
+        byte[] pdfBytes = boletoPdfService.gerarPdfBoleto(boleto);
+        helper.addAttachment("boleto.pdf", new ByteArrayResource(pdfBytes));
+
+        mailSender.send(message);
+    }
 
 }

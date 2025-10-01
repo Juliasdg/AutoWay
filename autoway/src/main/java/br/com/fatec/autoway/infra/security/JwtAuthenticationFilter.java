@@ -17,9 +17,11 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final TokenBlacklistService blacklistService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, TokenBlacklistService blacklistService) {
         this.jwtUtil = jwtUtil;
+        this.blacklistService = blacklistService;
     }
 
     @Override
@@ -36,28 +38,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        if(token != null){
+        if (token != null) {
+            // 🔴 Verifica se o token está na blacklist
+            if (blacklistService.isTokenBlacklisted(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
+
             if (!jwtUtil.validateJwtToken(token)) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
             }
 
-            // extrai email e role do token
             String email = jwtUtil.getEmailFromJwtToken(token);
-            String role = jwtUtil.getRoleFromJwtToken(token).toUpperCase(); // admin -> ADMIN
+            String role = jwtUtil.getRoleFromJwtToken(token).toUpperCase();
 
-            // adiciona prefixo ROLE
             var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
-
-            // cria Authentication
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(email, null, authorities);
-
-            // popula o SecurityContext
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(request, response);
     }
-
 }

@@ -222,7 +222,7 @@ public class PessoaService {
 
         // enviar email
         String ip = getLocalIp();
-        String link = "http://" + ip + ":9000/pessoas/confirm?token=" + token;
+        String link = "http://" + ip + ":9000/api/pessoas/confirm?token=" + token;
         emailService.sendHtmlConfirmationEmail(p.email(), p.nome(), link);
 
         return p;
@@ -232,8 +232,48 @@ public class PessoaService {
         ConfirmationToken t = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("Token inválido"));
 
-        if (t.isConfirmed()) return "Email já confirmado.";
-        if (t.getExpiresAt().isBefore(LocalDateTime.now())) return "Token expirado.";
+        if (t.isConfirmed()) return "<!DOCTYPE html>" +
+                "<html lang='pt-BR'>" +
+                "<head><meta charset='UTF-8'><title>Confirmação de Conta</title></head>" +
+                "<body style='font-family:Arial,sans-serif;background-color:#f4f6f8;margin:0;padding:0;'>" +
+                "<div style='max-width:600px;margin:30px auto;background:#ffffff;border-radius:8px;" +
+                "box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;'>" +
+
+                "<div style='background:#4E0967;padding:20px;text-align:center;'>" +
+                "</div>" +
+
+                "<div style='padding:30px 20px;text-align:center;'>" +
+                "<h2 style='color:#333;'>Email já confirmado!! </h2>" +
+                "</div>" +
+
+                "<div style='background:#f4f6f8;padding:15px;text-align:center;font-size:12px;color:#999;'>" +
+                "© 2025 Autoway. Todos os direitos reservados." +
+                "</div>" +
+
+                "</div>" +
+                "</body>" +
+                "</html>";
+        if (t.getExpiresAt().isBefore(LocalDateTime.now())) return "<!DOCTYPE html>" +
+                "<html lang='pt-BR'>" +
+                "<head><meta charset='UTF-8'><title>Confirmação de Conta</title></head>" +
+                "<body style='font-family:Arial,sans-serif;background-color:#f4f6f8;margin:0;padding:0;'>" +
+                "<div style='max-width:600px;margin:30px auto;background:#ffffff;border-radius:8px;" +
+                "box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;'>" +
+
+                "<div style='background:#4E0967;padding:20px;text-align:center;'>" +
+                "</div>" +
+
+                "<div style='padding:30px 20px;text-align:center;'>" +
+                "<h2 style='color:#333;'>Token Expirado!! </h2>" +
+                "</div>" +
+
+                "<div style='background:#f4f6f8;padding:15px;text-align:center;font-size:12px;color:#999;'>" +
+                "© 2025 Autoway. Todos os direitos reservados." +
+                "</div>" +
+
+                "</div>" +
+                "</body>" +
+                "</html>";
 
         // Usa apenas o ID do token para ativar o usuário
         repository.updateStatus(t.getUserId(), true);
@@ -241,7 +281,27 @@ public class PessoaService {
         t.setConfirmed(true);
         tokenRepository.save(t);
 
-        return "Email confirmado com sucesso!";
+        return "<!DOCTYPE html>" +
+                "<html lang='pt-BR'>" +
+                "<head><meta charset='UTF-8'><title>Confirmação de Conta</title></head>" +
+                "<body style='font-family:Arial,sans-serif;background-color:#f4f6f8;margin:0;padding:0;'>" +
+                "<div style='max-width:600px;margin:30px auto;background:#ffffff;border-radius:8px;" +
+                "box-shadow:0 4px 12px rgba(0,0,0,0.1);overflow:hidden;'>" +
+
+                "<div style='background:#4E0967;padding:20px;text-align:center;'>" +
+                "</div>" +
+
+                "<div style='padding:30px 20px;text-align:center;'>" +
+                "<h2 style='color:#333;'>Conta Validada com Sucesso!! </h2>" +
+                "</div>" +
+
+                "<div style='background:#f4f6f8;padding:15px;text-align:center;font-size:12px;color:#999;'>" +
+                "© 2025 Autoway. Todos os direitos reservados." +
+                "</div>" +
+
+                "</div>" +
+                "</body>" +
+                "</html>";
     }
 
     public void validatePessoaRequest(PessoaRequest req) {

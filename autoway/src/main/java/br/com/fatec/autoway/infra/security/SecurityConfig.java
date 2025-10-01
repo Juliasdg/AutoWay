@@ -29,12 +29,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter authenticationJwtTokenFilter() {
-        return new JwtAuthenticationFilter(jwtUtil);
+    public JwtAuthenticationFilter authenticationJwtTokenFilter(TokenBlacklistService blacklistService) {
+        return new JwtAuthenticationFilter(jwtUtil, blacklistService);
     }
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtAuthenticationFilter jwtFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
@@ -58,6 +59,12 @@ public class SecurityConfig {
                         // libera também se você tiver actuator/health
                         .requestMatchers("/actuator/**").permitAll()
 
+                        .requestMatchers(HttpMethod.POST, "/api/boletos/gerar/*").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/boletos/*").hasAnyRole("CLIENTE", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/boletos").hasAnyRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/boletos/trigger/*").hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.GET, "/api/passagens/all").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/passagens/me").hasRole("CLIENTE")
                         .requestMatchers(HttpMethod.POST, "/api/veiculos").hasRole("CLIENTE")
@@ -79,7 +86,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/pessoas/{id}/reactivate").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

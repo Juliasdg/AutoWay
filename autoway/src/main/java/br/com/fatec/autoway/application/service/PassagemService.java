@@ -2,12 +2,15 @@ package br.com.fatec.autoway.application.service;
 
 import br.com.fatec.autoway.domain.model.Passagem;
 import br.com.fatec.autoway.domain.model.Pessoa;
+import br.com.fatec.autoway.domain.model.TipoUsuario;
+import br.com.fatec.autoway.domain.model.Veiculo;
 import br.com.fatec.autoway.domain.port.persistence.PassagemRepositoryPort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +34,58 @@ public class PassagemService {
     }
 
     public Passagem createByRfid(String rfid, LocalDate data, LocalTime hora) {
-        var veiculo = veiculoService.findByRfid(rfid);
-        var pessoa = pessoaService.findById(veiculo.getIdPessoa());
+        Veiculo veiculo;
+        try {
+            veiculo = veiculoService.findByRfid(rfid);
+        } catch (RuntimeException ex) {
 
-        var local = "No cu do Jeferson";
+            // Em PassagemService
+            List<String> adminEmails = pessoaService.findAllAtivos().stream()
+                    .filter(p -> p.tipoUsuario() == TipoUsuario.admin)
+                    .map(Pessoa::email)
+                    .toList();
+
+
+            // Veículo não registrado ou RFID inválido
+            emailService.sendGenericEmailToAdmins(
+                    adminEmails,
+                    "Falha ao registrar passagem",
+                    "Tentativa de passagem com RFID não registrado: " + rfid
+            );
+            throw new IllegalArgumentException("Veículo não registrado ou RFID inválido");
+        }
+
+        Pessoa pessoa = pessoaService.findById(veiculo.getIdPessoa());
+
+        if (!veiculo.isAtivo()) {
+            // Em PassagemService
+            List<String> adminEmails = pessoaService.findAllAtivos().stream()
+                    .filter(p -> p.tipoUsuario() == TipoUsuario.admin)
+                    .map(Pessoa::email)
+                    .toList();
+
+
+            // dentro do método createByRfid
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            String dataFormatada = data.format(formatter);
+
+            // Notifica tanto admin quanto o dono do veículo
+            emailService.sendGenericEmailToAdmins(
+                    adminEmails,
+                    "Veículo desativado detectado",
+                    "O veículo " + veiculo.getPlaca() + " tentou passar, mas está desativado."
+            );
+
+            emailService.sendGenericEmail(
+                    pessoa.email(),
+                    "Tentativa de passagem com veículo desativado",
+                    "Seu veículo " + veiculo.getPlaca() + " tentou passar em " + dataFormatada + " às " + hora + ", mas está desativado."
+            );
+
+            throw new IllegalArgumentException("Veículo desativado");
+        }
+
+        var local = "No cu do Jeferson"; // seu local temporário
         var valorPassagem = 24.50;
 
         Passagem passagem = new Passagem(
