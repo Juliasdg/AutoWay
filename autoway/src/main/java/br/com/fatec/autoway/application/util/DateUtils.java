@@ -12,6 +12,8 @@ public class DateUtils {
             DateTimeFormatter.ofPattern("dd-MM-yyyy")
     };
 
+    private static final DateTimeFormatter BR_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
     public static LocalDate parseDate(String input) {
         if (input == null || input.isBlank()) return null;
         for (DateTimeFormatter formatter : FORMATTERS) {
@@ -29,5 +31,10 @@ public class DateUtils {
         if (dateOfBirth.plusYears(18).isAfter(today)) {
             throw new IllegalArgumentException("O usuário deve ser maior de 18 anos.");
         }
+    }
+
+    public static String formatToBR(LocalDate date) {
+        if (date == null) return "";
+        return date.format(BR_FORMATTER);
     }
 }

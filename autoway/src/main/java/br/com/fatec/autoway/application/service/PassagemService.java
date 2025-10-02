@@ -97,8 +97,8 @@ public class PassagemService {
         emailService.sendPassagemEmail(
                 pessoa.email(),
                 veiculo.getPlaca(),
-                data.toString(),
-                hora.toString(),
+                data,
+                hora,
                 valorPassagem
         );
 
