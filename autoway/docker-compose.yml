@@ -1,6 +1,36 @@
 version: "3.9"
 
 services:
+  autoway-app:
+    build: .
+    image: autoway-app
+    container_name: autoway-app
+    ports:
+      - "9000:9000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bd_autoway?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+    depends_on:
+      - mysql
+      - redis
+      - rabbitmq
+
+  mysql:
+    image: mysql:8.0
+    container_name: autoway-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: bd_autoway
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
   redis:
     image: redis:7.2-alpine
     container_name: autoway-redis
@@ -9,15 +39,17 @@ services:
     command: ["redis-server", "--save", "60", "1", "--appendonly", "yes"]
     volumes:
       - redis-data:/data
+
   rabbitmq:
     image: rabbitmq:3-management
-    container_name: rabbitmq
+    container_name: autoway-rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672" # painel web em http://localhost:15672
     environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
 volumes:
+  mysql-data:
   redis-data:

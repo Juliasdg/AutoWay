@@ -4,7 +4,7 @@ import br.com.fatec.autoway.domain.model.Boleto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import static br.com.fatec.autoway.infra.messaging.RabbitMQConfig.*;
+import static br.com.fatec.autoway.infra.config.RabbitMQConfig.*;
 
 @Component
 public class BoletoProducer {

@@ -1,4 +1,4 @@
-package br.com.fatec.autoway.infra.security;
+package br.com.fatec.autoway.infra.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

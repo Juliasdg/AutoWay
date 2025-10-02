@@ -8,7 +8,12 @@ import br.com.fatec.autoway.web.dto.request.*;
 import br.com.fatec.autoway.web.dto.response.AuthResponse;
 import br.com.fatec.autoway.web.dto.response.ErrorResponse;
 import br.com.fatec.autoway.web.dto.response.PessoaResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
-@ApiResponse
+@Tag(name = "Autenticação", description = "Endpoints de autenticação, registro e recuperação de senha")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -37,6 +42,12 @@ public class AuthController {
         this.blacklistService = blacklistService;
     }
 
+    @Operation(summary = "Esqueci minha senha", description = "Envia um código de redefinição de senha para o email informado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Código enviado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         try {
@@ -51,6 +62,13 @@ public class AuthController {
         }
     }
 
+
+    @Operation(summary = "Verificar código de redefinição", description = "Valida se o código enviado por e-mail é válido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Código válido ou inválido", content = @Content(schema = @Schema(implementation = Boolean.class))),
+            @ApiResponse(responseCode = "400", description = "Código ou email inválido", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/verify-reset-code")
     public ResponseEntity<?> verifyResetCode(@RequestBody VerifyResetRequest request) {
         try {
@@ -65,6 +83,12 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Redefinir senha", description = "Permite redefinir a senha usando o código enviado por e-mail.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Senha redefinida com sucesso", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "Código ou email inválido", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
         try {
@@ -79,6 +103,12 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Alterar senha", description = "Permite alterar a senha informando a senha atual e a nova senha.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Senha alterada com sucesso", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "Validação falhou", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
             @RequestParam String email,
@@ -101,6 +131,12 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Registrar novo usuário", description = "Cria um novo usuário (cliente ou admin).")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(schema = @Schema(implementation = PessoaResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Erro de validação", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @Valid @RequestBody PessoaRequest request,
@@ -156,6 +192,13 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Login do usuário", description = "Autentica o usuário com email e senha, retornando um token JWT.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login realizado com sucesso", content = @Content(schema = @Schema(implementation = AuthResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Credenciais inválidas", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Usuário inativo", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse response) {
 
@@ -212,6 +255,11 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Logout do usuário", description = "Invalida o token JWT atual e remove o cookie de autenticação.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Logout realizado com sucesso"),
+            @ApiResponse(responseCode = "500", description = "Erro interno do servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         String token = null;

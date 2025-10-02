@@ -1,5 +1,8 @@
-package br.com.fatec.autoway.infra.security;
+package br.com.fatec.autoway.infra.config;
 
+import br.com.fatec.autoway.infra.security.JwtAuthenticationFilter;
+import br.com.fatec.autoway.infra.security.JwtUtil;
+import br.com.fatec.autoway.infra.security.TokenBlacklistService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

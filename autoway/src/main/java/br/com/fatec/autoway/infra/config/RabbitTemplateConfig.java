@@ -1,4 +1,4 @@
-package br.com.fatec.autoway.infra.messaging;
+package br.com.fatec.autoway.infra.config;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
