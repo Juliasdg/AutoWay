@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -36,8 +37,6 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(400).body(error);
     }
-
-
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleInvalidJson(HttpMessageNotReadableException ex) {
@@ -63,6 +62,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> invalidIdAtURL(Exception ex) {
+        ex.printStackTrace(); // log detalhado
+        ErrorResponse error = new ErrorResponse(
+                404,
+                "Não foi possível identificar sua consulta",
+                LocalDateTime.now().toString()
+        );
+        return ResponseEntity.status(500).body(error);
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {

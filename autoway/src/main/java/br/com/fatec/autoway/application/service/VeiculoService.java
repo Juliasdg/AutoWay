@@ -3,8 +3,10 @@ package br.com.fatec.autoway.application.service;
 import br.com.fatec.autoway.domain.model.Veiculo;
 import br.com.fatec.autoway.domain.model.Pessoa;
 import br.com.fatec.autoway.domain.port.VeiculoRepositoryPort;
+import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +31,11 @@ public class VeiculoService {
         return p.id();
     }
 
-    public Optional<Veiculo> findById(String idVeiculo) {
+    public Optional<Veiculo> findById(String idVeiculo) throws NoResourceFoundException {
+        if(idVeiculo.equals("")){
+            throw new NoResourceFoundException(HttpMethod.GET, ("Não foi possível realizar sua consulta"));
+        }
+
         return repository.findById(idVeiculo);
     }
 
@@ -88,24 +94,21 @@ public class VeiculoService {
         return repository.findAll();
     }
 
-    public void inactivate(String idVeiculo, String idPessoa, boolean isAdmin) {
+    public void inactivate(String idVeiculo) {
         Veiculo v = repository.findById(idVeiculo)
                 .orElseThrow(() -> new IllegalArgumentException("Veículo não encontrado"));
 
-        if (!isAdmin && !v.getIdPessoa().equals(idPessoa)) {
-            throw new IllegalArgumentException("Ação não permitida");
-        }
 
         v.setAtivo(false);
         repository.save(v);
     }
 
-    public void reactivate(String idVeiculo, String idPessoa, boolean isAdmin) {
+    public void reactivate(String idVeiculo) {
         Veiculo v = repository.findById(idVeiculo)
                 .orElseThrow(() -> new IllegalArgumentException("Veículo não encontrado"));
 
-        if (!isAdmin && !v.getIdPessoa().equals(idPessoa)) {
-            throw new IllegalArgumentException("Ação não permitida");
+        if(v.getIdRfid() == null){
+            throw new IllegalArgumentException("O Veículo precisa ter um RFID informado.");
         }
 
         v.setAtivo(true);

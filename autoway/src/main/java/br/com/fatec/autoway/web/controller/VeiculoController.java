@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
 import java.util.Map;
@@ -124,11 +125,8 @@ public class VeiculoController {
 
         String token = authHeader.substring(7);
         String email = jwtUtil.getEmailFromJwtToken(token);
-        String idPessoa = service.findPessoaIdByEmail(email);
 
-        boolean isAdmin = jwtUtil.getRolesFromJwtToken(token).contains("ADMIN");
-
-        service.inactivate(idVeiculo, idPessoa, isAdmin);
+        service.inactivate(idVeiculo);
         return ResponseEntity.noContent().build();
     }
 
@@ -145,13 +143,7 @@ public class VeiculoController {
             @PathVariable String idVeiculo,
             @RequestHeader("Authorization") String authHeader) {
 
-        String token = authHeader.substring(7);
-        String email = jwtUtil.getEmailFromJwtToken(token);
-        String idPessoa = service.findPessoaIdByEmail(email);
-
-        boolean isAdmin = jwtUtil.getRolesFromJwtToken(token).contains("ADMIN");
-
-        service.reactivate(idVeiculo, idPessoa, isAdmin);
+        service.reactivate(idVeiculo);
         return ResponseEntity.noContent().build();
     }
 
@@ -165,7 +157,7 @@ public class VeiculoController {
             }
     )
     @GetMapping("/{idVeiculo}")
-    public ResponseEntity<VeiculoResponse> buscarPorId(@PathVariable String idVeiculo) {
+    public ResponseEntity<VeiculoResponse> buscarPorId(@PathVariable String idVeiculo) throws NoResourceFoundException {
         Veiculo v = service.findById(idVeiculo)
                 .orElseThrow(() -> new IllegalArgumentException("Veículo não encontrado"));
         return ResponseEntity.ok(toResponse(v));
