@@ -1,6 +1,7 @@
 export interface LoginResponse {
   token: string;
   userId: string;
+  tipoUsuario: string;
 }
 
 export interface LogoutResponse {

@@ -38,7 +38,11 @@ export class LoginComponent {
         this.alertService.success('Bem-vindo!', 'Login realizado com sucesso!');
         this.authService.setUserId(response.userId);
 
-        this.router.navigate(['/']);
+          if (response.tipoUsuario === 'admin') {
+            this.router.navigate(['/home-admin']);
+          } else {
+            this.router.navigate(['/']);
+          }
       },
       error: (error) => {
         this.alertService.httpError(error.status, error, 'Erro ao realizar login!');

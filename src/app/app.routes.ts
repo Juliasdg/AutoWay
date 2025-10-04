@@ -18,23 +18,23 @@ import { NewCarComponent } from './pages/new-car/new-car.component';
 
 export const routes: Routes = [
   // rotas públicas para quem não está logado
-  { path: 'login', component: LoginComponent, canActivate: [AuthGuard], data: { requiresAuth: false } },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthGuard], data: { requiresAuth: false } },
-  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [AuthGuard], data: { requiresAuth: false } },
+  { path: 'login', component: LoginComponent},
+  { path: 'register', component: RegisterComponent},
+  { path: 'forgot-password', component: ForgotPasswordComponent},
 
   // rotas protegidas, só para usuários logados
-  { path: '', component: HomeComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'home-admin', component: HomeAdminComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'edit-password', component: EditPasswordComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'edit-register', component: EditRegisterComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'car-history', component: CarHistoryComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'registered', component: RegisteredCarComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'activate-car', component: ActiveCarComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'edit-car', component: EditCarComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'inactivate-car', component: InativateCarComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
-  { path: 'new-car', component: NewCarComponent, canActivate: [AuthGuard], data: { requiresAuth: true } },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
+  { path: 'home-admin', component: HomeAdminComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'edit-password', component: EditPasswordComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'edit-register', component: EditRegisterComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'car-history', component: CarHistoryComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'registered', component: RegisteredCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'activate-car', component: ActiveCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'edit-car', component: EditCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'inactivate-car', component: InativateCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
+  { path: 'new-car', component: NewCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
 
   // fallback
   { path: '**', redirectTo: '' }

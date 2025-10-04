@@ -1,24 +1,27 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthService } from '../services/auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {
-    const requiresAuth = route.data['requiresAuth'] as boolean;
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
+    const requiresAuth = route.data['requiresAuth'] ?? true;
+    const allowedRoles: string[] = route.data['roles'] ?? []; // Roles permitidas para a rota
 
-    if (requiresAuth && !this.authService.isAuthenticated()) {
-      // rota protegida, usuário não logado
-      this.router.navigate(['/login']);
-      return false;
+    // Se precisa de autenticação e não está logado, redireciona
+    if (requiresAuth && !this.auth.isAuthenticated()) {
+      return this.router.createUrlTree(['/login']);
     }
 
-    if (!requiresAuth && this.authService.isAuthenticated()) {
-      // rota só para não logados, mas usuário já está logado
-      this.router.navigate(['']); // manda para home
-      return false;
+    // Se existem roles definidas, verifica se o usuário possui uma delas
+    if (allowedRoles.length > 0) {
+      const userRole = this.auth.getUserRole();
+      if (!userRole || !allowedRoles.includes(userRole)) {
+        // Redireciona para página padrão ou de acesso negado
+        return this.router.createUrlTree(['/']);
+      }
     }
 
     return true;
