@@ -1,0 +1,77 @@
+@import "../assets/color-variables.scss";
+
+.main-section {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .search-section {
+    position: relative;
+    width: 250px;
+    margin-left: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
+
+
+    img {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        pointer-events: none;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px 12px;
+        padding-left: 40px;
+        border: 1px solid $primary;
+        border-radius: 3px;
+        font-size: 14px;
+    }
+  }
+
+
+  .vehicle-card {
+    width: 100%;
+    max-width: 400rem;
+    background: #fff;
+    border: 1.5px solid $primary;
+    border-radius: 2px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    .vehicle-info {
+      p {
+        margin: 0.3rem 0;
+        font-size: 0.95rem;
+
+        strong {
+          color: #222;
+        }
+      }
+
+      .status {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-left: 3px;
+
+        &.active {
+          background: #28a745;
+        }
+        &.inactive {
+          background: #dc3545;
+        }
+      }
+    }
+
+  }}

@@ -1,0 +1,127 @@
+@import "../../../assets/color-variables.scss";
+
+.container {
+  display: flex;
+  min-height: 87vh;
+  background-color: $primary;
+  color: white;
+  justify-content: space-around;
+  align-items: center;
+  font-family: Inter, Arial, sans-serif;
+  padding: 70px;
+}
+
+.title-login {
+  text-align: center;
+  padding-top: 2rem;
+  margin-bottom: 4rem;
+}
+
+.logo-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.autoway-svg {
+  width: 700px;
+  height: auto;
+  display: block;
+}
+
+.input-svg {
+  width: 35px;
+  height: 35px;
+}
+
+.logo .tag {
+  background: transparent;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.logo .brand {
+  font-size: 2rem;
+  font-weight: bold;
+  display: block;
+}
+
+.logo .car {
+  font-size: 3rem;
+  margin: 10px 0;
+}
+
+.logo .slogan {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.login-card {
+  background: white;
+  color: black;
+  border-radius: 12px;
+  margin: 0;
+  padding: 40px 70px;
+  max-width: 600px;
+  height: 637px;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  margin: 15px 0;
+  margin-bottom: 55px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: -8px 8px 4px rgba(0, 0, 0, 0.255);
+
+  .input-icon {
+    background: $primary;
+    color: white;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    width: 64px;
+    height: 64px;
+  }
+
+  .input {
+    height: 64px;
+    width: 440px;
+    flex: 1;
+    padding: 10px;
+    background-color: $grey;
+    border: 3px solid $primary;
+    display: block;
+    font-size: 25px;
+  }
+}
+
+.links {
+  margin-top: 30px;
+  font-size: 20px;
+
+  a {
+    color: $primary;
+    margin-bottom: 15px;
+    text-decoration: none;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+}
+
+.new-user {
+  font-weight: bold;
+  text-decoration: underline !important;
+}

@@ -1,0 +1,23 @@
+@import "../../../assets/color-variables.scss";
+
+button {
+    background-color: white;
+    color: $button-color;
+    width: 200px;
+    height: 60px;
+    padding: 3px;
+    border-radius: 3px;
+    border: 2px solid $button-color;
+    box-shadow: -8px 5px 3px rgba(0, 0, 0, 0.195);
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background-color: $button-color;
+        color: white;
+        transform: translateY(-0.5px);
+    }
+}

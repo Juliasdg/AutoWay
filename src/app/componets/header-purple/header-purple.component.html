@@ -1,0 +1,14 @@
+<header class="header">
+  <img src="assets/white-logo.svg" class="logo-left" alt="Logo">
+
+  <div class="profile-menu" (click)="toggleDropdown($event)">
+    <img src="assets/login-avatar.svg" class="logo-right" alt="Avatar">
+
+    <!-- Dropdown menu -->
+    <div class="dropdown" [class.show]="dropdownOpen">
+      <div class="arrow"></div>
+      <a routerLink="/profile">Meu Perfil</a>
+      <button (click)="onLogout()">Sair</button>
+    </div>
+  </div>
+</header>

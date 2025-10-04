@@ -1,0 +1,46 @@
+<app-header></app-header>
+
+<div class="container">
+  <!-- Lado esquerdo -->
+  <div class="logo-side">
+    <div class="logo">
+      <div class="tag">
+        <img src="assets/white-logo.svg" alt="Logo AutoWay" class="autoway-svg">
+      </div>
+    </div>
+  </div>
+
+  <!-- Lado direito -->
+  <div class="login-card">
+    <h1 class="title title-login">Login</h1>
+    <form class="login-form" [formGroup]="formLogin">
+      <div class="input-group">
+        <span class="input-icon"><img class="input-svg" src="assets/login-avatar.svg" alt="User Icon"></span>
+        <input
+          type="email"
+          formControlName="email"
+          name="email"
+          class="input"
+          required />
+      </div>
+
+      <div class="input-group">
+        <span class="input-icon"><img class="input-svg" src="assets/password.svg" alt="Lock Icon"></span>
+        <input
+          type="password"
+          formControlName="senha"
+          name="senha"
+          class="input"
+          required />
+      </div>
+
+      <app-btn-purple label="Entrar" (onClick)="onSubmit()"></app-btn-purple>
+
+      <div class="links">
+        <a href="/forgot-password">Esqueceu sua senha?</a>
+        <a href="/register" class="new-user">Novo Usuário</a>
+      </div>
+    </form>
+  </div>
+</div>
+
