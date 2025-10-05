@@ -1,4 +1,8 @@
-<button (click)="onClick.emit()" [type]="type" [disabled]="disabled" class="btn btn-purple">
-    {{ label }}
+<button
+  [type]="type"
+  [disabled]="disabled"
+  class="btn-purple"
+  (click)="handleClick()"
+>
+  {{ label }}
 </button>
-

@@ -5,50 +5,27 @@
     <h2>Seja Bem-Vindo(a)</h2>
   </div>
 
-  <div class="vehicle-card">
+  <div *ngFor="let veiculo of veiculos" class="vehicle-card">
     <div class="vehicle-info">
-      <p><strong>Código do RFID:</strong> 0001</p>
-      <p><strong>Placa:</strong> BRA2E19</p>
-      <p><strong>Status:</strong> <span class="status active"></span> Ativo</p>
+      <p><strong>Código do RFID:</strong> {{ veiculo.idRfid || 'N/A' }}</p>
+      <p><strong>Placa:</strong> {{ veiculo.placa }}</p>
+      <p><strong>Status:</strong>
+        <span [ngClass]="veiculo.ativo ? 'status active' : 'status inactive'"></span>
+        {{ veiculo.ativo ? 'Ativo' : 'Inativo' }}
+      </p>
     </div>
     <div class="actions">
-      <button title="Ativar/Desativar">
-          <img src="assets/file-1.svg" alt="">
-      </button>
-
-      <button title="Editar">
-        <img src="assets/file-2.svg" alt="">
-      </button>
-
-      <button class="excluir" title="Excluir">
-        <img src="assets/file-3.svg" alt="">
-       </button>
-    </div>
+    <button 
+      *ngIf="veiculo.idRfid"
+      title="Ativar/Desativar" 
+      (click)="handleAtivarInativar(veiculo)">
+      <img src="assets/file-1.svg" alt="">
+    </button>
   </div>
 
-
-   <div class="vehicle-card">
-    <div class="vehicle-info">
-      <p><strong>Código do RFID:</strong> 0002</p>
-      <p><strong>Placa:</strong> RIO2E19</p>
-      <p><strong>Status:</strong> <span class="status inactive"></span> Inativo</p>
-    </div>
-    <div class="actions">
-      <button title="Ativar/Desativar">
-          <img src="assets/file-1.svg" alt="">
-      </button>
-
-      <button title="Editar">
-        <img src="assets/file-2.svg" alt="">
-      </button>
-
-      <button class="excluir" title="Excluir">
-        <img src="assets/file-3.svg" alt="">
-       </button>
-    </div>
   </div>
 
   <div class="new-vehicle">
-    <app-btn-purple label="Novo Veículo"></app-btn-purple>
+    <app-btn-purple label="Novo Veículo" (click)="router.navigate(['/new-car'])"></app-btn-purple>
   </div>
 </div>
