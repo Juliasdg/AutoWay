@@ -13,10 +13,11 @@ export class AlertService {
     this.showAlert('success', title, message);
   }
 
-  error(title: string = 'Erro', error: Error) {
-    console.error(title, error);
-    this.showAlert('error', title, error.message);
-  }
+  error(title: string = 'Erro', error: Error | string) {
+  console.error(title, error);
+  const message = typeof error === 'string' ? error : error.message;
+  this.showAlert('error', title, message);
+}
 
   httpError(statusCode: number = 999, error: Error, titleOverride?: string) {
     let message;

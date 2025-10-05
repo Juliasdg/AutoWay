@@ -25,18 +25,18 @@
         </div>
         <div class="field">
           <label>CPF:</label>
-          <input type="text" formControlName="cpf" (input)="formatarCpf($event)" maxlength="14" />
+          <input type="text" formControlName="cpf" mask="000.000.000-00" />
         </div>
       </div>
 
       <div class="double-input">
         <div class="field">
           <label>TELEFONE:</label>
-          <input type="text" formControlName="telefone" />
+          <input type="text" formControlName="telefone" mask="(00) 00000-0000"/>
         </div>
         <div class="field">
           <label>CEP:</label>
-          <input type="text" formControlName="cep" (input)="formatarCep($event)" (blur)="buscarEnderecoPorCep()" maxlength="9" />
+          <input type="text" formControlName="cep" mask="00000-000" (blur)="buscarEnderecoPorCep()"/>
         </div>
       </div>
 

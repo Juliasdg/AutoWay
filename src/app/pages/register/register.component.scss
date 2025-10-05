@@ -8,8 +8,7 @@
   height: 100%;
   overflow-x: hidden;
   align-items: center;
-    overflow-y: auto; // permite rolagem
-
+  overflow-y: auto;
 }
 
 .mat-field-double {
@@ -26,6 +25,7 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap; 
+  overflow-y: auto;
 }
 
 .form {

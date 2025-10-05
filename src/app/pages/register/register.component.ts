@@ -13,17 +13,24 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+// Ngx Mask
+import { provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-register',
-  imports: [HeaderComponent, BtnPurpleComponent, ReactiveFormsModule,  MatFormFieldModule,
+  imports: [
+    HeaderComponent,
+    BtnPurpleComponent,
+    ReactiveFormsModule,
+    MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
-    MatButtonModule],
+    MatButtonModule
+  ],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
   formRegister: FormGroup;
@@ -53,9 +60,9 @@ export class RegisterComponent {
   }
 
   buscarEnderecoPorCep() {
-    const cep = this.formRegister.get('cep')?.value;
+    const cep = this.formRegister.get('cep')?.value?.replace(/\D/g, '');
 
-    if (cep && /^[0-9]{8}$/.test(cep)) { // valida formato de CEP
+    if (cep && /^[0-9]{8}$/.test(cep)) {
       this.http.get<any>(`https://viacep.com.br/ws/${cep}/json/`).subscribe({
         next: (dados) => {
           if (dados.erro) {
@@ -75,55 +82,36 @@ export class RegisterComponent {
     }
   }
 
-      onSubmit() {
-      if (this.formRegister.invalid) {
-        this.alertService.error(
-          'Campos obrigatórios não preenchidos!',
-          new Error('Por favor, preencha todos os campos obrigatórios!')
-        );
-        return;
+  onSubmit() {
+    if (this.formRegister.invalid) {
+      this.alertService.error(
+        'Campos obrigatórios não preenchidos!',
+        new Error('Por favor, preencha todos os campos obrigatórios!')
+      );
+      return;
+    }
+
+    const enderecoFinal = `${this.formRegister.value.endereco}, ${this.formRegister.value.numero}`;
+    const nomeCompleto = `${this.formRegister.value.nome} ${this.formRegister.value.sobrenome}`;
+
+    const payload = {
+      ...this.formRegister.value,
+      endereco: enderecoFinal,
+      nome: nomeCompleto
+    };
+    delete payload.sobrenome;
+
+    this.authService.register(payload).subscribe({
+      next: () => {
+        this.alertService.success('Conta criada!', 'Seu cadastro foi realizado com sucesso.');
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        let msg = 'Erro ao realizar cadastro!';
+        if (error.error?.message) msg = error.error.message;
+        else if (error.message) msg = error.message;
+        this.alertService.error(msg, new Error(msg));
       }
-
-      // monta os campos finais antes de enviar
-      const enderecoFinal = `${this.formRegister.value.endereco}, ${this.formRegister.value.numero}`;
-      const nomeCompleto = `${this.formRegister.value.nome} ${this.formRegister.value.sobrenome}`;
-
-      const payload = {
-        ...this.formRegister.value,
-        endereco: enderecoFinal,
-        nome: nomeCompleto // substitui nome+sobrenome
-      };
-      delete payload.sobrenome; // não envia mais separado
-
-      this.authService.register(payload).subscribe({
-        next: () => {
-          this.alertService.success('Conta criada!', 'Seu cadastro foi realizado com sucesso.');
-          this.router.navigate(['/login']);
-        },
-        error: (error) => {
-          this.alertService.httpError(error.status, error, 'Erro ao realizar cadastro!');
-        }
-      });
-    }
-
-    // Máscara de CEP
-    formatarCep(event: any) {
-      let valor = event.target.value.replace(/\D/g, '');
-      if (valor.length > 5) {
-        valor = valor.replace(/(\d{5})(\d{1,3})/, '$1-$2');
-      }
-      event.target.value = valor;
-      this.formRegister.get('cep')?.setValue(valor.replace('-', '')); // mantém só números para API
-    }
-
-    // Máscara de CPF
-    formatarCpf(event: any) {
-      let valor = event.target.value.replace(/\D/g, '');
-      valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
-      valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
-      valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-      event.target.value = valor;
-      this.formRegister.get('cpf')?.setValue(valor.replace(/\D/g, '')); // mantém só números para API
-    }
-
+    });
+  }
 }

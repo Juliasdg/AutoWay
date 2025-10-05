@@ -5,66 +5,125 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  animation: fadeIn 0.4s ease-in-out;
 
   .title {
-    padding-top: 3rem;
-    margin-bottom: 3rem;
+    padding-top: 2rem;
+    margin-bottom: 2rem;
     h2 {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: bold;
-      color: #333;
+      color: $primary;
+      text-align: center;
+      position: relative;
+
+      &::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: $primary;
+        margin: 8px auto 0;
+        border-radius: 2px;
+      }
     }
   }
 
   .profile-card {
-    width: 550px;
-    height: 230px;
+    width: 600px;
     background: #fff;
     border: 1.5px solid $primary;
-    border-radius: 2px;
-    padding: 1rem 1.5rem;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;        
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    }
 
     .profile-info {
       display: flex;
-      gap: 4rem; 
+      gap: 3rem; 
       align-items: flex-start;
-      line-height: 1.5;
+      line-height: 1.6;
+      width: 100%;
 
       > div {
         display: flex;
         flex-direction: column;
+        flex: 1;
       }
 
       p {
-        margin: 0.3rem 0;
-        font-size: 0.95rem;
-        margin-right: 2rem;
+        margin: 0.4rem 0;
+        font-size: 1rem;
+        color: #444;
 
         strong {
-          color: #222;
+          color: $primary;
+          font-weight: 600;
         }
       }
     }
 
-    .info1{
-      border-right: 1px solid $primary;
-      margin-left:1rem;
+    .info1 {
+      border-right: 1px solid rgba($primary, 0.4);
+      padding-right: 2rem;
     }
   }
 
-  .btn-area{
+  .btn-area {
     display: flex;
     flex-direction: row;
-    gap: 2rem;
-    justify-content: flex-end;
-    margin-top: 3rem;
-    padding-top: 1rem;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+
+    .btn {
+      min-width: 130px;
+      text-align: center;
+    }
   }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 350px;
+  animation: fadeIn 0.5s ease-in-out;
+
+  .spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid $primary;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 18px;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    font-weight: 500;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsividade para telas menores */
@@ -72,22 +131,19 @@
   .profile-card {
     width: 100%;
     flex-direction: column;
-    height: auto;
+    padding: 1.5rem;
   }
 
   .profile-info {
     flex-direction: column;
-    gap: 1rem;
-
-    > div {
-      width: 100%;
-      margin: 0;
-    }
+    gap: 1.2rem;
   }
 
   .info1 {
     border-right: none;
-    margin-left: 0;
+    border-bottom: 1px solid rgba($primary, 0.4);
+    padding-right: 0;
+    padding-bottom: 1rem;
   }
 
   .btn-area {

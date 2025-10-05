@@ -20,6 +20,11 @@ import { BrowserModule } from '@angular/platform-browser'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { ReactiveFormsModule } from '@angular/forms';
+import { provideNgxMask } from 'ngx-mask';
+
 
 
 NgModule({
@@ -41,12 +46,13 @@ NgModule({
     RegisteredCarComponent
   ],
   imports: [
-    BrowserModule, MatDatepickerModule, MatInputModule, MatNativeDateModule
+    BrowserModule, MatDatepickerModule, MatInputModule, MatNativeDateModule, ReactiveFormsModule, provideNgxMask()
   ]
 })
 
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideNgxMask(), { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+]
   
 };
