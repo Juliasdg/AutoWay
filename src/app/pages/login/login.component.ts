@@ -29,7 +29,10 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.formLogin.invalid) {
-      this.alertService.error('Campos obrigatórios não preenchidos!', new Error('Por favor, preencha todos os campos obrigatórios!'));
+      this.alertService.error(
+        'Campos obrigatórios não preenchidos!',
+        new Error('Por favor, preencha todos os campos obrigatórios!')
+      );
       return;
     }
 
@@ -38,15 +41,29 @@ export class LoginComponent {
         this.alertService.success('Bem-vindo!', 'Login realizado com sucesso!');
         this.authService.setUserId(response.userId);
 
-          if (response.tipoUsuario === 'admin') {
-            this.router.navigate(['/home-admin']);
-          } else {
-            this.router.navigate(['/']);
-          }
+        if (response.tipoUsuario === 'admin') {
+          this.router.navigate(['/home-admin']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error: (error) => {
-        this.alertService.httpError(error.status, error, 'Erro ao realizar login!');
+        let title = 'Erro ao realizar login!';
+        let msg = 'Erro ao realizar login!';
+        // Aqui pegamos a mensagem específica do backend
+        if (error.error?.message) msg = error.error.message;
+        else if (error.message) msg = error.message;
+
+        // Exemplo de bad request específico: usuário inativo ou credenciais inválidas
+        if (error.status === 401 || error.status == 400) {
+          msg = 'Usuário inativo ou Credenciais Inválidas. Em caso de necessidade, entre em contato com o suporte!';
+        } else if (error.status === 404) {
+          msg = 'Usuário não encontrado.';
+        }
+
+        this.alertService.error(title, msg);
       }
     });
   }
+
 }

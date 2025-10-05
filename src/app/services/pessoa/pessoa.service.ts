@@ -37,9 +37,11 @@ export class PessoaService {
 
   // troca senha do usuário logado
   changePassword(payload: { currentPassword: string; newPassword: string; confirmPassword: string }, token: string) {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.put(`${this.apiUrl}/me/password`, payload, { headers });
-  }
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.put(`${this.apiUrl}/me/password`, payload, { headers, responseType: 'text' }); 
+  // responseType: 'text' evita JSON.parse em sucesso
+}
+
 
   // lista todos os usuários (ADMIN)
   listAll(token: string): Observable<PessoaResponse[]> {
@@ -52,4 +54,10 @@ export class PessoaService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     return this.http.get<PessoaResponse>(`${this.apiUrl}/${id}`, { headers });
   }
+
+  inactivateMe(userId: string, token: string): Observable<void> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.patch<void>(`${this.apiUrl}/${userId}/inactivate`, {}, { headers });
+  }
+
 }

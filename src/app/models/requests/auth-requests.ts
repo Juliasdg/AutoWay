@@ -26,7 +26,8 @@ export interface VerifyResetCodeRequest {
 }
 
 export interface ChangePasswordRequest {
+  email: string;
   currentPassword: string;
   newPassword: string;
-  confirmNewPassword: string;
+  confirmPassword: string;
 }

@@ -39,4 +39,8 @@ export class HeaderPurpleComponent {
       }
     });
   }
+
+    onProfile() {
+      this.router.navigate(['/profile']);
+    }
 }

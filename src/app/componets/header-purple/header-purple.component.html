@@ -7,7 +7,7 @@
     <!-- Dropdown menu -->
     <div class="dropdown" [class.show]="dropdownOpen">
       <div class="arrow"></div>
-      <a routerLink="/profile">Meu Perfil</a>
+      <button (click)="onProfile()">Meu Perfil</button>
       <button (click)="onLogout()">Sair</button>
     </div>
   </div>

@@ -70,9 +70,10 @@
       );
     }
 
-    changePassword(payload: ChangePasswordRequest): Observable<ChangePasswordResponse> {
-      return this.http.post<ChangePasswordResponse>(`${this.apiUrl}/change-password`, payload, { withCredentials: true });
+    changePassword(payload: ChangePasswordRequest) {  
+      return this.http.post<ChangePasswordResponse>( `${this.apiUrl}/change-password`, payload, { withCredentials: true });
     }
+
 
     // JWT MÉTODOS
     isAuthenticated(): boolean {

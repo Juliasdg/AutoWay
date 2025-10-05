@@ -15,6 +15,7 @@ import { EditCarComponent } from './pages/edit-car/edit-car.component';
 import { InativateCarComponent } from './pages/inativate-car/inativate-car.component';
 import { ListUsersComponent } from './pages/list-users/list-users.component';
 import { NewCarComponent } from './pages/new-car/new-car.component';
+import { InativateAccountComponent } from './pages/inativate-account/inativate-account.component';
 
 export const routes: Routes = [
   // rotas públicas para quem não está logado
@@ -26,13 +27,14 @@ export const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   { path: 'home-admin', component: HomeAdminComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
-  { path: 'edit-password', component: EditPasswordComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'profile/edit/password', component: EditPasswordComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'profile/edit', component: EditRegisterComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'car-history', component: CarHistoryComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'registered', component: RegisteredCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'activate-car', component: ActiveCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'edit-car', component: EditCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'inactivate-car', component: InativateCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'profile/inactivate-account', component: InativateAccountComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'new-car', component: NewCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
 

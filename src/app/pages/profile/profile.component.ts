@@ -49,27 +49,12 @@ export class ProfileComponent implements OnInit {
 
   onEdit() {
     if (this.pessoa?.id) {
-      this.router.navigate(['profile/edit', this.pessoa.id]);
+      this.router.navigate(['/profile/edit']);
     }
   }
 
   onInactivate() {
-    const token = this.authService.getToken();
-    if (!token || !this.pessoa?.id) return;
-
-    if (confirm('Deseja realmente inativar seu perfil?')) {
-      this.pessoaService.updateMe({ status: false }, token).subscribe({
-      next: () => {
-        this.alertService.success('Perfil inativado', 'Seu perfil foi inativado com sucesso.');
-        this.router.navigate(['/login']);
-        this.authService.clearToken();
-        this.authService.clearUserId();
-        this.authService.clearUserRole();
-      },
-      error: (err) => {
-        this.alertService.httpError(err.status, err, 'Erro ao inativar perfil');
-      }
-    });
-    }
+    this.router.navigate(['/profile/inactivate-account']);
   }
+
 }

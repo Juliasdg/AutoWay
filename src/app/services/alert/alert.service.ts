@@ -8,16 +8,19 @@ export class AlertService {
 
   constructor() {}
 
-  success(title: string = 'Sucesso', message: string) {
+  success(title: string = 'Sucesso', message: string = '') {
     console.log(title, message);
     this.showAlert('success', title, message);
   }
 
-  error(title: string = 'Erro', error: Error | string) {
-  console.error(title, error);
-  const message = typeof error === 'string' ? error : error.message;
-  this.showAlert('error', title, message);
-}
+
+  error(title: string = 'Erro', error?: Error | string) {
+    const message = error 
+      ? (typeof error === 'string' ? error : error.message) 
+      : '';
+    this.showAlert('error', title, message);
+  }
+
 
   httpError(statusCode: number = 999, error: Error, titleOverride?: string) {
     let message;

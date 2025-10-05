@@ -14,16 +14,15 @@
                     <p>Deseja realmente inativar a sua conta?</p>
                  </div>
                 
-                <div class="btn-area">
-                    <div class="btn">
-                        <app-btn-white label="Cancelar"></app-btn-white>
-                       
-                    </div>
-                     <div class="btn">
-                        
-                        <app-btn-purple label="Inativar"></app-btn-purple>
-                    </div>    
+               <div class="btn-area">
+                <div class="btn">
+                    <app-btn-white label="Cancelar" (click)="onCancel()"></app-btn-white>
                 </div>
+                <div class="btn">
+                    <app-btn-purple label="Inativar" (click)="onInactivate()"></app-btn-purple>
+                </div>
+                </div>
+
             </div>
         </div>
     </div>
