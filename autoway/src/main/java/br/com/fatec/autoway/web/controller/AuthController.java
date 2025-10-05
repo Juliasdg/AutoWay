@@ -7,6 +7,7 @@ import br.com.fatec.autoway.infra.security.TokenBlacklistService;
 import br.com.fatec.autoway.web.dto.request.*;
 import br.com.fatec.autoway.web.dto.response.AuthResponse;
 import br.com.fatec.autoway.web.dto.response.ErrorResponse;
+import br.com.fatec.autoway.web.dto.response.LogoutResponse;
 import br.com.fatec.autoway.web.dto.response.PessoaResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -283,7 +284,9 @@ public class AuthController {
         cookie.setMaxAge(0);
         response.addCookie(cookie);
 
-        return ResponseEntity.ok("Logout realizado com sucesso");
+        return ResponseEntity.ok(
+                new LogoutResponse("Logout realizado com sucesso!")
+        );
     }
 
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +27,8 @@ public class JwtUtil {
     public String generateToken(String subject, String role) {
         return Jwts.builder()
                 .setSubject(subject)
-                .claim("role", role)
+                .claim("role", role) // claim oficial
+                .claim("tipoUsuario", role) // 🔥 já gera também no outro formato
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -59,7 +59,13 @@ public class JwtUtil {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.get("role", String.class);
+
+        // 🔥 Tenta pegar "role", se não achar pega "tipoUsuario"
+        String role = claims.get("role", String.class);
+        if (role == null) {
+            role = claims.get("tipoUsuario", String.class);
+        }
+        return role;
     }
 
     public List<String> getRolesFromJwtToken(String token) {
@@ -76,5 +82,4 @@ public class JwtUtil {
                 .getBody();
         return claims.getExpiration();
     }
-
 }
