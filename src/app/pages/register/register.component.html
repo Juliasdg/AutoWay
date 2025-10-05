@@ -1,75 +1,93 @@
 <app-header></app-header>
 
 <div class="main-section">
-    <div class="content">
-        <div class="form">
-            <div class="title">
-                <h2>
-                    Registre-se
-                </h2>
-            </div>
+  <div class="content">
+    <div class="form" [formGroup]="formRegister">
+      <div class="title">
+        <h2>Registre-se</h2>
+      </div>
 
-            <div class="input-content">
-                <div class="double-input">
-                    <div class="field">
-                        <label for="">NOME:</label>
-                        <input type="text">
-                    </div>
-                    <div class="field">
-                        <label for="">SOBRENOME:</label>
-                        <input type="text">
-                    </div>
-                </div>
-
-                <div class="double-input">
-                    <div class="field">
-                        <label for="">DATA DE NASCIMENTO:</label>
-                        <input type="text">
-                    </div>
-                    <div class="field">
-                        <label for="">CPF:</label>
-                        <input type="text">
-                    </div>
-                </div>
-
-                <div class="double-input">
-                    <div class="field">
-                        <label for="">TELEFONE:</label>
-                        <input type="text">
-                    </div>
-                    <div class="field">
-                        <label for="">CEP:</label>
-                        <input type="text">
-                    </div>
-                </div>
-
-                <div class="double-input">
-                    <div class="field">
-                        <label for="">ENDEREÇO:</label>
-                        <input type="text">
-                    </div>
-                    <div class="field">
-                        <label for="">COMPLEMENTO:</label>
-                        <input type="text">
-                    </div>
-                </div>
-
-                  <div class="single-input">
-                    <div class="field">
-                        <label for="">E-MAIL:</label>
-                        <input class="single" type="text">
-                    </div>
-                    <div class="field">
-                        <label for="">SENHA:</label>
-                        <input class="single" type="text">
-                    </div>
-                    <div class="btn-area">
-                        <app-btn-purple label="Continuar"></app-btn-purple>
-                    </div>
-                        
-                    
-                </div>
-            </div>
+      <div class="double-input">
+        <div class="field">
+          <label>NOME:</label>
+          <input type="text" formControlName="nome" />
         </div>
+        <div class="field">
+          <label>SOBRENOME:</label>
+          <input type="text" formControlName="sobrenome" />
+        </div>
+      </div>
+
+      <div class="double-input">
+        <div class="field">
+          <label>DATA DE NASCIMENTO:</label>
+          <input type="date" formControlName="dataNascimento" />
+        </div>
+        <div class="field">
+          <label>CPF:</label>
+          <input type="text" formControlName="cpf" (input)="formatarCpf($event)" maxlength="14" />
+        </div>
+      </div>
+
+      <div class="double-input">
+        <div class="field">
+          <label>TELEFONE:</label>
+          <input type="text" formControlName="telefone" />
+        </div>
+        <div class="field">
+          <label>CEP:</label>
+          <input type="text" formControlName="cep" (input)="formatarCep($event)" (blur)="buscarEnderecoPorCep()" maxlength="9" />
+        </div>
+      </div>
+
+        <div class="double-input">
+        <div class="field">
+            <label>ENDEREÇO:</label>
+            <input type="text" formControlName="endereco" [disabled]="true" />
+        </div>
+        <div class="field">
+            <label>BAIRRO:</label>
+            <input type="text" formControlName="bairro" [disabled]="true" />
+        </div>
+        </div>
+
+      <div class="double-input">
+        <div class="field">
+          <label>NÚMERO/APTO:</label>
+          <input type="text" formControlName="numero" />
+        </div>
+        <div class="field">
+          <label>COMPLEMENTO:</label>
+          <input type="text" formControlName="complemento" />
+        </div>
+      </div>
+
+      <div class="double-input">
+        <div class="field">
+          <label>E-MAIL:</label>
+          <input type="email" formControlName="email" />
+        </div>
+        <div class="field">
+          <label>SENHA:</label>
+          <input type="password" formControlName="senha" />
+        </div>
+      </div>
+
+      <div class="single-input">
+        <div class="field">
+          <label>VENCIMENTO DO BOLETO:</label>
+          <select formControlName="vencimento">
+            <option value="5">Dia 05</option>
+            <option value="15">Dia 15</option>
+            <option value="20">Dia 20</option>
+          </select>
+          <small>Esse será o dia fixo de vencimento da sua fatura mensal.</small>
+        </div>
+      </div>
+
+      <div class="btn-area">
+        <app-btn-purple label="Continuar" (click)="onSubmit()"></app-btn-purple>
+      </div>
     </div>
+  </div>
 </div>

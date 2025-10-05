@@ -16,8 +16,11 @@ import { NewCarComponent } from './pages/new-car/new-car.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RegisteredCarComponent } from './pages/registered-car/registered-car.component';
-
 import { BrowserModule } from '@angular/platform-browser'
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 NgModule({
   declarations: [
@@ -38,7 +41,7 @@ NgModule({
     RegisteredCarComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule, MatDatepickerModule, MatInputModule, MatNativeDateModule
   ]
 })
 
