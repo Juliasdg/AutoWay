@@ -7,16 +7,7 @@ import { PassagemService } from '../../services/passagem/passagem.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { AlertService } from '../../services/alert/alert.service';
 import { VeiculoService } from '../../services/veiculo/veiculo.service';
-
-interface Passagem {
-  idVeiculo: string;
-  idPessoa: string;
-  local: string;
-  data: string;
-  hora: string;
-  valor: number;
-  placa?: string; // enriquecido depois
-}
+import { Passagem } from '../../models/responses/passagem-responses';
 
 @Component({
   selector: 'app-car-history',
