@@ -23,6 +23,10 @@ export class HeaderPurpleComponent {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
+  goHome() {
+    this.router.navigate(['/']); // rota inicial
+  }
+
   @HostListener('document:click')
   closeDropdown() {
     this.dropdownOpen = false;

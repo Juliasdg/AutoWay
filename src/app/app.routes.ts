@@ -29,7 +29,7 @@ export const routes: Routes = [
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'profile/edit/password', component: EditPasswordComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'profile/edit', component: EditRegisterComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
-  { path: 'car-history', component: CarHistoryComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'passagens', component: CarHistoryComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'registered', component: RegisteredCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'activate-car', component: ActiveCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'edit-car', component: EditCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },

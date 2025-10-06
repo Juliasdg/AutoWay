@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert/alert.service';
 import { AuthService } from '../../services/auth/auth.service';
@@ -12,6 +12,8 @@ import { AuthService } from '../../services/auth/auth.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  dropdownOpen = false;
+
 
   constructor(
     private authService: AuthService,
@@ -33,4 +35,23 @@ export class HeaderComponent {
       }
     });
   }
+
+  toggleDropdown(event: Event) {
+    event.stopPropagation(); // impede o clique de propagar e fechar imediatamente
+    this.dropdownOpen = !this.dropdownOpen;
+  }
+
+  goHome() {
+    this.router.navigate(['/']); // rota inicial
+  }
+
+  @HostListener('document:click')
+  closeDropdown() {
+    this.dropdownOpen = false;
+  }
+
+  
+    onProfile() {
+      this.router.navigate(['/profile']);
+    }
 }

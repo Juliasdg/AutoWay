@@ -1,5 +1,11 @@
 <header class="header">
-  <img src="assets/white-logo.svg" class="logo-left" alt="Logo">
+  <img 
+    src="assets/white-logo.svg" 
+    class="logo-left" 
+    alt="Logo"
+    (click)="goHome()"
+    style="cursor: pointer;"
+  >
 
   <div class="profile-menu" (click)="toggleDropdown($event)">
     <img src="assets/login-avatar.svg" class="logo-right" alt="Avatar">

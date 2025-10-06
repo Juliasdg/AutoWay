@@ -19,11 +19,11 @@ export class BtnPurpleComponent {
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
   @Input() disabled: boolean = false;
 
-  @Output() clickEvent = new EventEmitter<void>();
+  @Output() onClick = new EventEmitter<void>();
 
   handleClick() {
     if (!this.disabled) {
-      this.clickEvent.emit();
+      this.onClick.emit(); // aqui o evento é enviado para o componente pai
     }
   }
 }

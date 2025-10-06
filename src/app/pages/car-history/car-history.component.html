@@ -1,65 +1,57 @@
 <app-header-purple></app-header-purple>
 
-<div class="main-section">
+<div class="main-section" *ngIf="!loading">
+
   <div class="title">
     <h2>Histórico do Veículo</h2>
   </div>
 
-<div class="filter">
-    <select name="pets" id="pet-select">
-        <option value="">Filtrar Mês</option>
-        <option value="dog">Janeiro</option>
-        <option value="cat">Fevereiro</option>
-        <option value="hamster">Março</option>
-        <option value="parrot">Abril</option>
-        <option value="spider">Maio</option>
-        <option value="goldfish">Junho</option>
-        <option value="">Julho</option>
-        <option value="dog">Agosto</option>
-        <option value="cat">Setembro</option>
-        <option value="hamster">Outubro</option>
-        <option value="parrot">Novembro</option>
-        <option value="spider">Dezembro</option>
-    </select>
+  <div class="filter">
+    <label for="dataInicio">Início:</label>
+    <input type="date" id="dataInicio" [(ngModel)]="dataInicio" [max]="hoje">
+
+    <label for="dataFim">Fim:</label>
+    <input type="date" id="dataFim" [(ngModel)]="dataFim" [max]="hoje">
+
+    <button (click)="filtrarPorPeriodo()">Filtrar</button>
+  </div>
+
+  <!-- mensagem quando não houver passagens -->
+  <div *ngIf="passagens.length === 0 && !loading">
+    <p>Nenhuma passagem encontrada neste período.</p>
+  </div>
+
+  <!-- lista de passagens -->
+  <div *ngIf="passagens.length > 0">
+    <div *ngFor="let passagem of paginatedPassagens" class="vehicle-card">
+      <div class="vehicle-info">
+        <p><strong>Data da Passagem:</strong> {{ passagem.data | date:'dd/MM/yyyy' }}</p>
+        <p><strong>Horário:</strong> {{ passagem.hora }}</p>
+        <p><strong>Local:</strong> {{ passagem.local }}</p>
+        <p><strong>Placa:</strong> {{ passagem.placa || 'Carregando...' }}</p>
+        <p><strong>Valor:</strong> R$ {{ passagem.valor | number:'1.2-2' }}</p>
+      </div>
+
+      <div class="actions">
+        <button class="vizualize" title="Visualizar">
+          <img src="assets/red-eyes 1.svg" alt="">
+        </button>
+        <button class="Download" title="Download">
+          <img src="assets/Download.svg" alt="">
+        </button>
+      </div>
+    </div>
+
+    <!-- paginação -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button (click)="updatePage(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
+      <span>Página {{currentPage}} de {{totalPages}}</span>
+      <button (click)="updatePage(currentPage + 1)" [disabled]="currentPage === totalPages">Próxima</button>
+    </div>
+  </div>
 </div>
 
-  <div class="vehicle-card">
-    <div class="vehicle-info">
-      <p><strong>Boleto Emitido em:</strong> 08/04/2025</p>
-      <p><strong>Placa:</strong> BRA2E19</p>
-      <p><strong>Status do Pagamento:</strong> Concluído</p>
-    </div>
-    <div class="actions">
-      <button class="vizualize" title="Visualize">
-          <img src="assets/red-eyes 1.svg" alt="">
-      </button>
-
-      <button class="Download" title="Download">
-        <img src="assets/Download.svg" alt="">
-      </button>
-
-    </div>
-  </div>
-
-
-   <div class="vehicle-card">
-    <div class="vehicle-info">
-      <p><strong>Boleto Emitido em:</strong> 08/04/2025</p>
-      <p><strong>Placa:</strong> RIO2E19</p>
-      <p><strong>Status do Pagamento:</strong> Concluído</p>
-    </div>
-     <div class="actions">
-        <button class="vizualize" title="Visualize">
-          <img src="assets/red-eyes 1.svg" alt="">
-      </button>
-
-      <button class="Download" title="Download">
-        <img src="assets/Download.svg" alt="">
-      </button>
-    </div>
-  </div>
-
-  <div class="new-vehicle">
-    <app-btn-purple label="Novo Veículo"></app-btn-purple>
-  </div>
+<!-- loading -->
+<div *ngIf="loading" class="loading">
+  <p>Carregando passagens...</p>
 </div>
