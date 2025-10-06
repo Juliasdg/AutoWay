@@ -47,4 +47,8 @@ export class HeaderPurpleComponent {
     onProfile() {
       this.router.navigate(['/profile']);
     }
+
+    onHistoric() {
+      this.router.navigate(['/passagens']);
+    }
 }

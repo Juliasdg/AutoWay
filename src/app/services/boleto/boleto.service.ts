@@ -1,24 +1,27 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-  import { environment } from '../../environments/environments';
-
+import { environment } from '../../environments/environments';
 
 @Injectable({ providedIn: 'root' })
 export class BoletoService {
-    private apiUrl = `${environment.apiUrl}/boletos`;
+  private apiUrl = `${environment.apiUrl}/boletos`;
 
   constructor(private http: HttpClient) {}
 
-  listarBoletos(idPessoa: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${idPessoa}`);
+  private authHeaders(token: string) {
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
   }
 
-  consultarDebito(idPessoa: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/debito/${idPessoa}`);
+  listarBoletos(idPessoa: string, token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${idPessoa}`, { headers: this.authHeaders(token) });
   }
 
-  baixarPdf(idBoleto: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/pdf/${idBoleto}`, { responseType: 'blob' });
+  consultarDebito(idPessoa: string, token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/debito/${idPessoa}`, { headers: this.authHeaders(token) });
+  }
+
+  baixarPdf(idBoleto: string, token: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/pdf/${idBoleto}`, { headers: this.authHeaders(token), responseType: 'blob' });
   }
 }

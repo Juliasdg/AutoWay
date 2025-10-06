@@ -3,6 +3,8 @@
 <div class="main-section" *ngIf="!loading">
   <div class="title">
     <h2>Histórico do Veículo</h2>
+    <p *ngIf="debitoMes > 0" class="debito">Débito do Mês Atual: R$ {{ debitoMes | number:'1.2-2' }}</p>
+    <p *ngIf="debitoMes === 0" class="debito">Sem débitos neste mês</p>
   </div>
 
   <div class="filter">
@@ -20,6 +22,7 @@
   </div>
 
   <div *ngFor="let passagem of paginatedPassagens" class="vehicle-card">
+
     <div class="vehicle-info">
       <p><strong>Data da Passagem:</strong> {{ passagem.data | date:'dd/MM/yyyy' }}</p>
       <p><strong>Horário:</strong> {{ passagem.hora }}</p>
@@ -29,11 +32,8 @@
     </div>
 
     <div class="actions">
-      <button class="vizualize" title="Visualizar">
-        <img src="assets/red-eyes 1.svg" alt="">
-      </button>
-      <button class="Download" title="Download">
-        <img src="assets/Download.svg" alt="">
+      <button *ngIf="passagem.boletoId" class="boleto" title="Visualizar Boleto" (click)="visualizarBoleto(passagem.boletoId)">
+        <img src="assets/file-1.svg" alt="Boleto">
       </button>
     </div>
   </div>

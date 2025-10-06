@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { AlertService } from '../../services/alert/alert.service';
 import { VeiculoService } from '../../services/veiculo/veiculo.service';
 import { Passagem } from '../../models/responses/passagem-responses';
+import { BoletoService } from '../../services/boleto/boleto.service';
 
 @Component({
   selector: 'app-car-history',
@@ -20,6 +21,8 @@ export class CarHistoryComponent implements OnInit {
   passagens: Passagem[] = [];
   paginatedPassagens: Passagem[] = [];
   loading = true;
+
+  debitoMes: number = 0; // <--- novo campo
 
   // paginação
   currentPage = 1;
@@ -35,11 +38,13 @@ export class CarHistoryComponent implements OnInit {
     private passagemService: PassagemService,
     private authService: AuthService,
     private alertService: AlertService,
-    private veiculoService: VeiculoService
+    private veiculoService: VeiculoService,
+    private boletoService: BoletoService // <--- injetado
   ) {}
 
   ngOnInit(): void {
     this.carregarTodasPassagens();
+    this.consultarDebitoAtual();
   }
 
   carregarTodasPassagens() {
@@ -104,31 +109,55 @@ export class CarHistoryComponent implements OnInit {
   }
 
   private processarPassagens(res: Passagem[], token: string) {
-    this.passagens = res || [];
+  this.passagens = res || [];
 
-    // atualiza a paginação imediatamente
-    this.setupPagination();
-
-    if (this.passagens.length === 0) {
-      this.loading = false;
-      return;
-    }
-
-    // enriquecimento assíncrono das placas
-    this.veiculoService.listarMeusVeiculos(token).subscribe({
-      next: (veiculos) => {
-        this.passagens.forEach((p) => {
-          const veiculo = veiculos.find(v => v.idVeiculo === p.idVeiculo);
-          if (veiculo) p.placa = veiculo.placa;
-        });
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Erro ao buscar veículos', err);
-        this.loading = false;
-      }
-    });
+  if (!this.passagens.length) {
+    this.paginatedPassagens = [];
+    this.loading = false;
+    return;
   }
+
+  const userId = this.authService.getUserId();
+  if (!userId) {
+    this.setupPagination();
+    this.loading = false;
+    return;
+  }
+
+  // Busca os veículos do usuário
+  this.veiculoService.listarMeusVeiculos(token).subscribe({
+    next: (veiculos) => {
+      this.passagens.forEach(p => {
+        const veiculo = veiculos.find(v => v.idVeiculo === p.idVeiculo);
+        if (veiculo) p.placa = veiculo.placa;
+      });
+
+      // Busca os boletos do usuário
+      this.boletoService.listarBoletos(userId, token).subscribe({
+        next: (boletos: any[]) => {
+          // Associa cada passagem ao boleto correspondente
+          this.passagens.forEach(p => {
+            const boleto = boletos.find(b => b.passagens.some((bp: Passagem) => bp.idPassagem === p.idPassagem));
+            p.boletoId = boleto?.idBoleto;
+          });
+
+          this.setupPagination();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Erro ao buscar boletos', err);
+          this.setupPagination();
+          this.loading = false;
+        }
+      });
+    },
+    error: (err) => {
+      console.error('Erro ao buscar veículos', err);
+      this.setupPagination();
+      this.loading = false;
+    }
+  });
+}
 
   setupPagination() {
     this.totalPages = Math.ceil(this.passagens.length / this.itemsPerPage) || 1;
@@ -142,4 +171,37 @@ export class CarHistoryComponent implements OnInit {
     const end = start + this.itemsPerPage;
     this.paginatedPassagens = this.passagens.slice(start, end);
   }
+
+  consultarDebitoAtual() {
+  const userId = this.authService.getUserId();
+  const token = this.authService.getToken();
+  if (!userId || !token) return;
+
+  this.boletoService.consultarDebito(userId, token).subscribe({
+    next: (res: any) => {
+      this.debitoMes = res || 0;
+    },
+    error: (err) => {
+      console.error('Erro ao consultar débito', err);
+    }
+  });
+}
+
+visualizarBoleto(boletoId: string) {
+  const token = this.authService.getToken();
+  if (!token) return;
+
+  this.boletoService.baixarPdf(boletoId, token).subscribe({
+    next: (blob) => {
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank'); // abre em nova aba
+    },
+    error: (err) => {
+      console.error('Erro ao abrir boleto', err);
+      this.alertService.error('Erro', 'Não foi possível visualizar o boleto.');
+    }
+  });
+}
+
+
 }

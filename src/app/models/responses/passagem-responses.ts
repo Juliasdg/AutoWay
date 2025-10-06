@@ -1,9 +1,11 @@
 export interface Passagem {
+  idPassagem: string;
   idVeiculo: string;
-  idPessoa: string;
-  local: string;
   data: string;
   hora: string;
+  local: string;
   valor: number;
-  placa?: string; // enriquecido depois
+  placa?: string;
+  mesFechado?: boolean;      // vem do backend
+  boletoId?: string;         // preenchido após buscar o boleto
 }
