@@ -3,8 +3,6 @@
 <div class="main-section" *ngIf="!loading">
   <div class="title">
     <h2>Histórico do Veículo</h2>
-    <p *ngIf="debitoMes > 0" class="debito">Débito do Mês Atual: R$ {{ debitoMes | number:'1.2-2' }}</p>
-    <p *ngIf="debitoMes === 0" class="debito">Sem débitos neste mês</p>
   </div>
 
   <div class="filter">
@@ -17,24 +15,26 @@
     <button (click)="filtrarPorPeriodo()">Filtrar</button>
   </div>
 
+  <!-- BLOCO DO BOLETO ACIMA DAS PASSAGENS -->
+<div class="boleto-container" *ngIf="boletoDisponivel">
+  <button class="boleto-btn" (click)="visualizarBoleto(boletoIdPeriodo!)">
+    <img src="assets/file-1.svg" alt="Boleto">
+    <span>Visualizar Boleto do Período</span>
+  </button>
+</div>
+
+
   <div *ngIf="passagens.length === 0">
     <p>Nenhuma passagem encontrada neste período.</p>
   </div>
 
   <div *ngFor="let passagem of paginatedPassagens" class="vehicle-card">
-
     <div class="vehicle-info">
       <p><strong>Data da Passagem:</strong> {{ passagem.data | date:'dd/MM/yyyy' }}</p>
       <p><strong>Horário:</strong> {{ passagem.hora }}</p>
       <p><strong>Local:</strong> {{ passagem.local }}</p>
       <p><strong>Placa:</strong> {{ passagem.placa || 'Carregando...' }}</p>
       <p><strong>Valor:</strong> R$ {{ passagem.valor | number:'1.2-2' }}</p>
-    </div>
-
-    <div class="actions">
-      <button *ngIf="passagem.boletoId" class="boleto" title="Visualizar Boleto" (click)="visualizarBoleto(passagem.boletoId)">
-        <img src="assets/file-1.svg" alt="Boleto">
-      </button>
     </div>
   </div>
 

@@ -16,6 +16,7 @@ import { InativateCarComponent } from './pages/inativate-car/inativate-car.compo
 import { ListUsersComponent } from './pages/list-users/list-users.component';
 import { NewCarComponent } from './pages/new-car/new-car.component';
 import { InativateAccountComponent } from './pages/inativate-account/inativate-account.component';
+import { BoletoHistoryComponent } from './pages/boleto-history/boleto-history.component';
 
 export const routes: Routes = [
   // rotas públicas para quem não está logado
@@ -30,6 +31,7 @@ export const routes: Routes = [
   { path: 'profile/edit/password', component: EditPasswordComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'profile/edit', component: EditRegisterComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'passagens', component: CarHistoryComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'boletos', component: BoletoHistoryComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'registered', component: RegisteredCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'activate-car', component: ActiveCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'edit-car', component: EditCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },

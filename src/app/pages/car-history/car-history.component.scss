@@ -179,3 +179,35 @@
   margin-top: 0.5rem;
 }
 
+.boleto-container {
+  display: flex;
+  justify-content: flex-start;
+  margin: 1rem 0;
+
+  .boleto-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 2px solid $primary;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: $primary;
+
+    img {
+      width: 30px;
+      height: 30px;
+    }
+
+    &:hover {
+      background: $primary;
+      color: #fff;
+
+      img {
+        filter: brightness(0) invert(1);
+      }
+    }
+  }
+}

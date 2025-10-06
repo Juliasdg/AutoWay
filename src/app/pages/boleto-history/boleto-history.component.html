@@ -1,0 +1,36 @@
+<app-header-purple></app-header-purple>
+
+<div class="main-section" *ngIf="!loading">
+  <div class="title">
+    <h2>Histórico de Boletos</h2>
+    <p *ngIf="!boletos.length">Nenhum boleto encontrado.</p>
+  </div>
+
+  <div *ngFor="let boleto of paginatedBoletos" class="boleto-card">
+  <div class="boleto-info">
+    <p><strong>Período:</strong> {{ boleto.dataInicio | date:'dd/MM/yyyy' }} - {{ boleto.dataFim | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Emissão:</strong> {{ boleto.dataEmissao | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Vencimento:</strong> {{ boleto.dataVencimento | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Valor Total:</strong> R$ {{ boleto.valorTotal | number:'1.2-2' }}</p>
+    <p><strong>Status:</strong> 
+      <span [ngClass]="{'pago': boleto.statusPagamento === 'PAGO', 'pendente': boleto.statusPagamento !== 'PAGO'}">
+        {{ boleto.statusPagamento }}
+      </span>
+    </p>
+  </div>
+
+  <div class="boleto-actions">
+    <button class="boleto-btn" (click)="visualizarBoleto(boleto.idBoleto)">
+      <img src="assets/file-1.svg" alt="Boleto">
+      Visualizar PDF
+    </button>
+  </div>
+  </div>
+
+
+  <div class="pagination" *ngIf="boletos.length > 0">
+    <button (click)="updatePage(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button (click)="updatePage(currentPage + 1)" [disabled]="currentPage === totalPages">Próxima</button>
+  </div>
+</div>

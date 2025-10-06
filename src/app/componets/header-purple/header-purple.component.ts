@@ -48,6 +48,10 @@ export class HeaderPurpleComponent {
       this.router.navigate(['/profile']);
     }
 
+    onBoletos() {
+      this.router.navigate(['/boletos']);
+    }
+
     onHistoric() {
       this.router.navigate(['/passagens']);
     }

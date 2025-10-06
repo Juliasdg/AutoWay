@@ -29,6 +29,10 @@ export class CarHistoryComponent implements OnInit {
   itemsPerPage = 5;
   totalPages = 1;
 
+  boletoDisponivel: boolean = false;
+  boletoIdPeriodo: string | null = null;
+
+
   // filtro
   dataInicio: string = '';
   dataFim: string = '';
@@ -108,7 +112,7 @@ export class CarHistoryComponent implements OnInit {
     });
   }
 
-  private processarPassagens(res: Passagem[], token: string) {
+private processarPassagens(res: Passagem[], token: string) {
   this.passagens = res || [];
 
   if (!this.passagens.length) {
@@ -135,9 +139,28 @@ export class CarHistoryComponent implements OnInit {
       // Busca os boletos do usuário
       this.boletoService.listarBoletos(userId, token).subscribe({
         next: (boletos: any[]) => {
-          // Associa cada passagem ao boleto correspondente
           this.passagens.forEach(p => {
-            const boleto = boletos.find(b => b.passagens.some((bp: Passagem) => bp.idPassagem === p.idPassagem));
+            const dataPassagem = new Date(p.data);
+            const mes = dataPassagem.getMonth() + 1;
+            const ano = dataPassagem.getFullYear();
+
+            const boleto = boletos.find(b => {
+              const mesmoPeriodo =
+                Number(b.mes) === mes &&
+                Number(b.ano) === ano;
+
+              if (!mesmoPeriodo) return false;
+
+              // Se o boleto já está fechado, exige que a passagem conste no array
+              if (b.mesFechado) {
+                return Array.isArray(b.passagens) &&
+                       b.passagens.some((bp: any) => bp.idPassagem === p.idPassagem);
+              }
+
+              // Se o boleto está em aberto, basta casar pelo período
+              return true;
+            });
+
             p.boletoId = boleto?.idBoleto;
           });
 
@@ -150,6 +173,7 @@ export class CarHistoryComponent implements OnInit {
           this.loading = false;
         }
       });
+
     },
     error: (err) => {
       console.error('Erro ao buscar veículos', err);
@@ -158,6 +182,8 @@ export class CarHistoryComponent implements OnInit {
     }
   });
 }
+
+
 
   setupPagination() {
     this.totalPages = Math.ceil(this.passagens.length / this.itemsPerPage) || 1;
