@@ -13,7 +13,7 @@ import { BoletoService } from '../../services/boleto/boleto.service';
 @Component({
   selector: 'app-car-history',
   standalone: true,
-  imports: [HeaderPurpleComponent, BtnPurpleComponent, CommonModule, FormsModule],
+  imports: [HeaderPurpleComponent, CommonModule, FormsModule],
   templateUrl: './car-history.component.html',
   styleUrls: ['./car-history.component.scss']
 })

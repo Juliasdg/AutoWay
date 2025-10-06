@@ -60,4 +60,12 @@ export class PessoaService {
     return this.http.patch<void>(`${this.apiUrl}/${userId}/inactivate`, {}, { headers });
   }
 
+  private authHeaders(token: string) {
+      return new HttpHeaders({ Authorization: `Bearer ${token}` });
+    }
+
+  countAtivos(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/ativos/count`, {headers: this.authHeaders(token)});
+  }
+
 }

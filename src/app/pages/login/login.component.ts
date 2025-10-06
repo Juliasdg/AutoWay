@@ -41,7 +41,9 @@ export class LoginComponent {
         this.alertService.success('Bem-vindo!', 'Login realizado com sucesso!');
         this.authService.setUserId(response.userId);
 
-        if (response.tipoUsuario === 'admin') {
+        const tipoUsuario = this.authService.getUserRole();
+
+        if (tipoUsuario === 'admin') {
           this.router.navigate(['/home-admin']);
         } else {
           this.router.navigate(['/']);

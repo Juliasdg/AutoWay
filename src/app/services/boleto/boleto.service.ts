@@ -24,4 +24,8 @@ export class BoletoService {
   baixarPdf(idBoleto: string, token: string): Observable<Blob> {
     return this.http.get(`${this.apiUrl}/pdf/${idBoleto}`, { headers: this.authHeaders(token), responseType: 'blob' });
   }
+  
+  contarTodas(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/count`, { headers: this.authHeaders(token) });
+  }
 }

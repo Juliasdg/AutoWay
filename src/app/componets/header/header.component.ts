@@ -13,6 +13,8 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class HeaderComponent {
   dropdownOpen = false;
+    isAdmin = false;
+
 
 
   constructor(
@@ -20,6 +22,15 @@ export class HeaderComponent {
     private alertService: AlertService,
     private router: Router
   ) {}
+
+  ngOnInit() {
+    this.checkAdmin();
+  }
+
+  private checkAdmin() {
+      this.isAdmin = this.authService.getUserRole() === 'admin';
+  }
+
 
   onLogout() {
     const userId = this.authService.getUserId();
@@ -41,8 +52,12 @@ export class HeaderComponent {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-  goHome() {
-    this.router.navigate(['/']); // rota inicial
+   goHome() {
+    if (this.isAdmin) {
+      this.router.navigate(['/home-admin']);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 
   @HostListener('document:click')

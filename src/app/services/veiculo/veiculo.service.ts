@@ -52,7 +52,9 @@ export class VeiculoService {
     return this.http.get<VeiculoResponse[]>(`${this.apiUrl}/search`, { params });
   }
 
-  countAtivos(): Observable<{ quantidade: number }> {
-    return this.http.get<{ quantidade: number }>(`${this.apiUrl}/ativos/count`);
+  countAtivos(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/ativos/count`, {headers: this.authHeaders(token)});
   }
+
+  
 }

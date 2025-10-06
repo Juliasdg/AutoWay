@@ -23,9 +23,8 @@
           if (res && res.token && res.userId) {
             this.setToken(res.token);
             this.setUserId(res.userId);
-            if (res.tipoUsuario) {
-              this.setUserRole(res.tipoUsuario);
-            }
+            const tipo = res.tipoUsuario ? res.tipoUsuario.toLowerCase() : 'cliente';
+            this.setUserRole(tipo);
           }
           return res;
         })

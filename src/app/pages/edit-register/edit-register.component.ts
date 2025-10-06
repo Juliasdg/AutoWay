@@ -22,6 +22,7 @@ import { HttpClient } from '@angular/common/http';
 export class EditRegisterComponent implements OnInit {
   formRegister!: FormGroup;
   pessoa?: PessoaResponse;
+  isAdmin = false;
 
   constructor(
     private fb: FormBuilder,
@@ -31,6 +32,9 @@ export class EditRegisterComponent implements OnInit {
     private router: Router,
     private http: HttpClient
   ) {
+      this.isAdmin = this.authService.getUserRole() === 'admin';
+      console.log(this.isAdmin)
+
       this.formRegister = this.fb.group({
       nome: new FormControl(null, Validators.required),
       dataNascimento: new FormControl(null, Validators.required),
@@ -45,6 +49,10 @@ export class EditRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.isAdmin) {
+      this.formRegister.removeControl('vencimento'); // remove o campo para admin
+    }
+
     const token = this.authService.getToken();
     if (token) {
       this.pessoaService.getMe(token).subscribe({

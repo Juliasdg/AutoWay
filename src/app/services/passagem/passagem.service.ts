@@ -12,6 +12,10 @@ export class PassagemService {
 
   constructor(private http: HttpClient) {}
 
+private authHeaders(token: string) {
+    return new HttpHeaders({ Authorization: `Bearer ${token}` });
+  }
+
   getMinhasPassagens(token: string): Observable<Passagem[]> {
   const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
   return this.http.get<any>(`${this.apiUrl}/me`, { headers }).pipe(
@@ -30,7 +34,7 @@ getMinhasPassagensPorPeriodo(token: string, inicio: string, fim: string): Observ
 }
 
 
-  contarTodas(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/count`);
+  contarTodas(token: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/count`, { headers: this.authHeaders(token) });
   }
 }

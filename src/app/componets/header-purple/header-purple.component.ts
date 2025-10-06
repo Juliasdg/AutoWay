@@ -2,29 +2,37 @@ import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../../services/alert/alert.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-header-purple',
   standalone: true,
+  imports: [CommonModule], // 👈 adiciona aqui
   templateUrl: './header-purple.component.html',
   styleUrls: ['./header-purple.component.scss']
 })
 export class HeaderPurpleComponent {
   dropdownOpen = false;
+  isAdmin = false;
 
   constructor(
     private authService: AuthService,
     private alertService: AlertService,
     private router: Router
-  ) {}
+  ) {
+  }
+  
+  ngOnInit() {
+    this.checkAdmin();
+  }
+
+  private checkAdmin() {
+      this.isAdmin = this.authService.getUserRole() === 'admin';
+  }
 
   toggleDropdown(event: Event) {
     event.stopPropagation(); // impede o clique de propagar e fechar imediatamente
     this.dropdownOpen = !this.dropdownOpen;
-  }
-
-  goHome() {
-    this.router.navigate(['/']); // rota inicial
   }
 
   @HostListener('document:click')
@@ -55,4 +63,20 @@ export class HeaderPurpleComponent {
     onHistoric() {
       this.router.navigate(['/passagens']);
     }
+
+    goHome() {
+    if (this.isAdmin) {
+      this.router.navigate(['/home-admin']);
+    } else {
+      this.router.navigate(['/']);
+    }
+  }
+
+  onUsers() {
+    this.router.navigate(['/admin/users']);
+  }
+
+  onVehicles() {
+    this.router.navigate(['/admin/vehicles']);
+  }
 }

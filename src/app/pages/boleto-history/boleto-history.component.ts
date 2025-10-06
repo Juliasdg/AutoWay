@@ -20,7 +20,7 @@ export interface Boleto {
 @Component({
   selector: 'app-boleto-list',
   standalone: true,
-  imports: [CommonModule, BtnPurpleComponent, HeaderPurpleComponent],
+  imports: [CommonModule, HeaderPurpleComponent],
   templateUrl: './boleto-history.component.html',
   styleUrls: ['./boleto-history.component.scss']
 })

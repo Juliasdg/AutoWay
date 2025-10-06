@@ -41,6 +41,7 @@
       </div>
 
       <div class="double-input">
+        <div class="double-input" *ngIf="!isAdmin">
         <div class="field">
           <label>VENCIMENTO DO BOLETO:</label>
           <select formControlName="vencimento">
@@ -49,6 +50,7 @@
             <option value="20">Dia 20</option>
           </select>
         </div>
+      </div>
         <div class="field">
         <label>SENHA:</label>
         <div class="password-field">
