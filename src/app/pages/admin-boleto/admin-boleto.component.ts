@@ -4,8 +4,8 @@ import { HeaderPurpleComponent } from '../../componets/header-purple/header-purp
 import { BoletoService } from '../../services/boleto/boleto.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { AlertService } from '../../services/alert/alert.service';
-import { VeiculoService } from '../../services/veiculo/veiculo.service';
 import { PessoaService } from '../../services/pessoa/pessoa.service';
+import { firstValueFrom } from 'rxjs';
 
 export interface Boleto {
   idBoleto: string;
@@ -17,7 +17,6 @@ export interface Boleto {
   dataVencimento: string;
   statusPagamento: string;
   nomePessoa?: string;
-  placa?: string;
 }
 
 @Component({
@@ -40,15 +39,14 @@ export class AdminBoletoComponent implements OnInit {
     private boletoService: BoletoService,
     private authService: AuthService,
     private alertService: AlertService,
-    private pessoaService: PessoaService,
-    private veiculoService: VeiculoService
+    private pessoaService: PessoaService
   ) {}
 
   ngOnInit(): void {
     this.carregarTodosBoletos();
   }
 
-  carregarTodosBoletos() {
+  async carregarTodosBoletos() {
     const token = this.authService.getToken();
     if (!token) {
       this.alertService.error('Erro', 'Usuário não logado.');
@@ -58,44 +56,31 @@ export class AdminBoletoComponent implements OnInit {
 
     this.loading = true;
 
-    this.boletoService.getTodosBoletos(token).subscribe({
-      next: async (boletos: Boleto[]) => {
-        this.boletos = boletos || [];
-        await this.completarUsuariosEPlacas(token);
-        this.setupPagination();
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Erro ao buscar boletos', err);
-        this.alertService.error('Erro', 'Não foi possível carregar os boletos.');
-        this.loading = false;
-      }
-    });
+    try {
+      const boletos = await firstValueFrom(this.boletoService.getTodosBoletos(token));
+      this.boletos = boletos || [];
+      await this.completarUsuarios(token);
+      this.setupPagination();
+    } catch (err) {
+      console.error('Erro ao buscar boletos', err);
+      this.alertService.error('Erro', 'Não foi possível carregar os boletos.');
+    } finally {
+      this.loading = false;
+    }
   }
 
-  /** 🔹 Carrega todos os usuários e mapeia nome + placa */
-  private async completarUsuariosEPlacas(token: string): Promise<void> {
+  /** 🔹 Carrega todos os usuários de uma vez e mapeia no boleto */
+  private async completarUsuarios(token: string): Promise<void> {
     try {
-      // 1️⃣ Buscar todos os usuários de uma vez
-      const usuarios = await this.pessoaService.listAll(token).toPromise();
+      const usuarios = await firstValueFrom(this.pessoaService.listAll(token));
+      if (!usuarios) return;
 
-      // 2️⃣ Buscar todos os veículos de uma vez (opcional)
-      const veiculos = await this.veiculoService.listarTodos(token).toPromise();
-
-      // 3️⃣ Mapear cada boleto
       this.boletos.forEach(b => {
         const user = usuarios.find(u => u.id === b.idPessoa);
         b.nomePessoa = user?.nome || user?.email || 'Usuário desconhecido';
-
-        // Mapear a placa principal do veículo do usuário
-        const veiculoUser = veiculos.find(v => v.idPessoa === b.idPessoa);
-        if (veiculoUser) {
-          b.placa = veiculoUser.placa;
-        }
       });
-
     } catch (err) {
-      console.error('Erro ao buscar usuários ou veículos', err);
+      console.error('Erro ao buscar usuários', err);
     }
   }
 
@@ -104,11 +89,11 @@ export class AdminBoletoComponent implements OnInit {
     if (!token) return;
 
     this.boletoService.baixarPdf(idBoleto, token).subscribe({
-      next: (blob) => {
+      next: blob => {
         const url = window.URL.createObjectURL(blob);
         window.open(url, '_blank');
       },
-      error: (err) => {
+      error: err => {
         console.error('Erro ao abrir boleto', err);
         this.alertService.error('Erro', 'Não foi possível visualizar o boleto.');
       }

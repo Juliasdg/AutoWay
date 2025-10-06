@@ -9,7 +9,6 @@
  <div *ngFor="let boleto of paginatedBoletos" class="boleto-card">
   <div class="boleto-info">
     <p><strong>Usuário:</strong> {{ boleto.nomePessoa || 'Carregando...' }}</p>
-    <p *ngIf="boleto.placa"><strong>Placa:</strong> {{ boleto.placa }}</p>
     <p><strong>Período:</strong> {{ boleto.dataInicio | date:'dd/MM/yyyy' }} - {{ boleto.dataFim | date:'dd/MM/yyyy' }}</p>
     <p><strong>Emissão:</strong> {{ boleto.dataEmissao | date:'dd/MM/yyyy' }}</p>
     <p><strong>Vencimento:</strong> {{ boleto.dataVencimento | date:'dd/MM/yyyy' }}</p>
