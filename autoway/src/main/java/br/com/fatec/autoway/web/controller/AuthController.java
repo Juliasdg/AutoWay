@@ -112,7 +112,6 @@ public class AuthController {
     })
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
-            @RequestParam String email,
             @RequestBody ChangePasswordRequest request) {
         try {
             if (!request.newPassword().equals(request.confirmPassword())) {
@@ -120,6 +119,7 @@ public class AuthController {
                         .body(new ErrorResponse(400, "Nova senha e confirmação não coincidem", LocalDateTime.now().toString()));
             }
 
+            String email = request.email(); // se você adicionar email no DTO
             pessoaService.updatePassword(email, request.currentPassword(), request.newPassword());
             return ResponseEntity.ok("Senha alterada com sucesso!");
 
