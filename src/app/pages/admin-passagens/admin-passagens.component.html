@@ -1,0 +1,38 @@
+<app-header-purple></app-header-purple>
+
+<div class="main-section" *ngIf="!loading">
+  <div class="title">
+    <h2>Passagens Realizadas</h2>
+  </div>
+
+  <br><br>
+  <!-- BLOCO DO BOLETO ACIMA DAS PASSAGENS -->
+<div class="boleto-container" *ngIf="boletoDisponivel">
+  <button class="boleto-btn" (click)="visualizarBoleto(boletoIdPeriodo!)">
+    <img src="assets/file-1.svg" alt="Boleto">
+    <span>Visualizar Boleto do Período</span>
+  </button>
+</div>
+
+
+  <div *ngIf="passagens.length === 0">
+    <p>Nenhuma passagem encontrada neste período.</p>
+  </div>
+
+  <div *ngFor="let passagem of paginatedPassagens" class="vehicle-card">
+    <div class="vehicle-info">
+      <p><strong>Data da Passagem:</strong> {{ passagem.data | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Horário:</strong> {{ passagem.hora }}</p>
+      <p><strong>Local:</strong> {{ passagem.local }}</p>
+      <p><strong>Placa:</strong> {{ passagem.placa || 'Carregando...' }}</p>
+      <p><strong>Valor:</strong> R$ {{ passagem.valor | number:'1.2-2' }}</p>
+    </div>
+  </div>
+
+  <!-- paginação -->
+  <div class="pagination" *ngIf="passagens.length > 0">
+    <button (click)="updatePage(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
+    <span>Página {{currentPage}} de {{totalPages}}</span>
+    <button (click)="updatePage(currentPage + 1)" [disabled]="currentPage === totalPages">Próxima</button>
+  </div>
+</div>

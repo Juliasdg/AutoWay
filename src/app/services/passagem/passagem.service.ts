@@ -1,4 +1,3 @@
-// passagem.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
@@ -32,7 +31,14 @@ getMinhasPassagensPorPeriodo(token: string, inicio: string, fim: string): Observ
     map(res => Array.isArray(res) ? res : res.passagens || [])
   );
 }
+  // 🔹 NOVOS MÉTODOS PARA ADMIN
+  getTodasPassagens(token: string): Observable<Passagem[]> {
+    return this.http
+      .get<any>(`${this.apiUrl}/all`, { headers: this.authHeaders(token) })
+      .pipe(map(res => Array.isArray(res) ? res : res.passagens || []));
+  }
 
+  
 
   contarTodas(token: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/count`, { headers: this.authHeaders(token) });

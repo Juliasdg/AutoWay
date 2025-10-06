@@ -51,8 +51,7 @@ export class PessoaService {
 
   // busca usuário por id
   getById(id: string, token: string): Observable<PessoaResponse> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<PessoaResponse>(`${this.apiUrl}/${id}`, { headers });
+    return this.http.get<PessoaResponse>(`${this.apiUrl}/${id}`, { headers: this.authHeaders(token) });
   }
 
   inactivateMe(userId: string, token: string): Observable<void> {

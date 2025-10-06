@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
+import { map, Observable } from "rxjs";
 import { environment } from '../../environments/environments';
+import { Boleto } from "../../pages/boleto-history/boleto-history.component";
 
 @Injectable({ providedIn: 'root' })
 export class BoletoService {
@@ -28,4 +29,10 @@ export class BoletoService {
   contarTodas(token: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/count`, { headers: this.authHeaders(token) });
   }
+
+  getTodosBoletos(token: string): Observable<Boleto[]> {
+      return this.http
+        .get<any>(`${this.apiUrl}`, { headers: this.authHeaders(token) })
+        .pipe(map(res => Array.isArray(res) ? res : res.boletos || []));
+    }
 }

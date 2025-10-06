@@ -41,8 +41,8 @@ export class VeiculoService {
     return this.http.put<void>(`${this.apiUrl}/${idVeiculo}/reativar`, {}, { headers: this.authHeaders(token) });
   }
 
-  buscarPorId(idVeiculo: string): Observable<VeiculoResponse> {
-    return this.http.get<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}`);
+  buscarPorId(idVeiculo: string, token: string): Observable<VeiculoResponse> {
+    return this.http.get<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}`, {headers: this.authHeaders(token)});
   }
 
   searchVeiculos(placa?: string, rfid?: string): Observable<VeiculoResponse[]> {
