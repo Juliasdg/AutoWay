@@ -5,34 +5,52 @@
     <h2>Usuários do Sistema</h2>
   </div>
 
-<div class="search-section">
-    <img src="assets/search.svg" alt="">
-    <input type="text">
-</div>
-
-  <div class="vehicle-card">
-    <div class="vehicle-info">
-      <div>
-        <p><strong>Nome:</strong> Giovanni Marcondes Ferreira</p>
-        <p><strong>Status:</strong> <span class="status active"></span> Ativo</p>
-      </div>
-      <div>
-        <p><strong>Telefone:</strong> (11) 12345-6789</p>
-        <p><strong>E-mail:</strong> gioferreira</p>
-      </div>
-    </div>
+  <!-- Busca -->
+  <div class="search-section">
+    <img src="assets/search.svg" alt="Buscar">
+    <input
+      type="text"
+      placeholder="Buscar por nome ou e-mail..."
+      [(ngModel)]="searchText"
+      (input)="buscarUsuario()"
+    >
   </div>
 
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading">
+    Carregando usuários...
+  </div>
 
-   <div class="vehicle-card">
+  <!-- Nenhum usuário -->
+  <div *ngIf="!loading && filteredUsuarios.length === 0" class="no-results">
+    Nenhum usuário encontrado.
+  </div>
+
+  <!-- Lista de Usuários -->
+  <div *ngFor="let usuario of filteredUsuarios" class="vehicle-card">
     <div class="vehicle-info">
       <div>
-        <p><strong>Nome:</strong> Giovanni Marcondes Ferreira</p>
-        <p><strong>Status:</strong> <span class="status active"></span> Ativo</p>
+        <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+        <p>
+          <strong>Status:</strong>
+          <span class="status" [ngClass]="usuario.status ? 'active' : 'inactive'"></span>
+          {{ usuario.status ? 'Ativo' : 'Inativo' }}
+        </p>
+        <p><strong>Telefone:</strong> {{ usuario.telefone || '-' }}</p>
+        <p><strong>E-mail:</strong> {{ usuario.email }}</p>
       </div>
-      <div>
-        <p><strong>Telefone:</strong> (11) 12345-6789</p>
-        <p><strong>E-mail:</strong> gioferreira</p>
-      </div>
+    </div>
+
+    <div class="user-actions">
+      <!-- Botão Ativar/Inativar -->
+      <button title="Ativar/Inativar" (click)="toggleStatus(usuario)">
+        <img src="assets/file-1.svg" alt="Ativar/Inativar">
+      </button>
+
+      <!-- Botão Editar -->
+      <button title="Editar" (click)="editarUsuario(usuario, { nome: 'Novo Nome', telefone: '123456789' })">
+        <img src="assets/file-2.svg" alt="Editar">
+      </button>
+    </div>
   </div>
 </div>

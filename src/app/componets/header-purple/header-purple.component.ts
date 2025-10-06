@@ -57,11 +57,20 @@ export class HeaderPurpleComponent {
     }
 
     onBoletos() {
+      if (this.isAdmin) {
+        this.router.navigate(['/manage/boletos']);
+      } else {
       this.router.navigate(['/boletos']);
+      }
     }
 
     onHistoric() {
-      this.router.navigate(['/passagens']);
+      if (this.isAdmin) {
+        this.router.navigate(['/manage/passagens']);
+      } else {
+        this.router.navigate(['/passagens']);
+      }
+      
     }
 
     goHome() {

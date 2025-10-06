@@ -1,0 +1,70 @@
+<app-header></app-header>
+
+<div class="main-section">
+  <div class="content">
+    <div class="form" [formGroup]="formRegister">
+      <div class="title">
+        <h2>Atualize suas informações</h2>
+      </div>
+
+      <div class="double-input">
+        <div class="field">
+          <label>NOME:</label>
+          <input type="text" formControlName="nome">
+        </div>
+        <div class="field">
+          <label>TELEFONE:</label>
+          <input type="text" formControlName="telefone">
+        </div>
+      </div>
+
+      <div class="double-input">
+        <div class="field">
+          <label>CEP:</label>
+          <input type="text" formControlName="cep" (blur)="buscarEnderecoPorCep()">
+        </div>
+        <div class="field">
+          <label>ENDEREÇO:</label>
+          <input type="text" formControlName="endereco">
+        </div>
+      </div>
+
+      <div class="double-input">
+        <div class="field">
+          <label>COMPLEMENTO:</label>
+          <input type="text" formControlName="complemento">
+        </div>
+        <div class="field">
+          <label>DATA DE NASCIMENTO:</label>
+          <input type="date" formControlName="dataNascimento">
+        </div>
+      </div>
+
+      <div class="double-input">
+        <div class="double-input" *ngIf="!isAdmin">
+        <div class="field">
+          <label>VENCIMENTO DO BOLETO:</label>
+          <select formControlName="vencimento">
+            <option value="5">Dia 05</option>
+            <option value="15">Dia 15</option>
+            <option value="20">Dia 20</option>
+          </select>
+        </div>
+      </div>
+        <div class="field">
+        <label>SENHA:</label>
+        <div class="password-field">
+          <input type="password" value="*************" formControlName="senha" readonly class="disabled-input">
+          <button type="button" (click)="onEditPassword()">
+            <img src="assets/file-2.svg" alt="Editar senha">
+          </button>
+        </div>
+        </div>
+      </div>
+
+      <div class="btn-area">
+        <app-btn-purple label="Atualizar" (click)="onUpdate()"></app-btn-purple>
+      </div>
+    </div>
+  </div>
+</div>

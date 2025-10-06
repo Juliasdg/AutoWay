@@ -19,6 +19,7 @@ import { InativateAccountComponent } from './pages/inativate-account/inativate-a
 import { BoletoHistoryComponent } from './pages/boleto-history/boleto-history.component';
 import { AdminPassagensComponent } from './pages/admin-passagens/admin-passagens.component';
 import { AdminBoletoComponent } from './pages/admin-boleto/admin-boleto.component';
+import { EditUserRegisterComponent } from './pages/edit-user-register/edit-register.component';
 
 export const routes: Routes = [
   // rotas públicas para quem não está logado
@@ -42,6 +43,7 @@ export const routes: Routes = [
   { path: 'inactivate-car', component: InativateCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'profile/inactivate-account', component: InativateAccountComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
+  { path: 'manage/user', component: EditUserRegisterComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'new-car', component: NewCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
 
   // fallback

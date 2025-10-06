@@ -67,4 +67,9 @@ export class PessoaService {
     return this.http.get(`${this.apiUrl}/ativos/count`, {headers: this.authHeaders(token)});
   }
 
+  updateUserAsAdmin(id: string, req: PessoaUpdateRequest, token: string): Observable<PessoaResponse> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put<PessoaResponse>(`${this.apiUrl}/${id}`, req, { headers });
+  }
+
 }
