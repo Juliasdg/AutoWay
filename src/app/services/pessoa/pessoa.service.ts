@@ -59,6 +59,11 @@ export class PessoaService {
     return this.http.patch<void>(`${this.apiUrl}/${userId}/inactivate`, {}, { headers });
   }
 
+  reactivateMe(userId: string, token: string): Observable<void> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.patch<void>(`${this.apiUrl}/${userId}/reactivate`, {}, { headers });
+  }
+
   private authHeaders(token: string) {
       return new HttpHeaders({ Authorization: `Bearer ${token}` });
     }

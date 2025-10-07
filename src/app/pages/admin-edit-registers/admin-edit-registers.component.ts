@@ -114,6 +114,7 @@ export class AdminEditRegistersComponent implements OnInit {
   }
 }
 
+
   onComeback(){
     this.router.navigate(['/list-users'])
   }

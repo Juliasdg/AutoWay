@@ -70,6 +70,8 @@ export class ListUsersComponent implements OnInit {
     this.setupPagination(); // reinicia a paginação após busca
   }
 
+  
+
   setupPagination(): void {
     this.totalPages = Math.ceil(this.filteredUsuarios.length / this.itemsPerPage) || 1;
     this.updatePage(1);
@@ -102,22 +104,34 @@ export class ListUsersComponent implements OnInit {
   }
 
   async alternarStatus(usuario: PessoaResponse): Promise<void> {
-    const token = this.authService.getToken();
-    if (!token) return;
-
-    try {
-      const novoStatus = !usuario.status;
-      await firstValueFrom(
-        this.pessoaService.updateUserAsAdmin(usuario.id, { status: novoStatus }, token)
-      );
-      usuario.status = novoStatus;
-      this.alertService.success(
-        'Sucesso',
-        `Usuário ${usuario.nome} ${novoStatus ? 'ativado' : 'inativado'} com sucesso!`
-      );
-    } catch (err) {
-      console.error('Erro ao alterar status', err);
-      this.alertService.error('Erro', 'Não foi possível alterar o status do usuário.');
-    }
+  const token = this.authService.getToken();
+  if (!token) {
+    this.alertService.error('Erro', 'Usuário não autenticado.');
+    return;
   }
+
+  try {
+    const novoStatus = !usuario.status;
+
+    if (novoStatus) {
+      // Reativar usuário
+      await firstValueFrom(this.pessoaService.reactivateMe(usuario.id, token));
+    } else {
+      // Inativar usuário
+      await firstValueFrom(this.pessoaService.inactivateMe(usuario.id, token));
+    }
+
+    // Atualiza status localmente
+    usuario.status = novoStatus;
+
+    this.alertService.success(
+      'Sucesso',
+      `Usuário ${usuario.nome} foi ${novoStatus ? 'reativado' : 'inativado'} com sucesso!`
+    );
+  } catch (err) {
+    console.error('Erro ao alterar status', err);
+    this.alertService.error('Erro', 'Não foi possível alterar o status do usuário.');
+  }
+}
+
 }
