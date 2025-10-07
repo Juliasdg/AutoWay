@@ -20,12 +20,13 @@ import { BoletoHistoryComponent } from './pages/boleto-history/boleto-history.co
 import { AdminPassagensComponent } from './pages/admin-passagens/admin-passagens.component';
 import { AdminBoletoComponent } from './pages/admin-boleto/admin-boleto.component';
 import { AdminEditRegistersComponent } from './pages/admin-edit-registers/admin-edit-registers.component';
+import { PublicGuard } from './guards/public.guard';
 
 export const routes: Routes = [
   // rotas públicas para quem não está logado
-  { path: 'login', component: LoginComponent},
-  { path: 'register', component: RegisterComponent},
-  { path: 'forgot-password', component: ForgotPasswordComponent},
+  { path: 'login', component: LoginComponent, canActivate: [PublicGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [PublicGuard] },
+  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [PublicGuard] },
 
   // rotas protegidas, só para usuários logados
   { path: '', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },

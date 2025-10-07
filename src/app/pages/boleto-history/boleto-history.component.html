@@ -3,6 +3,9 @@
 <div class="main-section" *ngIf="!loading">
   <div class="title">
     <h2>Histórico de Boletos</h2>
+    <div class="debito-atual" *ngIf="debitoMes > 0">
+      <h3>Débito Atual: <span>R$ {{ debitoMes | number:'1.2-2' }}</span></h3>
+    </div>
     <p *ngIf="!boletos.length">Nenhum boleto encontrado.</p>
   </div>
 

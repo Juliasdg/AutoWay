@@ -28,6 +28,8 @@ export class BoletoHistoryComponent implements OnInit {
   boletos: Boleto[] = [];
   paginatedBoletos: Boleto[] = [];
   loading = true;
+    debitoMes: number = 0; // <--- novo campo
+
 
   currentPage = 1;
   itemsPerPage = 5;
@@ -41,6 +43,7 @@ export class BoletoHistoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.carregarBoletos();
+    this.consultarDebitoAtual();
   }
 
   carregarBoletos() {
@@ -81,6 +84,21 @@ export class BoletoHistoryComponent implements OnInit {
       }
     });
   }
+
+   consultarDebitoAtual() {
+  const userId = this.authService.getUserId();
+  const token = this.authService.getToken();
+  if (!userId || !token) return;
+
+  this.boletoService.consultarDebito(userId, token).subscribe({
+    next: (res: any) => {
+      this.debitoMes = res || 0;
+    },
+    error: (err) => {
+      console.error('Erro ao consultar débito', err);
+    }
+  });
+}
 
   setupPagination() {
     this.totalPages = Math.ceil(this.boletos.length / this.itemsPerPage) || 1;

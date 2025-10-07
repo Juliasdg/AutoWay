@@ -107,4 +107,19 @@
       &:hover:not(:disabled) { background: darken(#6f42c1, 10%); }
     }
   }
+
+  .debito-atual {
+  text-align: center;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-size: 1.4rem;
+  color: #333;
+
+  span {
+    color: $primary; // usa seu roxo principal
+    font-weight: 700;
+    margin-left: 0.5rem;
+  }
+}
+
 }
