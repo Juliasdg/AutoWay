@@ -24,7 +24,7 @@
     padding: 50px;
     background-color: white;
     width: 60rem;
-    height: 350px;
+    height: 430px;
     border-radius: 1rem;
 }
 
@@ -60,11 +60,19 @@ input{
     margin-top: 1.5px;
 }
 
-.btn-area{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 2rem;
+.btn-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 3rem;
+  width: 100%;
+}
+
+app-btn-purple {
+  width: 60%;
+  max-width: 300px;
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -90,7 +98,12 @@ input{
   }
 
   .btn-area {
-    width: 100%;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  app-btn-purple {
+    width: 80%;
+    max-width: none;
   }
 }
+

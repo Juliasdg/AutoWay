@@ -4,4 +4,5 @@ export interface VeiculoResponse {
   placa: string;
   idRfid: string | null;
   ativo: boolean;
+  portadorNome?: string; // <-- campo opcional só para exibir
 }

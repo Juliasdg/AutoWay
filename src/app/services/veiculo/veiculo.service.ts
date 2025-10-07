@@ -29,8 +29,8 @@ export class VeiculoService {
     return this.http.get<VeiculoResponse[]>(this.apiUrl, { headers: this.authHeaders(token) });
   }
 
-  ativarVeiculo(idVeiculo: string, payload: VeiculoAdminUpdateRequest): Observable<VeiculoResponse> {
-    return this.http.put<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}/ativar`, payload);
+  ativarVeiculo(idVeiculo: string, payload: VeiculoAdminUpdateRequest, token: string): Observable<VeiculoResponse> {
+    return this.http.put<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}/ativar`, payload, {headers: this.authHeaders(token)});
   }
 
   inativarVeiculo(idVeiculo: string, token: string): Observable<void> {

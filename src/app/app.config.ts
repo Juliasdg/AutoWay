@@ -15,7 +15,7 @@ import { ListUsersComponent } from './pages/admin-users/admin-users.component';
 import { NewCarComponent } from './pages/new-car/new-car.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';
-import { RegisteredCarComponent } from './pages/registered-car/registered-car.component';
+import { RegisteredCarComponent } from './pages/admin-vehicles/admin-vehicles.component';
 import { BrowserModule } from '@angular/platform-browser'
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';

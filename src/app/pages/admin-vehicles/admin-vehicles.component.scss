@@ -84,4 +84,59 @@
       }
     }
 
+    .vehicle-actions {
+  display: flex;
+  flex-direction: column;       // empilha os botões verticalmente
+  justify-content: center;      // centraliza verticalmente
+  align-items: center;          // centraliza horizontalmente dentro da lateral
+  width: 80px;                  // aumenta a área do container
+  height: 100%;                 // ocupa toda a altura do card
+  gap: 1rem;                    // espaço entre os botões
+
+  button {
+    width: 100%;                // botão ocupa largura total do container
+    height: 40px;               // aumenta área clicável
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      width: 24px;              // ícones um pouco maiores
+      height: 24px;
+    }
+  }
+}
+
   }}
+
+  .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+
+  button {
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 1.8rem; // aumentei aqui
+    font-size: 1.1rem;       // texto maior
+    font-weight: bold;       // mais destaque
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: darken($primary, 10%);
+    }
+
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}

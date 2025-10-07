@@ -9,7 +9,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { EditPasswordComponent } from './pages/edit-password/edit-password.component';
 import { EditRegisterComponent } from './pages/edit-register/edit-register.component';
 import { CarHistoryComponent } from './pages/car-history/car-history.component';
-import { RegisteredCarComponent } from './pages/registered-car/registered-car.component';
+import { AdminVehiclesComponent } from './pages/admin-vehicles/admin-vehicles.component';
 import { ActiveCarComponent } from './pages/active-car/active-car.component';
 import { EditCarComponent } from './pages/edit-car/edit-car.component';
 import { InativateCarComponent } from './pages/inativate-car/inativate-car.component';
@@ -37,9 +37,9 @@ export const routes: Routes = [
   { path: 'manage/passagens', component: AdminPassagensComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'manage/boletos', component: AdminBoletoComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'boletos', component: BoletoHistoryComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
-  { path: 'registered', component: RegisteredCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'manage/vehicles', component: AdminVehiclesComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'activate-car', component: ActiveCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
-  { path: 'edit-car', component: EditCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
+  { path: 'manage/vehicles/edit/:id', component: EditCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'inactivate-car', component: InativateCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'profile/inactivate-account', component: InativateAccountComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'manage/users', component: AdminUsersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
