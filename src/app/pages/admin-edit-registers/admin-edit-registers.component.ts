@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { BtnPurpleComponent } from '../../componets/btn-purple/btn-purple.component';
@@ -12,14 +12,14 @@ import { HeaderComponent } from '../../componets/header/header.component';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-edit-user-register',
+  selector: 'app-edit-register',
   standalone: true,
   imports: [CommonModule, HeaderComponent, BtnPurpleComponent, ReactiveFormsModule],
-  templateUrl: './edit-register.component.html',
-  styleUrls: ['./edit-register.component.scss']
+  templateUrl: './admin-edit-registers.component.html',
+  styleUrls: ['./admin-edit-registers.component.scss']
 })
 
-export class EditUserRegisterComponent implements OnInit {
+export class AdminEditRegistersComponent implements OnInit {
   formRegister!: FormGroup;
   pessoa?: PessoaResponse;
   isAdmin = false;
@@ -30,7 +30,8 @@ export class EditUserRegisterComponent implements OnInit {
     private pessoaService: PessoaService,
     private authService: AuthService,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private route: ActivatedRoute
   ) {
       this.isAdmin = this.authService.getUserRole() === 'admin';
       console.log(this.isAdmin)
@@ -49,23 +50,23 @@ export class EditUserRegisterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isAdmin) {
-      this.formRegister.removeControl('vencimento'); // remove o campo para admin
-    }
+  const id = this.route.snapshot.paramMap.get('id');
+  const token = this.authService.getToken();
 
-    const token = this.authService.getToken();
-    if (token) {
-      this.pessoaService.getMe(token).subscribe({
-        next: (res) => {
-          this.pessoa = res;
-          this.initForm(res);
-        },
-        error: (err) => console.error(err)
-      });
-    }
+  if (id && token) {
+    this.pessoaService.getById(id, token).subscribe({
+      next: (res) => {
+        this.pessoa = res;
+        this.initForm(res);
+      },
+      error: (err) => this.alertService.error('Erro ao carregar usuário!', err)
+    });
+  } else {
+    this.alertService.error('Usuário não encontrado ou não autenticado.');
+    this.router.navigate(['/list-users']);
   }
+}
 
-  
 
   private initForm(pessoa: PessoaResponse) {
     this.formRegister = this.fb.group({
@@ -76,7 +77,6 @@ export class EditUserRegisterComponent implements OnInit {
       complemento: [pessoa.complemento],
       dataNascimento: [pessoa.dataNascimento, Validators.required],
       vencimento: [pessoa.vencimento, Validators.required],
-      senha: [{ value: '', disabled: true }] // campo de senha desabilitado
     });
   }
 
@@ -93,27 +93,32 @@ export class EditUserRegisterComponent implements OnInit {
   }
 
   const payload: PessoaUpdateRequest = this.formRegister.value;
+  const id = this.route.snapshot.paramMap.get('id');
 
-  this.pessoaService.updateMe(payload, token).subscribe({
-    next: () => {
-      this.alertService.success('Perfil atualizado com sucesso!', 'Seus dados foram atualizados corretamente.');
-      this.router.navigate(['/profile']);
-    },
-    error: (err) => {
-      // Tratativa para Bad Request (400) e mensagens personalizadas
-      let msg = 'Erro ao atualizar perfil!';
-      if (err.status === 400 && err.error?.message) {
-        msg = err.error.message; // mensagem retornada pelo backend
-      } else if (err.message) {
-        msg = err.message; // mensagem genérica de erro
-      }
-      this.alertService.error(msg, new Error(msg));
-    }
-  });
+  if (this.isAdmin && id) {
+    this.pessoaService.updateUserAsAdmin(id, payload, token).subscribe({
+      next: () => {
+        this.alertService.success('Usuário atualizado com sucesso!');
+        this.router.navigate(['/list-users']);
+      },
+      error: (err) => this.alertService.error('Erro ao atualizar usuário!', err)
+    });
+  } else {
+    this.pessoaService.updateMe(payload, token).subscribe({
+      next: () => {
+        this.alertService.success('Perfil atualizado com sucesso!');
+        this.router.navigate(['/profile']);
+      },
+      error: (err) => this.alertService.error('Erro ao atualizar perfil!', err)
+    });
+  }
 }
 
+  onComeback(){
+    this.router.navigate(['/list-users'])
+  }
 
-  onEditPassword() {  
+  onEditPassword() {
     this.router.navigate(['/profile/edit/password']);
   }
     buscarEnderecoPorCep() {

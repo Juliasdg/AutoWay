@@ -41,7 +41,7 @@
       </div>
 
       <div class="double-input">
-        <div class="double-input" *ngIf="!isAdmin">
+        <div class="double-input">
         <div class="field">
           <label>VENCIMENTO DO BOLETO:</label>
           <select formControlName="vencimento">
@@ -51,19 +51,11 @@
           </select>
         </div>
       </div>
-        <div class="field">
-        <label>SENHA:</label>
-        <div class="password-field">
-          <input type="password" value="*************" formControlName="senha" readonly class="disabled-input">
-          <button type="button" (click)="onEditPassword()">
-            <img src="assets/file-2.svg" alt="Editar senha">
-          </button>
-        </div>
-        </div>
       </div>
 
       <div class="btn-area">
-        <app-btn-purple label="Atualizar" (click)="onUpdate()"></app-btn-purple>
+        <app-btn-purple label="Atualizar" (click)="onUpdate()"></app-btn-purple> 
+        <app-btn-purple label="Voltar" (click)="onComeback()"></app-btn-purple>
       </div>
     </div>
   </div>

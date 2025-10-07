@@ -27,7 +27,7 @@
   </div>
 
   <!-- Lista de Usuários -->
-  <div *ngFor="let usuario of filteredUsuarios" class="vehicle-card">
+  <div *ngFor="let usuario of paginatedUsuarios" class="vehicle-card">
     <div class="vehicle-info">
       <div>
         <p><strong>Nome:</strong> {{ usuario.nome }}</p>
@@ -43,14 +43,22 @@
 
     <div class="user-actions">
       <!-- Botão Ativar/Inativar -->
-      <button title="Ativar/Inativar" (click)="toggleStatus(usuario)">
+      <button title="Ativar/Inativar" (click)="alternarStatus(usuario)">
         <img src="assets/file-1.svg" alt="Ativar/Inativar">
       </button>
 
       <!-- Botão Editar -->
-      <button title="Editar" (click)="editarUsuario(usuario, { nome: 'Novo Nome', telefone: '123456789' })">
-        <img src="assets/file-2.svg" alt="Editar">
-      </button>
+      <!-- Botão Editar -->
+    <button title="Editar" (click)="abrirTelaEdicao(usuario.id)">
+      <img src="assets/file-2.svg" alt="Editar">
+    </button>
     </div>
+  </div>
+
+  <!-- Paginação -->
+  <div *ngIf="!loading && totalPages > 1" class="pagination">
+    <button (click)="updatePage(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button (click)="updatePage(currentPage + 1)" [disabled]="currentPage === totalPages">Próxima</button>
   </div>
 </div>

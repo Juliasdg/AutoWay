@@ -115,8 +115,37 @@
     }
   }
 }
-
 }
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+
+  button {
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.8rem 1.8rem; // aumentei aqui
+    font-size: 1.1rem;       // texto maior
+    font-weight: bold;       // mais destaque
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: darken($primary, 10%);
+    }
+
+    &:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+  }
+}
+
 
 @media (max-width: 768px) {
   .vehicle-card {
