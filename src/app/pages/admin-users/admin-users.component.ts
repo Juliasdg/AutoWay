@@ -13,10 +13,10 @@ import { Router } from '@angular/router';
   selector: 'app-list-users',
   standalone: true,
   imports: [CommonModule, FormsModule, HeaderPurpleComponent],
-  templateUrl: './list-users.component.html',
-  styleUrls: ['./list-users.component.scss']
+  templateUrl: './admin-users.component.html',
+  styleUrls: ['./admin-users.component.scss']
 })
-export class ListUsersComponent implements OnInit {
+export class AdminUsersComponent implements OnInit {
   usuarios: PessoaResponse[] = [];
   filteredUsuarios: PessoaResponse[] = [];
   paginatedUsuarios: PessoaResponse[] = [];

@@ -82,7 +82,7 @@ export class HeaderPurpleComponent {
   }
 
   onUsers() {
-    this.router.navigate(['/admin/users']);
+    this.router.navigate(['/manage/users']);
   }
 
   onVehicles() {

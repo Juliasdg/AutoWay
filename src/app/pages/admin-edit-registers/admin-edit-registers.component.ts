@@ -116,7 +116,7 @@ export class AdminEditRegistersComponent implements OnInit {
 
 
   onComeback(){
-    this.router.navigate(['/list-users'])
+    this.router.navigate(['/manage/users'])
   }
 
   onEditPassword() {

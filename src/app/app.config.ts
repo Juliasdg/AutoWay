@@ -11,7 +11,7 @@ import { EditPasswordComponent } from './pages/edit-password/edit-password.compo
 import { EditRegisterComponent } from './pages/edit-register/edit-register.component';
 import { HomeAdminComponent } from './pages/home-admin/home-admin.component';
 import { InativateCarComponent } from './pages/inativate-car/inativate-car.component';
-import { ListUsersComponent } from './pages/list-users/list-users.component';
+import { ListUsersComponent } from './pages/admin-users/admin-users.component';
 import { NewCarComponent } from './pages/new-car/new-car.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './pages/register/register.component';

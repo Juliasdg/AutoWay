@@ -13,7 +13,7 @@ import { RegisteredCarComponent } from './pages/registered-car/registered-car.co
 import { ActiveCarComponent } from './pages/active-car/active-car.component';
 import { EditCarComponent } from './pages/edit-car/edit-car.component';
 import { InativateCarComponent } from './pages/inativate-car/inativate-car.component';
-import { ListUsersComponent } from './pages/list-users/list-users.component';
+import { AdminUsersComponent } from './pages/admin-users/admin-users.component';
 import { NewCarComponent } from './pages/new-car/new-car.component';
 import { InativateAccountComponent } from './pages/inativate-account/inativate-account.component';
 import { BoletoHistoryComponent } from './pages/boleto-history/boleto-history.component';
@@ -42,7 +42,7 @@ export const routes: Routes = [
   { path: 'edit-car', component: EditCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'inactivate-car', component: InativateCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
   { path: 'profile/inactivate-account', component: InativateAccountComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
-  { path: 'list-users', component: ListUsersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
+  { path: 'manage/users', component: AdminUsersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'manage/users/edit/:id', component: AdminEditRegistersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'new-car', component: NewCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
 
