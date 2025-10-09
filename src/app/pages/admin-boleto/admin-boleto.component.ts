@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth/auth.service';
 import { AlertService } from '../../services/alert/alert.service';
 import { PessoaService } from '../../services/pessoa/pessoa.service';
 import { firstValueFrom } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 export interface Boleto {
   idBoleto: string;
@@ -22,14 +23,19 @@ export interface Boleto {
 @Component({
   selector: 'app-admin-boleto',
   standalone: true,
-  imports: [CommonModule, HeaderPurpleComponent],
+  imports: [CommonModule, HeaderPurpleComponent, FormsModule],
   templateUrl: './admin-boleto.component.html',
   styleUrls: ['./admin-boleto.component.scss']
 })
 export class AdminBoletoComponent implements OnInit {
   boletos: Boleto[] = [];
+  boletosFiltrados: Boleto[] = [];
   paginatedBoletos: Boleto[] = [];
   loading = true;
+
+  filtroNome: string = '';
+  filtroDataInicio: string = '';
+  filtroDataFim: string = '';
 
   currentPage = 1;
   itemsPerPage = 5;
@@ -60,6 +66,8 @@ export class AdminBoletoComponent implements OnInit {
       const boletos = await firstValueFrom(this.boletoService.getTodosBoletos(token));
       this.boletos = boletos || [];
       await this.completarUsuarios(token);
+
+      this.boletosFiltrados = [...this.boletos];
       this.setupPagination();
     } catch (err) {
       console.error('Erro ao buscar boletos', err);
@@ -83,6 +91,42 @@ export class AdminBoletoComponent implements OnInit {
     }
   }
 
+  aplicarFiltros() {
+    let filtrados = [...this.boletos];
+
+    if (this.filtroNome.trim()) {
+      const termo = this.filtroNome.toLowerCase();
+      filtrados = filtrados.filter(b =>
+        b.nomePessoa?.toLowerCase().includes(termo)
+      );
+    }
+
+    if (this.filtroDataInicio) {
+      const inicio = new Date(this.filtroDataInicio);
+      filtrados = filtrados.filter(b =>
+        new Date(b.dataInicio) >= inicio
+      );
+    }
+
+    if (this.filtroDataFim) {
+      const fim = new Date(this.filtroDataFim);
+      filtrados = filtrados.filter(b =>
+        new Date(b.dataFim) <= fim
+      );
+    }
+
+    this.boletosFiltrados = filtrados;
+    this.setupPagination();
+  }
+
+  limparFiltros() {
+    this.filtroNome = '';
+    this.filtroDataInicio = '';
+    this.filtroDataFim = '';
+    this.boletosFiltrados = [...this.boletos];
+    this.setupPagination();
+  }
+
   visualizarBoleto(idBoleto: string) {
     const token = this.authService.getToken();
     if (!token) return;
@@ -100,7 +144,7 @@ export class AdminBoletoComponent implements OnInit {
   }
 
   setupPagination() {
-    this.totalPages = Math.ceil(this.boletos.length / this.itemsPerPage) || 1;
+    this.totalPages = Math.ceil(this.boletosFiltrados.length / this.itemsPerPage) || 1;
     this.updatePage(1);
   }
 
@@ -109,6 +153,6 @@ export class AdminBoletoComponent implements OnInit {
     this.currentPage = page;
     const start = (page - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
-    this.paginatedBoletos = this.boletos.slice(start, end);
+    this.paginatedBoletos = this.boletosFiltrados.slice(start, end);
   }
 }

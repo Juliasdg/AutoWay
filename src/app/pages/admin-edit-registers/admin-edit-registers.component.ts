@@ -42,7 +42,7 @@ export class AdminEditRegistersComponent implements OnInit {
       telefone: new FormControl(null, Validators.required),
       cep: new FormControl(null, Validators.required),
       endereco: new FormControl(null),
-      bairro: new FormControl(null),  
+      bairro: new FormControl(null),
       numero: new FormControl(null, Validators.required),
       complemento: new FormControl(null),
       vencimento: new FormControl(5, Validators.required)

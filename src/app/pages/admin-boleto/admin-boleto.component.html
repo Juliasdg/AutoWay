@@ -6,6 +6,18 @@
     <p *ngIf="!boletos.length">Nenhum boleto encontrado.</p>
   </div>
 
+  <div class="filter">
+    <input type="text" placeholder="Buscar por usuário" [(ngModel)]="filtroNome" />
+
+    <input type="date" [(ngModel)]="filtroDataInicio" />
+
+    <input type="date" [(ngModel)]="filtroDataFim" />
+
+    <button (click)="aplicarFiltros()">Filtrar</button>
+    <button (click)="limparFiltros()">Limpar</button>
+  </div>
+
+
   <div *ngFor="let boleto of paginatedBoletos" class="boleto-card">
     <div class="boleto-info">
       <p><strong>Usuário:</strong> {{ boleto.nomePessoa || 'Carregando...' }}</p>
