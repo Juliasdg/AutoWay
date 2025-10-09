@@ -17,34 +17,6 @@
     }
   }
 
-  .search-section {
-    position: relative;
-    width: 250px;
-    margin-left: auto;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
-
-
-    img {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
-      pointer-events: none;
-    }
-
-    input {
-      width: 100%;
-      padding: 8px 12px;
-      padding-left: 40px;
-      border: 1px solid $primary;
-      border-radius: 3px;
-      font-size: 14px;
-    }
-  }
-
-
   .vehicle-card {
     width: 100%;
     max-width: 400rem;
@@ -112,6 +84,32 @@
       }
     }
 
+  }
+}
+
+.search-section {
+  position: relative;
+  width: 500px;
+  margin: 0 0 2rem 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
+
+  img {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px 12px;
+    padding-left: 40px;
+    border: 1px solid $primary;
+    border-radius: 3px;
+    font-size: 14px;
   }
 }
 
