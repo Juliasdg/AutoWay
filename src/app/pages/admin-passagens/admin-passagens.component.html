@@ -13,6 +13,18 @@
     </button>
   </div>
 
+  <div class="filter">
+    <input type="text" placeholder="Buscar por placa" [(ngModel)]="filtroPlaca" maxlength="8" />
+
+    <input type="date" [(ngModel)]="filtroDataInicio" />
+
+    <input type="date" [(ngModel)]="filtroDataFim" />
+
+    <button (click)="aplicarFiltros()">Filtrar</button>
+    <button (click)="limparFiltros()">Limpar</button>
+  </div>
+
+
 
   <div *ngIf="passagens.length === 0">
     <p>Nenhuma passagem encontrada neste período.</p>

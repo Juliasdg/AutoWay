@@ -18,8 +18,13 @@ import { VeiculoService } from '../../services/veiculo/veiculo.service';
 })
 export class AdminPassagensComponent implements OnInit {
   passagens: Passagem[] = [];
+  passagensFiltradas: Passagem[] = [];
   paginatedPassagens: Passagem[] = [];
   loading = true;
+
+  filtroPlaca: string = '';
+  filtroDataInicio: string = '';
+  filtroDataFim: string = '';
 
   currentPage = 1;
   itemsPerPage = 5;
@@ -54,6 +59,7 @@ export class AdminPassagensComponent implements OnInit {
         this.passagens = res || [];
 
         this.completarPlacas(token).then(() => {
+          this.passagensFiltradas = [...this.passagens];
           this.setupPagination();
           this.loading = false;
         });
@@ -78,8 +84,38 @@ export class AdminPassagensComponent implements OnInit {
     await Promise.all(promises);
   }
 
+  aplicarFiltros() {
+    let filtradas = [...this.passagens];
+
+    if (this.filtroPlaca.trim()) {
+      const termo = this.filtroPlaca.trim().toLowerCase();
+      filtradas = filtradas.filter(p => p.placa?.toLowerCase().includes(termo));
+    }
+
+    if (this.filtroDataInicio) {
+      const inicio = new Date(this.filtroDataInicio);
+      filtradas = filtradas.filter(p => new Date(p.data) >= inicio);
+    }
+
+    if (this.filtroDataFim) {
+      const fim = new Date(this.filtroDataFim);
+      filtradas = filtradas.filter(p => new Date(p.data) <= fim);
+    }
+
+    this.passagensFiltradas = filtradas;
+    this.setupPagination();
+  }
+
+  limparFiltros() {
+    this.filtroPlaca = '';
+    this.filtroDataInicio = '';
+    this.filtroDataFim = '';
+    this.passagensFiltradas = [...this.passagens];
+    this.setupPagination();
+  }
+
   setupPagination() {
-    this.totalPages = Math.ceil(this.passagens.length / this.itemsPerPage) || 1;
+    this.totalPages = Math.ceil(this.passagensFiltradas.length / this.itemsPerPage) || 1;
     this.updatePage(1);
   }
 
@@ -88,7 +124,7 @@ export class AdminPassagensComponent implements OnInit {
     this.currentPage = page;
     const start = (page - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
-    this.paginatedPassagens = this.passagens.slice(start, end);
+    this.paginatedPassagens = this.passagensFiltradas.slice(start, end);
   }
 
   visualizarBoleto(boletoId: string) {

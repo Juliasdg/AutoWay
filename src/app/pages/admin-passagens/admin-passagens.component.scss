@@ -214,3 +214,33 @@
     }
   }
 }
+
+.filter {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0;
+
+  input[type="text"],
+  input[type="date"] {
+    padding: 0.4rem 0.6rem;
+    border: 1.5px solid $primary;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: $primary;
+  }
+
+  button {
+    background: $primary;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      background: darken($primary, 10%);
+    }
+  }
+}
