@@ -1,9 +1,16 @@
 @import "../../../assets/color-variables.scss";
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+
 .main-section {
   padding-top: 4rem;
   background-color: $primary;
-  position: fixed;
+  position: absolute;
   width: 100%;
   height: 100%;
   overflow-x: hidden;

@@ -40,8 +40,8 @@ export class EditRegisterComponent implements OnInit {
       dataNascimento: new FormControl(null, Validators.required),
       telefone: new FormControl(null, Validators.required),
       cep: new FormControl(null, Validators.required),
-      endereco: new FormControl(null), 
-      bairro: new FormControl(null),   
+      endereco: new FormControl(null),
+      bairro: new FormControl(null),
       numero: new FormControl(null, Validators.required),
       complemento: new FormControl(null),
       vencimento: new FormControl(5, Validators.required)
@@ -50,7 +50,7 @@ export class EditRegisterComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isAdmin) {
-      this.formRegister.removeControl('vencimento'); 
+      this.formRegister.removeControl('vencimento');
     }
 
     const token = this.authService.getToken();
@@ -74,7 +74,7 @@ export class EditRegisterComponent implements OnInit {
       complemento: [pessoa.complemento],
       dataNascimento: [pessoa.dataNascimento, Validators.required],
       vencimento: [pessoa.vencimento, Validators.required],
-      senha: [{ value: '', disabled: true }] 
+      senha: [{ value: '', disabled: true }]
     });
   }
 
@@ -100,9 +100,9 @@ export class EditRegisterComponent implements OnInit {
       error: (err) => {
         let msg = 'Erro ao atualizar perfil!';
         if (err.status === 400 && err.error?.message) {
-          msg = err.error.message; 
+          msg = err.error.message;
         } else if (err.message) {
-          msg = err.message; 
+          msg = err.message;
         }
         this.alertService.error(msg, new Error(msg));
       }
@@ -134,5 +134,29 @@ export class EditRegisterComponent implements OnInit {
         }
       });
     }
+  }
+
+  formatarTelefone() {
+    const control = this.formRegister.get('telefone');
+    if (!control) return;
+    let value = control.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    if (value.length <= 10) {
+      value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+      value = value.replace(/(\d{4})(\d)/, '$1-$2');
+    } else {
+      value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+      value = value.replace(/(\d{5})(\d)/, '$1-$2');
+    }
+    control.setValue(value, { emitEvent: false });
+  }
+
+  formatarCep() {
+    const control = this.formRegister.get('cep');
+    if (!control) return;
+    let value = control.value.replace(/\D/g, '');
+    if (value.length > 8) value = value.slice(0, 8);
+    value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+    control.setValue(value, { emitEvent: false });
   }
 }

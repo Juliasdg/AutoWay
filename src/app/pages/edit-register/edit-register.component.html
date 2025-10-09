@@ -14,14 +14,15 @@
         </div>
         <div class="field">
           <label>TELEFONE:</label>
-          <input type="text" formControlName="telefone">
+          <input type="text" formControlName="telefone" maxlength="15" (input)="formatarTelefone()" />
         </div>
       </div>
 
       <div class="double-input">
         <div class="field">
           <label>CEP:</label>
-          <input type="text" formControlName="cep" (blur)="buscarEnderecoPorCep()">
+          <input type="text" formControlName="cep" maxlength="9" (input)="formatarCep()"
+            (blur)="buscarEnderecoPorCep()" />
         </div>
         <div class="field">
           <label>ENDEREÇO:</label>
