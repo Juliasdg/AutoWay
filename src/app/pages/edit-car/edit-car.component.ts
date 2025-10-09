@@ -28,7 +28,7 @@ export class EditCarComponent implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.idVeiculo = this.route.snapshot.paramMap.get('id')!;

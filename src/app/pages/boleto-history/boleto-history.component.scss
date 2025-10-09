@@ -8,83 +8,105 @@
 
   .title {
     margin-bottom: 2rem;
-    h2 { font-size: 1.8rem; font-weight: bold; color: #333; }
-    p { font-size: 1rem; color: #555; }
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #333;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #555;
+    }
   }
 
   .boleto-card {
-  width: 100%;
-  max-width: 500px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 1rem 1.5rem;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
-  }
-
-  .boleto-info {
-    p {
-      margin: 0.3rem 0;
-      font-size: 0.95rem;
-    }
-    .pago { color: #28a745; font-weight: bold; }
-    .pendente { color: #dc3545; font-weight: bold; }
-  }
-
-  .boleto-actions {
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-    .boleto-btn {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.5rem 1rem;
-      
-      font-weight: 600;
-      font-size: 0.95rem;
-      border-radius: 8px;
-      border: 2px solid #6f42c1;
-      background: #fff;
-      color: #6f42c1;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    }
 
-      img {
-        width: 24px;
-        height: 24px;
-        transition: transform 0.25s ease;
+    .boleto-info {
+      p {
+        margin: 0.3rem 0;
+        font-size: 0.95rem;
       }
 
-      &:hover {
-        background: #6f42c1;
-        color: #fff;
-        img { filter: brightness(0) invert(1); transform: scale(1.1); }
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      }
-
-      &.download {
-        border-color: #28a745;
+      .pago {
         color: #28a745;
+        font-weight: bold;
+      }
+
+      .pendente {
+        color: #dc3545;
+        font-weight: bold;
+      }
+    }
+
+    .boleto-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .boleto-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.5rem 1rem;
+
+        font-weight: 600;
+        font-size: 0.95rem;
+        border-radius: 8px;
+        border: 2px solid #6f42c1;
+        background: #fff;
+        color: #6f42c1;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+        img {
+          width: 24px;
+          height: 24px;
+          transition: transform 0.25s ease;
+        }
 
         &:hover {
-          background: #28a745;
+          background: #6f42c1;
           color: #fff;
+
+          img {
+            filter: brightness(0) invert(1);
+            transform: scale(1.1);
+          }
+
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        &.download {
+          border-color: #28a745;
+          color: #28a745;
+
+          &:hover {
+            background: #28a745;
+            color: #fff;
+          }
         }
       }
     }
   }
-}
 
 
   .pagination {
@@ -98,28 +120,34 @@
       color: #fff;
       border: none;
       cursor: pointer;
-          border-radius: 6px;
-    padding: 0.8rem 1.8rem; // aumentei aqui
-    font-size: 1.1rem;       // texto maior
-    font-weight: bold;       // mais destaque
+      border-radius: 6px;
+      padding: 0.8rem 1.8rem;
+      font-size: 1.1rem;
+      font-weight: bold;
 
-      &:disabled { background: #ccc; cursor: not-allowed; }
-      &:hover:not(:disabled) { background: darken(#6f42c1, 10%); }
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        background: darken(#6f42c1, 10%);
+      }
     }
   }
 
   .debito-atual {
-  text-align: center;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  font-size: 1.4rem;
-  color: #333;
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+    color: #333;
 
-  span {
-    color: $primary; // usa seu roxo principal
-    font-weight: 700;
-    margin-left: 0.5rem;
+    span {
+      color: $primary;
+      font-weight: 700;
+      margin-left: 0.5rem;
+    }
   }
-}
 
 }

@@ -9,6 +9,7 @@
   .title {
     padding-top: 3rem;
     margin-bottom: 1.5rem;
+
     h2 {
       font-size: 1.8rem;
       font-weight: bold;
@@ -21,25 +22,25 @@
     width: 250px;
     margin-left: auto;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
-    
+
 
     img {
-        position: absolute;
-        left: 10px; 
-        top: 50%;
-        transform: translateY(-50%);
-        width: 18px; 
-        height: 18px;
-        pointer-events: none;
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
     }
 
     input {
-        width: 100%;
-        padding: 8px 12px;
-        padding-left: 40px; 
-        border: 1px solid $primary;
-        border-radius: 3px;
-        font-size: 14px;
+      width: 100%;
+      padding: 8px 12px;
+      padding-left: 40px;
+      border: 1px solid $primary;
+      border-radius: 3px;
+      font-size: 14px;
     }
   }
 
@@ -76,43 +77,45 @@
         margin-left: 3px;
 
         &.active {
-          background: #28a745; 
+          background: #28a745;
         }
+
         &.inactive {
-          background: #dc3545; 
+          background: #dc3545;
         }
       }
     }
 
     .vehicle-actions {
-  display: flex;
-  flex-direction: column;       // empilha os botões verticalmente
-  justify-content: center;      // centraliza verticalmente
-  align-items: center;          // centraliza horizontalmente dentro da lateral
-  width: 80px;                  // aumenta a área do container
-  height: 100%;                 // ocupa toda a altura do card
-  gap: 1rem;                    // espaço entre os botões
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 80px;
+      height: 100%;
+      gap: 1rem;
 
-  button {
-    width: 100%;                // botão ocupa largura total do container
-    height: 40px;               // aumenta área clicável
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      button {
+        width: 100%;
+        height: 40px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-    img {
-      width: 24px;              // ícones um pouco maiores
-      height: 24px;
+        img {
+          width: 24px;
+          height: 24px;
+        }
+      }
     }
+
   }
 }
 
-  }}
-
-  .pagination {
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -124,9 +127,9 @@
     color: #fff;
     border: none;
     border-radius: 6px;
-    padding: 0.8rem 1.8rem; // aumentei aqui
-    font-size: 1.1rem;       // texto maior
-    font-weight: bold;       // mais destaque
+    padding: 0.8rem 1.8rem;
+    font-size: 1.1rem;
+    font-weight: bold;
     cursor: pointer;
     transition: all 0.2s ease;
 

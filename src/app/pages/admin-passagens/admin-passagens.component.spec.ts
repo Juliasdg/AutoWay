@@ -10,7 +10,7 @@ describe('AdminPassagensComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AdminPassagensComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdminPassagensComponent);
     component = fixture.componentInstance;

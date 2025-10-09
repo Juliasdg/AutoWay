@@ -30,7 +30,7 @@ export class EditPasswordComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private pessoaService: PessoaService, // injetando PessoaService
+    private pessoaService: PessoaService,
     private alertService: AlertService,
     private router: Router
   ) {
@@ -46,7 +46,7 @@ export class EditPasswordComponent implements OnInit {
     if (token) {
       this.pessoaService.getMe(token).subscribe({
         next: (res: PessoaResponse) => {
-          this.email = res.email; // guarda para montar o payload
+          this.email = res.email; 
         },
         error: () => {
           this.alertService.warning('Não foi possível carregar os dados do usuário.');
@@ -58,48 +58,46 @@ export class EditPasswordComponent implements OnInit {
     }
   }
 
- onSubmit() {
-  if (this.formPassword.invalid) {
-    this.alertService.warning('Preencha os campos corretamente!');
-    return;
-  }
-
-  const token = this.authService.getToken();
-  if (!token) {
-    this.alertService.error('Usuário não autenticado!');
-    this.router.navigate(['/login']);
-    return;
-  }
-
-  const payload: ChangePasswordRequest = {
-    currentPassword: this.formPassword.value.currentPassword,
-    newPassword: this.formPassword.value.newPassword,
-    confirmPassword: this.formPassword.value.confirmPassword
-  };
-
-  this.pessoaService.changePassword(payload, token).subscribe({
-    next: () => {
-      // resposta de sucesso é texto ou vazia
-      this.alertService.success('Senha alterada com sucesso!', 'Sua senha foi atualizada corretamente.');
-      this.router.navigate(['/profile']);
-    },
-    error: (err) => {
-      // resposta de erro continua JSON
-      let msg = 'Erro ao alterar senha!';
-      try {
-        const body = typeof err.error === 'string' ? JSON.parse(err.error) : err.error;
-        if (body?.message) {
-          msg = body.message;
-        }
-      } catch {
-        if (err.message) {
-          msg = err.message;
-        }
-      }
-      this.alertService.error(msg, new Error(msg));
+  onSubmit() {
+    if (this.formPassword.invalid) {
+      this.alertService.warning('Preencha os campos corretamente!');
+      return;
     }
-  });
-}
+
+    const token = this.authService.getToken();
+    if (!token) {
+      this.alertService.error('Usuário não autenticado!');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const payload: ChangePasswordRequest = {
+      currentPassword: this.formPassword.value.currentPassword,
+      newPassword: this.formPassword.value.newPassword,
+      confirmPassword: this.formPassword.value.confirmPassword
+    };
+
+    this.pessoaService.changePassword(payload, token).subscribe({
+      next: () => {
+        this.alertService.success('Senha alterada com sucesso!', 'Sua senha foi atualizada corretamente.');
+        this.router.navigate(['/profile']);
+      },
+      error: (err) => {
+        let msg = 'Erro ao alterar senha!';
+        try {
+          const body = typeof err.error === 'string' ? JSON.parse(err.error) : err.error;
+          if (body?.message) {
+            msg = body.message;
+          }
+        } catch {
+          if (err.message) {
+            msg = err.message;
+          }
+        }
+        this.alertService.error(msg, new Error(msg));
+      }
+    });
+  }
 
 
 

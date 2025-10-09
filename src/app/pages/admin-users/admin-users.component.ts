@@ -24,7 +24,6 @@ export class AdminUsersComponent implements OnInit {
   loading = true;
   searchText = '';
 
-  // paginação
   currentPage = 1;
   itemsPerPage = 5;
   totalPages = 1;
@@ -33,8 +32,8 @@ export class AdminUsersComponent implements OnInit {
     private pessoaService: PessoaService,
     private authService: AuthService,
     private alertService: AlertService,
-    private router:  Router
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.carregarUsuarios();
@@ -67,10 +66,10 @@ export class AdminUsersComponent implements OnInit {
     this.filteredUsuarios = this.usuarios.filter(u =>
       u.nome.toLowerCase().includes(term) || u.email.toLowerCase().includes(term)
     );
-    this.setupPagination(); // reinicia a paginação após busca
+    this.setupPagination();
   }
 
-  
+
 
   setupPagination(): void {
     this.totalPages = Math.ceil(this.filteredUsuarios.length / this.itemsPerPage) || 1;
@@ -100,38 +99,35 @@ export class AdminUsersComponent implements OnInit {
   }
 
   abrirTelaEdicao(id: string): void {
-  this.router.navigate(['/manage/users/edit', id]);
+    this.router.navigate(['/manage/users/edit', id]);
   }
 
   async alternarStatus(usuario: PessoaResponse): Promise<void> {
-  const token = this.authService.getToken();
-  if (!token) {
-    this.alertService.error('Erro', 'Usuário não autenticado.');
-    return;
-  }
-
-  try {
-    const novoStatus = !usuario.status;
-
-    if (novoStatus) {
-      // Reativar usuário
-      await firstValueFrom(this.pessoaService.reactivateMe(usuario.id, token));
-    } else {
-      // Inativar usuário
-      await firstValueFrom(this.pessoaService.inactivateMe(usuario.id, token));
+    const token = this.authService.getToken();
+    if (!token) {
+      this.alertService.error('Erro', 'Usuário não autenticado.');
+      return;
     }
 
-    // Atualiza status localmente
-    usuario.status = novoStatus;
+    try {
+      const novoStatus = !usuario.status;
 
-    this.alertService.success(
-      'Sucesso',
-      `Usuário ${usuario.nome} foi ${novoStatus ? 'reativado' : 'inativado'} com sucesso!`
-    );
-  } catch (err) {
-    console.error('Erro ao alterar status', err);
-    this.alertService.error('Erro', 'Não foi possível alterar o status do usuário.');
+      if (novoStatus) {
+        await firstValueFrom(this.pessoaService.reactivateMe(usuario.id, token));
+      } else {
+        await firstValueFrom(this.pessoaService.inactivateMe(usuario.id, token));
+      }
+
+      usuario.status = novoStatus;
+
+      this.alertService.success(
+        'Sucesso',
+        `Usuário ${usuario.nome} foi ${novoStatus ? 'reativado' : 'inativado'} com sucesso!`
+      );
+    } catch (err) {
+      console.error('Erro ao alterar status', err);
+      this.alertService.error('Erro', 'Não foi possível alterar o status do usuário.');
+    }
   }
-}
 
 }

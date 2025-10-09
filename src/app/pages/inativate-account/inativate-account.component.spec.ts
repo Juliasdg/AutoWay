@@ -10,7 +10,7 @@ describe('InativateAccountComponent', () => {
     await TestBed.configureTestingModule({
       imports: [InativateAccountComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(InativateAccountComponent);
     component = fixture.componentInstance;

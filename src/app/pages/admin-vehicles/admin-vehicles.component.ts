@@ -25,7 +25,6 @@ export class AdminVehiclesComponent implements OnInit {
   loading = true;
   searchText = '';
 
-  // Paginação
   currentPage = 1;
   itemsPerPage = 5;
   totalPages = 1;
@@ -36,47 +35,46 @@ export class AdminVehiclesComponent implements OnInit {
     private pessoaService: PessoaService,
     private alertService: AlertService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarVeiculos();
   }
 
   async carregarVeiculos(): Promise<void> {
-  const token = this.authService.getToken();
-  if (!token) {
-    this.alertService.error('Erro', 'Usuário não logado.');
-    this.loading = false;
-    return;
+    const token = this.authService.getToken();
+    if (!token) {
+      this.alertService.error('Erro', 'Usuário não logado.');
+      this.loading = false;
+      return;
+    }
+
+    this.loading = true;
+    try {
+      const veiculos = await firstValueFrom(this.veiculoService.listarTodos(token));
+      this.veiculos = veiculos || [];
+
+      await Promise.all(
+        this.veiculos.map(async v => {
+          try {
+            const pessoa = await firstValueFrom(this.pessoaService.getById(v.idPessoa, token));
+            v.portadorNome = pessoa.nome;
+          } catch (err) {
+            console.error(`Erro ao buscar portador do veículo ${v.idVeiculo}`, err);
+            v.portadorNome = '-';
+          }
+        })
+      );
+
+      this.filteredVeiculos = [...this.veiculos];
+      this.setupPagination();
+    } catch (err) {
+      console.error('Erro ao carregar veículos', err);
+      this.alertService.error('Erro', 'Não foi possível carregar os veículos.');
+    } finally {
+      this.loading = false;
+    }
   }
-
-  this.loading = true;
-  try {
-    const veiculos = await firstValueFrom(this.veiculoService.listarTodos(token));
-    this.veiculos = veiculos || [];
-
-    // Buscar nomes dos portadores
-    await Promise.all(
-      this.veiculos.map(async v => {
-        try {
-          const pessoa = await firstValueFrom(this.pessoaService.getById(v.idPessoa, token));
-          v.portadorNome = pessoa.nome;
-        } catch (err) {
-          console.error(`Erro ao buscar portador do veículo ${v.idVeiculo}`, err);
-          v.portadorNome = '-';
-        }
-      })
-    );
-
-    this.filteredVeiculos = [...this.veiculos];
-    this.setupPagination();
-  } catch (err) {
-    console.error('Erro ao carregar veículos', err);
-    this.alertService.error('Erro', 'Não foi possível carregar os veículos.');
-  } finally {
-    this.loading = false;
-  }
-}
 
 
   buscarVeiculos(): void {
@@ -102,36 +100,35 @@ export class AdminVehiclesComponent implements OnInit {
   }
 
   abrirTelaEdicao(id: string): void {
-  this.router.navigate(['/manage/vehicles/edit', id]);
-}
+    this.router.navigate(['/manage/vehicles/edit', id]);
+  }
 
 
   async alternarStatus(veiculo: VeiculoResponse): Promise<void> {
-  const token = this.authService.getToken();
-  if (!token) return;
+    const token = this.authService.getToken();
+    if (!token) return;
 
-  try {
-    const novoStatus = !veiculo.ativo;
+    try {
+      const novoStatus = !veiculo.ativo;
 
-    if (novoStatus) {
-      await firstValueFrom(this.veiculoService.reativarVeiculo(veiculo.idVeiculo, token));
-    } else {
-      await firstValueFrom(this.veiculoService.inativarVeiculo(veiculo.idVeiculo, token));
+      if (novoStatus) {
+        await firstValueFrom(this.veiculoService.reativarVeiculo(veiculo.idVeiculo, token));
+      } else {
+        await firstValueFrom(this.veiculoService.inativarVeiculo(veiculo.idVeiculo, token));
+      }
+
+      veiculo.ativo = novoStatus;
+      this.alertService.success(
+        'Sucesso',
+        `Veículo ${veiculo.placa} ${novoStatus ? 'reativado' : 'inativado'} com sucesso!`
+      );
+    } catch (err: any) {
+      console.error('Erro ao alterar status do veículo', err);
+
+      const msg = err?.error?.message || 'Não foi possível alterar o status do veículo.';
+      this.alertService.error('Erro', msg);
     }
-
-    veiculo.ativo = novoStatus;
-    this.alertService.success(
-      'Sucesso',
-      `Veículo ${veiculo.placa} ${novoStatus ? 'reativado' : 'inativado'} com sucesso!`
-    );
-  } catch (err: any) {
-    console.error('Erro ao alterar status do veículo', err);
-
-    // Captura a mensagem da API
-    const msg = err?.error?.message || 'Não foi possível alterar o status do veículo.';
-    this.alertService.error('Erro', msg);
   }
-}
 
 
 }

@@ -52,11 +52,9 @@ export class LoginComponent {
       error: (error) => {
         let title = 'Erro ao realizar login!';
         let msg = 'Erro ao realizar login!';
-        // Aqui pegamos a mensagem específica do backend
         if (error.error?.message) msg = error.error.message;
         else if (error.message) msg = error.message;
 
-        // Exemplo de bad request específico: usuário inativo ou credenciais inválidas
         if (error.status === 401 || error.status == 400) {
           msg = 'Usuário inativo ou Credenciais Inválidas. Em caso de necessidade, entre em contato com o suporte!';
         } else if (error.status === 404) {

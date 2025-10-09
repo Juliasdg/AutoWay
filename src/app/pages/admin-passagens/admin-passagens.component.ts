@@ -34,7 +34,7 @@ export class AdminPassagensComponent implements OnInit {
     private alertService: AlertService,
     private boletoService: BoletoService,
     private veiculoService: VeiculoService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarTodasPassagens();
@@ -53,7 +53,6 @@ export class AdminPassagensComponent implements OnInit {
       next: (res: Passagem[]) => {
         this.passagens = res || [];
 
-        // buscar placas de cada veículo
         this.completarPlacas(token).then(() => {
           this.setupPagination();
           this.loading = false;

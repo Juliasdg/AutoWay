@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private alertService: AlertService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const token = this.authService.getToken();

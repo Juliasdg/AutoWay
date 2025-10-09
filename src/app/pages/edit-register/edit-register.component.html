@@ -42,23 +42,23 @@
 
       <div class="double-input">
         <div class="double-input" *ngIf="!isAdmin">
-        <div class="field">
-          <label>VENCIMENTO DO BOLETO:</label>
-          <select formControlName="vencimento">
-            <option value="5">Dia 05</option>
-            <option value="15">Dia 15</option>
-            <option value="20">Dia 20</option>
-          </select>
+          <div class="field">
+            <label>VENCIMENTO DO BOLETO:</label>
+            <select formControlName="vencimento">
+              <option value="5">Dia 05</option>
+              <option value="15">Dia 15</option>
+              <option value="20">Dia 20</option>
+            </select>
+          </div>
         </div>
-      </div>
         <div class="field">
-        <label>SENHA:</label>
-        <div class="password-field">
-          <input type="password" value="*************" formControlName="senha" readonly class="disabled-input">
-          <button type="button" (click)="onEditPassword()">
-            <img src="assets/file-2.svg" alt="Editar senha">
-          </button>
-        </div>
+          <label>SENHA:</label>
+          <div class="password-field">
+            <input type="password" value="*************" formControlName="senha" readonly class="disabled-input">
+            <button type="button" (click)="onEditPassword()">
+              <img src="assets/file-2.svg" alt="Editar senha">
+            </button>
+          </div>
         </div>
       </div>
 

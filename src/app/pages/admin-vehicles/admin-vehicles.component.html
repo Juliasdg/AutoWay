@@ -5,28 +5,19 @@
     <h2>Veículos Cadastrados</h2>
   </div>
 
-  <!-- Busca -->
   <div class="search-section">
     <img src="assets/search.svg" alt="Buscar">
-    <input
-      type="text"
-      placeholder="Buscar por placa ou RFID..."
-      [(ngModel)]="searchText"
-      (input)="buscarVeiculos()"
-    >
+    <input type="text" placeholder="Buscar por placa ou RFID..." [(ngModel)]="searchText" (input)="buscarVeiculos()">
   </div>
 
-  <!-- Loading -->
   <div *ngIf="loading" class="loading">
     Carregando veículos...
   </div>
 
-  <!-- Nenhum veículo -->
   <div *ngIf="!loading && filteredVeiculos.length === 0" class="no-results">
     Nenhum veículo encontrado.
   </div>
 
-  <!-- Lista de Veículos -->
   <div *ngFor="let veiculo of paginatedVeiculos" class="vehicle-card">
     <div class="vehicle-info">
       <p><strong>Código do RFID:</strong> {{ veiculo.idRfid }}</p>
@@ -40,29 +31,23 @@
     </div>
 
     <div class="vehicle-actions">
-  <!-- Se veículo inativo e sem RFID -->
-  <button *ngIf="!veiculo.ativo && !veiculo.idRfid" 
-          title="Ativar veículo inserindo RFID"
-          (click)="abrirTelaEdicao(veiculo.idVeiculo)">
-    <img src="assets/power.svg" alt="Inserir RFID e Ativar">
-  </button>
+      <button *ngIf="!veiculo.ativo && !veiculo.idRfid" title="Ativar veículo inserindo RFID"
+        (click)="abrirTelaEdicao(veiculo.idVeiculo)">
+        <img src="assets/power.svg" alt="Inserir RFID e Ativar">
+      </button>
 
-  <!-- Se veículo tem RFID, mantém ativar/desativar -->
-  <button *ngIf="veiculo.idRfid" 
-          title="{{ veiculo.ativo ? 'Inativar' : 'Reativar' }}" 
-          (click)="alternarStatus(veiculo)">
-    <img src="assets/file-1.svg" alt="Ativar/Inativar">
-  </button>
+      <button *ngIf="veiculo.idRfid" title="{{ veiculo.ativo ? 'Inativar' : 'Reativar' }}"
+        (click)="alternarStatus(veiculo)">
+        <img src="assets/file-1.svg" alt="Ativar/Inativar">
+      </button>
 
-  <!-- Botão de edição sempre -->
-  <button title="Editar" (click)="abrirTelaEdicao(veiculo.idVeiculo)">
-    <img src="assets/file-2.svg" alt="Editar">
-  </button>
-</div>
+      <button title="Editar" (click)="abrirTelaEdicao(veiculo.idVeiculo)">
+        <img src="assets/file-2.svg" alt="Editar">
+      </button>
+    </div>
 
   </div>
 
-  <!-- Paginação -->
   <div *ngIf="!loading && totalPages > 1" class="pagination">
     <button (click)="updatePage(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
     <span>Página {{ currentPage }} de {{ totalPages }}</span>

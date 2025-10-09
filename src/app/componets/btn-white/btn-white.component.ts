@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
   styleUrl: './btn-white.component.scss'
 })
 export class BtnWhiteComponent {
-   @Input() label: string = 'Clique';
+  @Input() label: string = 'Clique';
 }

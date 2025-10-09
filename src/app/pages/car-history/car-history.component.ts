@@ -22,9 +22,8 @@ export class CarHistoryComponent implements OnInit {
   paginatedPassagens: Passagem[] = [];
   loading = true;
 
-  debitoMes: number = 0; // <--- novo campo
+  debitoMes: number = 0; 
 
-  // paginação
   currentPage = 1;
   itemsPerPage = 5;
   totalPages = 1;
@@ -33,18 +32,17 @@ export class CarHistoryComponent implements OnInit {
   boletoIdPeriodo: string | null = null;
 
 
-  // filtro
   dataInicio: string = '';
   dataFim: string = '';
-  hoje: string = new Date().toISOString().split('T')[0]; // yyyy-MM-dd
+  hoje: string = new Date().toISOString().split('T')[0]; 
 
   constructor(
     private passagemService: PassagemService,
     private authService: AuthService,
     private alertService: AlertService,
     private veiculoService: VeiculoService,
-    private boletoService: BoletoService // <--- injetado
-  ) {}
+    private boletoService: BoletoService 
+  ) { }
 
   ngOnInit(): void {
     this.carregarTodasPassagens();
@@ -112,76 +110,75 @@ export class CarHistoryComponent implements OnInit {
     });
   }
 
-private processarPassagens(res: Passagem[], token: string) {
-  this.passagens = res || [];
+  private processarPassagens(res: Passagem[], token: string) {
+    this.passagens = res || [];
 
-  if (!this.passagens.length) {
-    this.paginatedPassagens = [];
-    this.loading = false;
-    return;
-  }
+    if (!this.passagens.length) {
+      this.paginatedPassagens = [];
+      this.loading = false;
+      return;
+    }
 
-  const userId = this.authService.getUserId();
-  if (!userId) {
-    this.setupPagination();
-    this.loading = false;
-    return;
-  }
-
-  // Busca os veículos do usuário
-  this.veiculoService.listarMeusVeiculos(token).subscribe({
-    next: (veiculos) => {
-      this.passagens.forEach(p => {
-        const veiculo = veiculos.find(v => v.idVeiculo === p.idVeiculo);
-        if (veiculo) p.placa = veiculo.placa;
-      });
-
-      // Busca os boletos do usuário
-      this.boletoService.listarBoletos(userId, token).subscribe({
-        next: (boletos: any[]) => {
-          this.passagens.forEach(p => {
-            const dataPassagem = new Date(p.data);
-            const mes = dataPassagem.getMonth() + 1;
-            const ano = dataPassagem.getFullYear();
-
-            const boleto = boletos.find(b => {
-              const mesmoPeriodo =
-                Number(b.mes) === mes &&
-                Number(b.ano) === ano;
-
-              if (!mesmoPeriodo) return false;
-
-              // Se o boleto já está fechado, exige que a passagem conste no array
-              if (b.mesFechado) {
-                return Array.isArray(b.passagens) &&
-                       b.passagens.some((bp: any) => bp.idPassagem === p.idPassagem);
-              }
-
-              // Se o boleto está em aberto, basta casar pelo período
-              return true;
-            });
-
-            p.boletoId = boleto?.idBoleto;
-          });
-
-          this.setupPagination();
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Erro ao buscar boletos', err);
-          this.setupPagination();
-          this.loading = false;
-        }
-      });
-
-    },
-    error: (err) => {
-      console.error('Erro ao buscar veículos', err);
+    const userId = this.authService.getUserId();
+    if (!userId) {
       this.setupPagination();
       this.loading = false;
+      return;
     }
-  });
-}
+
+    this.veiculoService.listarMeusVeiculos(token).subscribe({
+      next: (veiculos) => {
+        this.passagens.forEach(p => {
+          const veiculo = veiculos.find(v => v.idVeiculo === p.idVeiculo);
+          if (veiculo) p.placa = veiculo.placa;
+        });
+
+        // Busca os boletos do usuário
+        this.boletoService.listarBoletos(userId, token).subscribe({
+          next: (boletos: any[]) => {
+            this.passagens.forEach(p => {
+              const dataPassagem = new Date(p.data);
+              const mes = dataPassagem.getMonth() + 1;
+              const ano = dataPassagem.getFullYear();
+
+              const boleto = boletos.find(b => {
+                const mesmoPeriodo =
+                  Number(b.mes) === mes &&
+                  Number(b.ano) === ano;
+
+                if (!mesmoPeriodo) return false;
+
+                // Se o boleto já está fechado, exige que a passagem conste no array
+                if (b.mesFechado) {
+                  return Array.isArray(b.passagens) &&
+                    b.passagens.some((bp: any) => bp.idPassagem === p.idPassagem);
+                }
+
+                // Se o boleto está em aberto, basta casar pelo período
+                return true;
+              });
+
+              p.boletoId = boleto?.idBoleto;
+            });
+
+            this.setupPagination();
+            this.loading = false;
+          },
+          error: (err) => {
+            console.error('Erro ao buscar boletos', err);
+            this.setupPagination();
+            this.loading = false;
+          }
+        });
+
+      },
+      error: (err) => {
+        console.error('Erro ao buscar veículos', err);
+        this.setupPagination();
+        this.loading = false;
+      }
+    });
+  }
 
 
 
@@ -199,35 +196,35 @@ private processarPassagens(res: Passagem[], token: string) {
   }
 
   consultarDebitoAtual() {
-  const userId = this.authService.getUserId();
-  const token = this.authService.getToken();
-  if (!userId || !token) return;
+    const userId = this.authService.getUserId();
+    const token = this.authService.getToken();
+    if (!userId || !token) return;
 
-  this.boletoService.consultarDebito(userId, token).subscribe({
-    next: (res: any) => {
-      this.debitoMes = res || 0;
-    },
-    error: (err) => {
-      console.error('Erro ao consultar débito', err);
-    }
-  });
-}
+    this.boletoService.consultarDebito(userId, token).subscribe({
+      next: (res: any) => {
+        this.debitoMes = res || 0;
+      },
+      error: (err) => {
+        console.error('Erro ao consultar débito', err);
+      }
+    });
+  }
 
-visualizarBoleto(boletoId: string) {
-  const token = this.authService.getToken();
-  if (!token) return;
+  visualizarBoleto(boletoId: string) {
+    const token = this.authService.getToken();
+    if (!token) return;
 
-  this.boletoService.baixarPdf(boletoId, token).subscribe({
-    next: (blob) => {
-      const url = window.URL.createObjectURL(blob);
-      window.open(url, '_blank'); // abre em nova aba
-    },
-    error: (err) => {
-      console.error('Erro ao abrir boleto', err);
-      this.alertService.error('Erro', 'Não foi possível visualizar o boleto.');
-    }
-  });
-}
+    this.boletoService.baixarPdf(boletoId, token).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+      },
+      error: (err) => {
+        console.error('Erro ao abrir boleto', err);
+        this.alertService.error('Erro', 'Não foi possível visualizar o boleto.');
+      }
+    });
+  }
 
 
 }

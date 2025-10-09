@@ -6,7 +6,7 @@ import Swal, { SweetAlertIcon } from 'sweetalert2';
 })
 export class AlertService {
 
-  constructor() {}
+  constructor() { }
 
   success(title: string = 'Sucesso', message: string = '') {
     console.log(title, message);
@@ -15,8 +15,8 @@ export class AlertService {
 
 
   error(title: string = 'Erro', error?: Error | string) {
-    const message = error 
-      ? (typeof error === 'string' ? error : error.message) 
+    const message = error
+      ? (typeof error === 'string' ? error : error.message)
       : '';
     this.showAlert('error', title, message);
   }

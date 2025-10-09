@@ -24,7 +24,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   overflow-y: auto;
 }
 
@@ -68,7 +68,8 @@ label {
   font-weight: 600;
 }
 
-input, select {
+input,
+select {
   width: 400px;
   height: 3rem;
   background-color: $grey;
@@ -109,7 +110,8 @@ small {
     flex-direction: column;
   }
 
-  input, select {
+  input,
+  select {
     width: 100%;
   }
 

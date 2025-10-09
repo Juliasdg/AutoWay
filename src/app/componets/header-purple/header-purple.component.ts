@@ -21,13 +21,13 @@ export class HeaderPurpleComponent {
     private router: Router
   ) {
   }
-  
+
   ngOnInit() {
     this.checkAdmin();
   }
 
   private checkAdmin() {
-      this.isAdmin = this.authService.getUserRole() === 'admin';
+    this.isAdmin = this.authService.getUserRole() === 'admin';
   }
 
   toggleDropdown(event: Event) {
@@ -52,28 +52,28 @@ export class HeaderPurpleComponent {
     });
   }
 
-    onProfile() {
-      this.router.navigate(['/profile']);
-    }
+  onProfile() {
+    this.router.navigate(['/profile']);
+  }
 
-    onBoletos() {
-      if (this.isAdmin) {
-        this.router.navigate(['/manage/boletos']);
-      } else {
+  onBoletos() {
+    if (this.isAdmin) {
+      this.router.navigate(['/manage/boletos']);
+    } else {
       this.router.navigate(['/boletos']);
-      }
+    }
+  }
+
+  onHistoric() {
+    if (this.isAdmin) {
+      this.router.navigate(['/manage/passagens']);
+    } else {
+      this.router.navigate(['/passagens']);
     }
 
-    onHistoric() {
-      if (this.isAdmin) {
-        this.router.navigate(['/manage/passagens']);
-      } else {
-        this.router.navigate(['/passagens']);
-      }
-      
-    }
+  }
 
-    goHome() {
+  goHome() {
     if (this.isAdmin) {
       this.router.navigate(['/home-admin']);
     } else {

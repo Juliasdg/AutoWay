@@ -10,6 +10,7 @@
   .title {
     padding-top: 2rem;
     margin-bottom: 2rem;
+
     h2 {
       font-size: 2rem;
       font-weight: bold;
@@ -37,7 +38,7 @@
     padding: 2rem;
     margin-bottom: 2rem;
     display: flex;
-    align-items: center;        
+    align-items: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
 
@@ -48,12 +49,12 @@
 
     .profile-info {
       display: flex;
-      gap: 3rem; 
+      gap: 3rem;
       align-items: flex-start;
       line-height: 1.6;
       width: 100%;
 
-      > div {
+      >div {
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -117,16 +118,27 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Responsividade para telas menores */
 @media (max-width: 768px) {
   .profile-card {
     width: 100%;

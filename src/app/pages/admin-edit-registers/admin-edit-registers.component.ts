@@ -33,16 +33,16 @@ export class AdminEditRegistersComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute
   ) {
-      this.isAdmin = this.authService.getUserRole() === 'admin';
-      console.log(this.isAdmin)
+    this.isAdmin = this.authService.getUserRole() === 'admin';
+    console.log(this.isAdmin)
 
-      this.formRegister = this.fb.group({
+    this.formRegister = this.fb.group({
       nome: new FormControl(null, Validators.required),
       dataNascimento: new FormControl(null, Validators.required),
       telefone: new FormControl(null, Validators.required),
       cep: new FormControl(null, Validators.required),
-      endereco: new FormControl(null), // preenchido pelo ViaCEP
-      bairro: new FormControl(null),   // preenchido pelo ViaCEP
+      endereco: new FormControl(null),
+      bairro: new FormControl(null),  
       numero: new FormControl(null, Validators.required),
       complemento: new FormControl(null),
       vencimento: new FormControl(5, Validators.required)
@@ -50,22 +50,22 @@ export class AdminEditRegistersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  const id = this.route.snapshot.paramMap.get('id');
-  const token = this.authService.getToken();
+    const id = this.route.snapshot.paramMap.get('id');
+    const token = this.authService.getToken();
 
-  if (id && token) {
-    this.pessoaService.getById(id, token).subscribe({
-      next: (res) => {
-        this.pessoa = res;
-        this.initForm(res);
-      },
-      error: (err) => this.alertService.error('Erro ao carregar usuário!', err)
-    });
-  } else {
-    this.alertService.error('Usuário não encontrado ou não autenticado.');
-    this.router.navigate(['/list-users']);
+    if (id && token) {
+      this.pessoaService.getById(id, token).subscribe({
+        next: (res) => {
+          this.pessoa = res;
+          this.initForm(res);
+        },
+        error: (err) => this.alertService.error('Erro ao carregar usuário!', err)
+      });
+    } else {
+      this.alertService.error('Usuário não encontrado ou não autenticado.');
+      this.router.navigate(['/list-users']);
+    }
   }
-}
 
 
   private initForm(pessoa: PessoaResponse) {
@@ -81,48 +81,48 @@ export class AdminEditRegistersComponent implements OnInit {
   }
 
   onUpdate() {
-  if (this.formRegister.invalid) {
-    this.alertService.warning('Preencha todos os campos obrigatórios!', 'Formulário inválido');
-    return;
+    if (this.formRegister.invalid) {
+      this.alertService.warning('Preencha todos os campos obrigatórios!', 'Formulário inválido');
+      return;
+    }
+
+    const token = this.authService.getToken();
+    if (!token) {
+      this.alertService.error('Usuário não autenticado!');
+      return;
+    }
+
+    const payload: PessoaUpdateRequest = this.formRegister.value;
+    const id = this.route.snapshot.paramMap.get('id');
+
+    if (this.isAdmin && id) {
+      this.pessoaService.updateUserAsAdmin(id, payload, token).subscribe({
+        next: () => {
+          this.alertService.success('Usuário atualizado com sucesso!');
+          this.router.navigate(['/list-users']);
+        },
+        error: (err) => this.alertService.error('Erro ao atualizar usuário!', err)
+      });
+    } else {
+      this.pessoaService.updateMe(payload, token).subscribe({
+        next: () => {
+          this.alertService.success('Perfil atualizado com sucesso!');
+          this.router.navigate(['/profile']);
+        },
+        error: (err) => this.alertService.error('Erro ao atualizar perfil!', err)
+      });
+    }
   }
 
-  const token = this.authService.getToken();
-  if (!token) {
-    this.alertService.error('Usuário não autenticado!');
-    return;
-  }
 
-  const payload: PessoaUpdateRequest = this.formRegister.value;
-  const id = this.route.snapshot.paramMap.get('id');
-
-  if (this.isAdmin && id) {
-    this.pessoaService.updateUserAsAdmin(id, payload, token).subscribe({
-      next: () => {
-        this.alertService.success('Usuário atualizado com sucesso!');
-        this.router.navigate(['/list-users']);
-      },
-      error: (err) => this.alertService.error('Erro ao atualizar usuário!', err)
-    });
-  } else {
-    this.pessoaService.updateMe(payload, token).subscribe({
-      next: () => {
-        this.alertService.success('Perfil atualizado com sucesso!');
-        this.router.navigate(['/profile']);
-      },
-      error: (err) => this.alertService.error('Erro ao atualizar perfil!', err)
-    });
-  }
-}
-
-
-  onComeback(){
+  onComeback() {
     this.router.navigate(['/manage/users'])
   }
 
   onEditPassword() {
     this.router.navigate(['/profile/edit/password']);
   }
-    buscarEnderecoPorCep() {
+  buscarEnderecoPorCep() {
     const cep = this.formRegister.get('cep')?.value?.replace(/\D/g, '');
 
     if (cep && /^[0-9]{8}$/.test(cep)) {

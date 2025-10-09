@@ -22,7 +22,7 @@ export class InativateCarComponent implements OnInit {
     private veiculoService: VeiculoService,
     private alertService: AlertService,
     private authService: AuthService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.veiculo = history.state.veiculo || JSON.parse(localStorage.getItem('veiculo') || 'null');
@@ -33,7 +33,6 @@ export class InativateCarComponent implements OnInit {
       return;
     }
 
-    // Armazena temporariamente para não perder ao dar refresh
     localStorage.setItem('veiculo', JSON.stringify(this.veiculo));
   }
 

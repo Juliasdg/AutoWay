@@ -10,7 +10,7 @@ describe('HomeAdminComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HomeAdminComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(HomeAdminComponent);
     component = fixture.componentInstance;

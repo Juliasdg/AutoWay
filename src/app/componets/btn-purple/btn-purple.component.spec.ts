@@ -10,7 +10,7 @@ describe('BtnPurpleComponent', () => {
     await TestBed.configureTestingModule({
       imports: [BtnPurpleComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(BtnPurpleComponent);
     component = fixture.componentInstance;

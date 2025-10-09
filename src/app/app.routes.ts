@@ -23,12 +23,10 @@ import { AdminEditRegistersComponent } from './pages/admin-edit-registers/admin-
 import { PublicGuard } from './guards/public.guard';
 
 export const routes: Routes = [
-  // rotas públicas para quem não está logado
   { path: 'login', component: LoginComponent, canActivate: [PublicGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [PublicGuard] },
   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [PublicGuard] },
 
-  // rotas protegidas, só para usuários logados
   { path: '', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
   { path: 'home-admin', component: HomeAdminComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], data: { roles: ['cliente', 'admin'] } },
@@ -47,6 +45,5 @@ export const routes: Routes = [
   { path: 'manage/users/edit/:id', component: AdminEditRegistersComponent, canActivate: [AuthGuard], data: { roles: ['admin'] } },
   { path: 'new-car', component: NewCarComponent, canActivate: [AuthGuard], data: { roles: ['cliente'] } },
 
-  // fallback
   { path: '**', redirectTo: '' }
 ];

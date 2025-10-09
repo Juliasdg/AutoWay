@@ -32,16 +32,16 @@ export class EditRegisterComponent implements OnInit {
     private router: Router,
     private http: HttpClient
   ) {
-      this.isAdmin = this.authService.getUserRole() === 'admin';
-      console.log(this.isAdmin)
+    this.isAdmin = this.authService.getUserRole() === 'admin';
+    console.log(this.isAdmin)
 
-      this.formRegister = this.fb.group({
+    this.formRegister = this.fb.group({
       nome: new FormControl(null, Validators.required),
       dataNascimento: new FormControl(null, Validators.required),
       telefone: new FormControl(null, Validators.required),
       cep: new FormControl(null, Validators.required),
-      endereco: new FormControl(null), // preenchido pelo ViaCEP
-      bairro: new FormControl(null),   // preenchido pelo ViaCEP
+      endereco: new FormControl(null), 
+      bairro: new FormControl(null),   
       numero: new FormControl(null, Validators.required),
       complemento: new FormControl(null),
       vencimento: new FormControl(5, Validators.required)
@@ -50,7 +50,7 @@ export class EditRegisterComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.isAdmin) {
-      this.formRegister.removeControl('vencimento'); // remove o campo para admin
+      this.formRegister.removeControl('vencimento'); 
     }
 
     const token = this.authService.getToken();
@@ -74,47 +74,46 @@ export class EditRegisterComponent implements OnInit {
       complemento: [pessoa.complemento],
       dataNascimento: [pessoa.dataNascimento, Validators.required],
       vencimento: [pessoa.vencimento, Validators.required],
-      senha: [{ value: '', disabled: true }] // campo de senha desabilitado
+      senha: [{ value: '', disabled: true }] 
     });
   }
 
   onUpdate() {
-  if (this.formRegister.invalid) {
-    this.alertService.warning('Preencha todos os campos obrigatórios!', 'Formulário inválido');
-    return;
-  }
-
-  const token = this.authService.getToken();
-  if (!token) {
-    this.alertService.error('Usuário não autenticado!');
-    return;
-  }
-
-  const payload: PessoaUpdateRequest = this.formRegister.value;
-
-  this.pessoaService.updateMe(payload, token).subscribe({
-    next: () => {
-      this.alertService.success('Perfil atualizado com sucesso!', 'Seus dados foram atualizados corretamente.');
-      this.router.navigate(['/profile']);
-    },
-    error: (err) => {
-      // Tratativa para Bad Request (400) e mensagens personalizadas
-      let msg = 'Erro ao atualizar perfil!';
-      if (err.status === 400 && err.error?.message) {
-        msg = err.error.message; // mensagem retornada pelo backend
-      } else if (err.message) {
-        msg = err.message; // mensagem genérica de erro
-      }
-      this.alertService.error(msg, new Error(msg));
+    if (this.formRegister.invalid) {
+      this.alertService.warning('Preencha todos os campos obrigatórios!', 'Formulário inválido');
+      return;
     }
-  });
-}
+
+    const token = this.authService.getToken();
+    if (!token) {
+      this.alertService.error('Usuário não autenticado!');
+      return;
+    }
+
+    const payload: PessoaUpdateRequest = this.formRegister.value;
+
+    this.pessoaService.updateMe(payload, token).subscribe({
+      next: () => {
+        this.alertService.success('Perfil atualizado com sucesso!', 'Seus dados foram atualizados corretamente.');
+        this.router.navigate(['/profile']);
+      },
+      error: (err) => {
+        let msg = 'Erro ao atualizar perfil!';
+        if (err.status === 400 && err.error?.message) {
+          msg = err.error.message; 
+        } else if (err.message) {
+          msg = err.message; 
+        }
+        this.alertService.error(msg, new Error(msg));
+      }
+    });
+  }
 
 
   onEditPassword() {
     this.router.navigate(['/profile/edit/password']);
   }
-    buscarEnderecoPorCep() {
+  buscarEnderecoPorCep() {
     const cep = this.formRegister.get('cep')?.value?.replace(/\D/g, '');
 
     if (cep && /^[0-9]{8}$/.test(cep)) {

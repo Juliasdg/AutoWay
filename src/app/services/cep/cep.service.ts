@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 export class CepService {
   private url = 'https://viacep.com.br/ws';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   buscarCep(cep: string): Observable<any> {
     return this.http.get<any>(`${this.url}/${cep}/json/`);

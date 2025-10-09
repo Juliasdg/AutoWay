@@ -10,7 +10,7 @@ describe('BoletoHistoryComponent', () => {
     await TestBed.configureTestingModule({
       imports: [BoletoHistoryComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(BoletoHistoryComponent);
     component = fixture.componentInstance;

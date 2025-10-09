@@ -11,7 +11,7 @@ import { VeiculoRequest, VeiculoAdminUpdateRequest } from '../../models/requests
 export class VeiculoService {
   private apiUrl = `${environment.apiUrl}/veiculos`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private authHeaders(token: string) {
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
@@ -30,7 +30,7 @@ export class VeiculoService {
   }
 
   ativarVeiculo(idVeiculo: string, payload: VeiculoAdminUpdateRequest, token: string): Observable<VeiculoResponse> {
-    return this.http.put<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}/ativar`, payload, {headers: this.authHeaders(token)});
+    return this.http.put<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}/ativar`, payload, { headers: this.authHeaders(token) });
   }
 
   inativarVeiculo(idVeiculo: string, token: string): Observable<void> {
@@ -42,7 +42,7 @@ export class VeiculoService {
   }
 
   buscarPorId(idVeiculo: string, token: string): Observable<VeiculoResponse> {
-    return this.http.get<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}`, {headers: this.authHeaders(token)});
+    return this.http.get<VeiculoResponse>(`${this.apiUrl}/${idVeiculo}`, { headers: this.authHeaders(token) });
   }
 
   searchVeiculos(placa?: string, rfid?: string): Observable<VeiculoResponse[]> {
@@ -53,8 +53,8 @@ export class VeiculoService {
   }
 
   countAtivos(token: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/ativos/count`, {headers: this.authHeaders(token)});
+    return this.http.get(`${this.apiUrl}/ativos/count`, { headers: this.authHeaders(token) });
   }
 
-  
+
 }

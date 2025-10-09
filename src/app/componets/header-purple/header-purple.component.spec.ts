@@ -10,7 +10,7 @@ describe('HeaderPurpleComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HeaderPurpleComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(HeaderPurpleComponent);
     component = fixture.componentInstance;

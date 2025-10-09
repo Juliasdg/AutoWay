@@ -16,22 +16,12 @@
     <form class="login-form" [formGroup]="formLogin">
       <div class="input-group">
         <span class="input-icon"><img class="input-svg" src="assets/login-avatar.svg" alt="User Icon"></span>
-        <input
-          type="email"
-          formControlName="email"
-          name="email"
-          class="input"
-          required />
+        <input type="email" formControlName="email" name="email" class="input" required />
       </div>
 
       <div class="input-group">
         <span class="input-icon"><img class="input-svg" src="assets/password.svg" alt="Lock Icon"></span>
-        <input
-          type="password"
-          formControlName="senha"
-          name="senha"
-          class="input"
-          required />
+        <input type="password" formControlName="senha" name="senha" class="input" required />
       </div>
 
       <app-btn-purple label="Entrar" (onClick)="onSubmit()"></app-btn-purple>
@@ -43,4 +33,3 @@
     </form>
   </div>
 </div>
-

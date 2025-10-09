@@ -23,7 +23,7 @@ export class BtnPurpleComponent {
 
   handleClick() {
     if (!this.disabled) {
-      this.onClick.emit(); // aqui o evento é enviado para o componente pai
+      this.onClick.emit();
     }
   }
 }

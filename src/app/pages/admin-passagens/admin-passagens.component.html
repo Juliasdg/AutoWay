@@ -6,13 +6,12 @@
   </div>
 
   <br><br>
-  <!-- BLOCO DO BOLETO ACIMA DAS PASSAGENS -->
-<div class="boleto-container" *ngIf="boletoDisponivel">
-  <button class="boleto-btn" (click)="visualizarBoleto(boletoIdPeriodo!)">
-    <img src="assets/file-1.svg" alt="Boleto">
-    <span>Visualizar Boleto do Período</span>
-  </button>
-</div>
+  <div class="boleto-container" *ngIf="boletoDisponivel">
+    <button class="boleto-btn" (click)="visualizarBoleto(boletoIdPeriodo!)">
+      <img src="assets/file-1.svg" alt="Boleto">
+      <span>Visualizar Boleto do Período</span>
+    </button>
+  </div>
 
 
   <div *ngIf="passagens.length === 0">
@@ -29,7 +28,6 @@
     </div>
   </div>
 
-  <!-- paginação -->
   <div class="pagination" *ngIf="passagens.length > 0">
     <button (click)="updatePage(currentPage - 1)" [disabled]="currentPage === 1">Anterior</button>
     <span>Página {{currentPage}} de {{totalPages}}</span>

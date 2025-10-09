@@ -21,7 +21,7 @@ export class InativateAccountComponent implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const token = this.authService.getToken();
@@ -33,27 +33,26 @@ export class InativateAccountComponent implements OnInit {
   }
 
   onInactivate() {
-  const token = this.authService.getToken();
-  const userId = this.authService.getUserId();
+    const token = this.authService.getToken();
+    const userId = this.authService.getUserId();
 
-  if (!token || !userId) return;
+    if (!token || !userId) return;
 
-  // Chamando diretamente o serviço sem popup de confirmação
-  this.pessoaService.inactivateMe(userId, token).subscribe({
-    next: () => {
-      this.alertService.success(
-        'Conta inativada',
-        'Sua conta foi inativada com sucesso.'
-      );
-      this.authService.clearToken();
-      this.authService.clearUserId();
-      this.authService.clearUserRole();
-      this.router.navigate(['/login']);
-    },
-    error: (err) => {
-      this.alertService.httpError(err.status, err, 'Erro ao inativar conta');
-    }
-  });
+    this.pessoaService.inactivateMe(userId, token).subscribe({
+      next: () => {
+        this.alertService.success(
+          'Conta inativada',
+          'Sua conta foi inativada com sucesso.'
+        );
+        this.authService.clearToken();
+        this.authService.clearUserId();
+        this.authService.clearUserRole();
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.alertService.httpError(err.status, err, 'Erro ao inativar conta');
+      }
+    });
   }
 
   onCancel() {

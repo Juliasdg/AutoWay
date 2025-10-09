@@ -1,6 +1,6 @@
 @import "../../../assets/color-variables.scss";
 
-.main-section{
+.main-section {
     padding-top: 15rem;
     background-color: $primary;
     position: fixed;
@@ -10,14 +10,14 @@
     align-items: center;
 }
 
-.content{
+.content {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap; 
+    flex-wrap: wrap;
 }
 
-.form{
+.form {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,28 +28,28 @@
     border-radius: 1rem;
 }
 
-h2{
+h2 {
     font-size: 35px;
     font-weight: 810;
     padding-bottom: 1.5rem;
 }
 
-.double-input{
+.double-input {
     display: flex;
     flex-direction: row;
 }
 
-.field{
+.field {
     margin: 1rem;
 }
 
-label{
+label {
     color: $primary;
     gap: 1rem;
     font-weight: 600;
 }
 
-input{
+input {
     width: 400px;
     height: 3rem;
     background-color: $grey;
@@ -60,7 +60,7 @@ input{
     margin-top: 1.5px;
 }
 
-.btn-area{
+.btn-area {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -14,22 +14,22 @@
 
 
     img {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 18px;
-        height: 18px;
-        pointer-events: none;
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
     }
 
     input {
-        width: 100%;
-        padding: 8px 12px;
-        padding-left: 40px;
-        border: 1px solid $primary;
-        border-radius: 3px;
-        font-size: 14px;
+      width: 100%;
+      padding: 8px 12px;
+      padding-left: 40px;
+      border: 1px solid $primary;
+      border-radius: 3px;
+      font-size: 14px;
     }
   }
 
@@ -68,10 +68,12 @@
         &.active {
           background: #28a745;
         }
+
         &.inactive {
           background: #dc3545;
         }
       }
     }
 
-  }}
+  }
+}

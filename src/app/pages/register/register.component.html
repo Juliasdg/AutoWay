@@ -32,24 +32,24 @@
       <div class="double-input">
         <div class="field">
           <label>TELEFONE:</label>
-          <input type="text" formControlName="telefone" mask="(00) 00000-0000"/>
+          <input type="text" formControlName="telefone" mask="(00) 00000-0000" />
         </div>
         <div class="field">
           <label>CEP:</label>
-          <input type="text" formControlName="cep" mask="00000-000" (blur)="buscarEnderecoPorCep()"/>
+          <input type="text" formControlName="cep" mask="00000-000" (blur)="buscarEnderecoPorCep()" />
         </div>
       </div>
 
-        <div class="double-input">
+      <div class="double-input">
         <div class="field">
-            <label>ENDEREÇO:</label>
-            <input type="text" formControlName="endereco" [disabled]="true" />
+          <label>ENDEREÇO:</label>
+          <input type="text" formControlName="endereco" [disabled]="true" />
         </div>
         <div class="field">
-            <label>BAIRRO:</label>
-            <input type="text" formControlName="bairro" [disabled]="true" />
+          <label>BAIRRO:</label>
+          <input type="text" formControlName="bairro" [disabled]="true" />
         </div>
-        </div>
+      </div>
 
       <div class="double-input">
         <div class="field">

@@ -40,7 +40,7 @@ export class AdminBoletoComponent implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private pessoaService: PessoaService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.carregarTodosBoletos();
@@ -69,7 +69,6 @@ export class AdminBoletoComponent implements OnInit {
     }
   }
 
-  /** 🔹 Carrega todos os usuários de uma vez e mapeia no boleto */
   private async completarUsuarios(token: string): Promise<void> {
     try {
       const usuarios = await firstValueFrom(this.pessoaService.listAll(token));

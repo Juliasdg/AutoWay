@@ -10,7 +10,7 @@ describe('CarHistoryComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CarHistoryComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CarHistoryComponent);
     component = fixture.componentInstance;

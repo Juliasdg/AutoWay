@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class HeaderComponent {
   dropdownOpen = false;
-    isAdmin = false;
+  isAdmin = false;
 
 
 
@@ -21,14 +21,14 @@ export class HeaderComponent {
     private authService: AuthService,
     private alertService: AlertService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.checkAdmin();
   }
 
   private checkAdmin() {
-      this.isAdmin = this.authService.getUserRole() === 'admin';
+    this.isAdmin = this.authService.getUserRole() === 'admin';
   }
 
 
@@ -48,11 +48,11 @@ export class HeaderComponent {
   }
 
   toggleDropdown(event: Event) {
-    event.stopPropagation(); // impede o clique de propagar e fechar imediatamente
+    event.stopPropagation();
     this.dropdownOpen = !this.dropdownOpen;
   }
 
-   goHome() {
+  goHome() {
     if (this.isAdmin) {
       this.router.navigate(['/home-admin']);
     } else {
@@ -65,8 +65,8 @@ export class HeaderComponent {
     this.dropdownOpen = false;
   }
 
-  
-    onProfile() {
-      this.router.navigate(['/profile']);
-    }
+
+  onProfile() {
+    this.router.navigate(['/profile']);
+  }
 }

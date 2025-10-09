@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     public router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const token = this.authService.getToken();

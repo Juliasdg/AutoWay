@@ -24,7 +24,7 @@ export class NewCarComponent implements OnInit {
     private authService: AuthService,
     private alertService: AlertService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.veiculoForm = this.fb.group({
@@ -33,35 +33,33 @@ export class NewCarComponent implements OnInit {
   }
 
   cadastrarVeiculo() {
-  if (this.veiculoForm.invalid) {
-    this.alertService.warning('Preencha o campo Placa corretamente!');
-    return;
-  }
-
-  const token = this.authService.getToken();
-  if (!token) {
-    this.alertService.error('Usuário não autenticado!');
-    this.router.navigate(['/login']);
-    return;
-  }
-
-  this.veiculoService.criarVeiculo(this.veiculoForm.value, token).subscribe({
-    next: (res) => {
-      this.alertService.success('Veículo cadastrado com sucesso! Aguarde a validação do Administrador');
-      this.veiculoForm.reset(); // limpa o formulário
-      this.router.navigate(['/']); // volta para a home
-    },
-    error: (err) => {
-      // Se houver mensagem do backend, exibe ela
-      if (err.status === 400 && err.error && err.error.message) {
-        this.alertService.error('Erro de Validação!', err.error.message);
-      } else {
-        // Caso contrário, utiliza a função httpError do serviço
-        this.alertService.httpError(err.status, err);
-      }
+    if (this.veiculoForm.invalid) {
+      this.alertService.warning('Preencha o campo Placa corretamente!');
+      return;
     }
-  });
-}
+
+    const token = this.authService.getToken();
+    if (!token) {
+      this.alertService.error('Usuário não autenticado!');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.veiculoService.criarVeiculo(this.veiculoForm.value, token).subscribe({
+      next: (res) => {
+        this.alertService.success('Veículo cadastrado com sucesso! Aguarde a validação do Administrador');
+        this.veiculoForm.reset(); 
+        this.router.navigate(['/']); 
+      },
+      error: (err) => {
+        if (err.status === 400 && err.error && err.error.message) {
+          this.alertService.error('Erro de Validação!', err.error.message);
+        } else {
+          this.alertService.httpError(err.status, err);
+        }
+      }
+    });
+  }
 
 
 }

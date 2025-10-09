@@ -24,10 +24,10 @@ export class HomeAdminComponent implements OnInit {
     private veiculoService: VeiculoService,
     private boletoService: BoletoService,
     private passagemService: PassagemService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-  const token = localStorage.getItem('auth_token') || ''; // ✅ chave correta
+    const token = localStorage.getItem('auth_token') || '';
 
     this.pessoaService.countAtivos(token).subscribe({
       next: res => this.pessoasCount = res.quantidade,

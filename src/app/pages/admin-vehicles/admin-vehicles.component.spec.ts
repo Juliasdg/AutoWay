@@ -10,7 +10,7 @@ describe('AdminVehiclesComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AdminVehiclesComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdminVehiclesComponent);
     component = fixture.componentInstance;
