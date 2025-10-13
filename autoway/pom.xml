@@ -57,10 +57,11 @@
 
         <!-- MySQL -->
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
             <scope>runtime</scope>
         </dependency>
+
 
         <!-- JWT -->
         <dependency>
@@ -168,6 +169,7 @@
             <artifactId>netty-transport</artifactId>
             <version>4.1.121.Final</version>
         </dependency>
+
 
     </dependencies>
 
